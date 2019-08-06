@@ -2,7 +2,7 @@
 
 ### Summary
 
-`outrun` ('ORN' for short) is a custom server designed for Sonic Runners, reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) project.
+`outrun` ('ORN' for short) is a custom server for Sonic Runners, reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) project.
 
 ### Goals
 
