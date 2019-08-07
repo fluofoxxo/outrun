@@ -1,13 +1,13 @@
 package consts
 
 import (
-    "strconv"
+	"strconv"
 )
 
 type EMess string
 
 func (s EMess) MarshalJSON() ([]byte, error) {
-    return []byte(strconv.QuoteToASCII(string(s))), nil
+	return []byte(strconv.QuoteToASCII(string(s))), nil
 }
 
 // player states
@@ -151,3 +151,15 @@ const USR_DEFAULT_CHAO_LEVEL = 0
 const USR_DEFAULT_CHAO_ACQUIRED = 0
 const USR_DEFAULT_CHAO_RARITY = 0
 const USR_DEFAULT_CHAO_HIDDEN = 0
+
+// mileage consts
+
+const MILE_EPISODE = 1
+const MILE_CHAPTER = 1
+const MILE_POINT = 0
+const MILE_MAPDISTANCE = 0
+const MILE_NUMBOSSATTACK = 0
+const MILE_STAGEDISTANCE = 0
+const MILE_STAGETOTALSCORE = 0
+const MILE_STAGEMAXSCORE = 0
+const MILE_CHAPTERSTARTTIME = 1469718000 // Is there significance to this magic number?
