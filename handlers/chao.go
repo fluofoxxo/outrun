@@ -9,6 +9,21 @@ import (
     "github.com/fluofoxxo/outrun/responses"
 )
 
+func GetPrizeChaoWheelSpinHandler(w http.ResponseWriter, r *http.Request) {
+    // this appears to be player agnostic.
+    baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
+    response := responses.DefaultPrizeChaoWheelResponse(baseInfo)
+    responseJ, err := responses.ToJSON(response)
+    if err != nil {
+        log.Println("[ERR] (GetPrizeChaoWheelSpinHandler) Error marshalling: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    log.Println("[OUT] (GetPrizeChaoWheelSpinHandler) All OK")
+    helper.Respond([]byte(responseJ), w)
+}
+
 func GetChaoWheelOptionsHandler(w http.ResponseWriter, r *http.Request) {
     // this appears to be player agnostic.
     baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)

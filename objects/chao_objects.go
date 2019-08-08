@@ -16,3 +16,12 @@ type ChaoWheelOptions struct {
     StartTime            int64          `json:"startTime"`
     EndTime              int64          `json:"endTime"`
 }
+
+type ChaoPrize struct {
+    ChaoID string `json:"chao_id"`
+    Rarity int64  `json:"rarity,string"`
+}
+
+func NewChaoPrize(chaoId string, rarity int64) ChaoPrize {
+    return ChaoPrize{chaoId, rarity}
+}

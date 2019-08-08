@@ -37,5 +37,6 @@ func main() {
 	mux.HandleFunc("/Game/getMileageData/", handlers.GetMileageDataHandler)
 	mux.HandleFunc("/Game/getCampaignList/", handlers.GetCampaignListHandler)
 	mux.HandleFunc("/Chao/getChaoWheelOptions/", handlers.GetChaoWheelOptionsHandler)
+	mux.HandleFunc("/Chao/getPrizeChaoWheelSpin/", handlers.GetPrizeChaoWheelSpinHandler)
 	panic(http.ListenAndServe(":9001", mux))
 }

@@ -1,6 +1,8 @@
 package responses
 
 import (
+	"encoding/json"
+
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/objects"
 	"github.com/fluofoxxo/outrun/playerdata"
@@ -54,4 +56,27 @@ func DefaultChaoWheelOptionsResponse(base BaseInfo) ChaoWheelOptionsResponse {
 			endTime,
 		},
 	)
+}
+
+type PrizeChaoWheelResponse struct {
+	BaseResponse
+	PrizeList []objects.ChaoPrize `json:"prizeList"`
+}
+
+func NewPrizeChaoWheelResponse(base BaseInfo, prizeList []objects.ChaoPrize) PrizeChaoWheelResponse {
+	br := NewBaseResponse(base)
+	pcwr := PrizeChaoWheelResponse{
+		br,
+		prizeList,
+	}
+	return pcwr
+}
+
+func DefaultPrizeChaoWheelResponse(base BaseInfo) PrizeChaoWheelResponse {
+	var prizeList []objects.ChaoPrize
+	err := json.Unmarshal([]byte(consts.JSON_DEFAULT_PRIZECHAOWHEEL_PRIZELIST), &prizeList)
+	if err != nil {
+		panic(err)
+	}
+	return NewPrizeChaoWheelResponse(base, prizeList)
 }
