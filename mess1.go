@@ -35,5 +35,6 @@ func main() {
 	mux.HandleFunc("/Game/getCostList/", handlers.GetCostListHandler)
 	mux.HandleFunc("/Event/getEventList/", handlers.GetEventListHandler)
 	mux.HandleFunc("/Game/getMileageData/", handlers.GetMileageDataHandler)
+	mux.HandleFunc("/Game/getCampaignList/", handlers.GetCampaignListHandler)
 	panic(http.ListenAndServe(":9001", mux))
 }
