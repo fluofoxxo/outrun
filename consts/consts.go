@@ -153,7 +153,6 @@ const USR_DEFAULT_CHAO_RARITY = 0
 const USR_DEFAULT_CHAO_HIDDEN = 0
 
 // mileage consts
-
 const MILE_EPISODE = 1
 const MILE_CHAPTER = 1
 const MILE_POINT = 0
@@ -163,3 +162,18 @@ const MILE_STAGEDISTANCE = 0
 const MILE_STAGETOTALSCORE = 0
 const MILE_STAGEMAXSCORE = 0
 const MILE_CHAPTERSTARTTIME = 1469718000 // Is there significance to this magic number?
+
+// chao wheel consts
+var CHAOWHEEL_RARITY = []int64{2, 1, 100, 1, 2, 1, 100, 1}
+var CHAOWHEEL_ITEMWEIGHT = []int64{6, 17, 5, 17, 16, 17, 5, 17}
+
+const CHAOWHEEL_SPINCOST = 0
+const CHAOWHEEL_CHAOROULETTETYPE = 0
+const CHAOWHEEL_NUMSPECIALEGG = 0
+const CHAOWHEEL_ROULETTEAVAILABLE = 1
+
+// const CHAOWHEEL_CAMPAIGNLIST  // TODO: resolve cyclical dependencies to allow
+const CHAOWHEEL_NUMCHAOROULETTE = 0
+const CHAOWHEEL_NUMCHAOROULETTETOKEN = 0
+const CHAOWHEEL_STARTTIME = 1564822800 // this const should never be used. it should be current day at 9 AM UTC
+const CHAOWHEEL_ENDTIME = 1564909199   // this const should never be used. it should be next day at 8:59 AM UTC
