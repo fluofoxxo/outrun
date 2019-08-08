@@ -13,6 +13,21 @@ import (
     "github.com/fluofoxxo/outrun/responses"
 )
 
+func GetInformationHandler(w http.ResponseWriter, r *http.Request) {
+    // player agnostic
+    baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
+    resp := responses.DefaultInformationResponse(baseInfo)
+    respJ, err := responses.ToJSON(resp)
+    if err != nil {
+        log.Println("[ERR] (GetInformationHandler) Error in JSON marshalling: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    log.Println("[OUT] (GetInformationHandler) All OK")
+    helper.Respond([]byte(respJ), w)
+}
+
 func GetVariousParameterHandler(w http.ResponseWriter, r *http.Request) {
     // TODO: responds with a default value for now. fix this to tie to user
     baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
