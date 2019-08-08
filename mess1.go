@@ -39,5 +39,6 @@ func main() {
 	mux.HandleFunc("/Chao/getChaoWheelOptions/", handlers.GetChaoWheelOptionsHandler)
 	mux.HandleFunc("/Chao/getPrizeChaoWheelSpin/", handlers.GetPrizeChaoWheelSpinHandler)
 	mux.HandleFunc("/login/getInformation/", handlers.GetInformationHandler)
+	mux.HandleFunc("/Leaderboard/getWeeklyLeaderboardOptions/", handlers.GetWeeklyLeaderboardOptionsHandler)
 	panic(http.ListenAndServe(":9001", mux))
 }
