@@ -1,6 +1,12 @@
 package responses
 
-import "github.com/jinzhu/now"
+import (
+    "encoding/json"
+
+    "github.com/fluofoxxo/outrun/consts"
+    "github.com/fluofoxxo/outrun/objects"
+    "github.com/jinzhu/now"
+)
 
 type LeaderboardResponse struct {
     BaseResponse
@@ -38,4 +44,36 @@ func DefaultLeaderboardResponse(base BaseInfo, mode int64) LeaderboardResponse {
         mode,
     )
     return lbr
+}
+
+type LeagueDataResponse struct {
+    BaseResponse
+    LeagueData objects.LeagueData `json:"leagueData"`
+    Mode       int64              `json:"mode"`
+}
+
+func NewLeagueDataResponse(base BaseInfo, leagueData objects.LeagueData, mode int64) LeagueDataResponse {
+    br := NewBaseResponse(base)
+    ldr := LeagueDataResponse{
+        br,
+        leagueData,
+        mode,
+    }
+    return ldr
+}
+
+func DefaultLeagueDataResponse(base BaseInfo, mode int64) LeagueDataResponse {
+    var leagueData objects.LeagueData
+    if mode == 0 {
+        err := json.Unmarshal([]byte(consts.JSON_DEFAULT_LEAGUEDATA_MODE0), &leagueData)
+        if err != nil {
+            panic(err)
+        }
+    } else if mode == 1 {
+        err := json.Unmarshal([]byte(consts.JSON_DEFAULT_LEAGUEDATA_MODE1), &leagueData)
+        if err != nil {
+            panic(err)
+        }
+    }
+    return NewLeagueDataResponse(base, leagueData, mode)
 }

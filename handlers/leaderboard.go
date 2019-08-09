@@ -12,6 +12,31 @@ import (
     "github.com/fluofoxxo/outrun/responses"
 )
 
+func GetLeagueData(w http.ResponseWriter, r *http.Request) {
+    // player agnostic
+    recv := cryption.GetReceivedMessage(r)
+    var request requests.LeaderboardRequest
+    err := json.Unmarshal(recv, &request)
+    if err != nil {
+        log.Println("[ERR] (GetLeagueData) Error in JSON unmarshalling: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    mode := request.Mode // mode is first 0, then 1 (but appears to return the same response)
+    baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
+    resp := responses.DefaultLeagueDataResponse(baseInfo, mode)
+    respJ, err := responses.ToJSON(resp)
+    if err != nil {
+        log.Println("[ERR] (GetLeagueData) Error in JSON marshalling: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    log.Println("[OUT] (GetLeagueData) All OK")
+    helper.Respond([]byte(respJ), w)
+}
+
 func GetWeeklyLeaderboardOptionsHandler(w http.ResponseWriter, r *http.Request) {
     // player agnostic
     recv := cryption.GetReceivedMessage(r)

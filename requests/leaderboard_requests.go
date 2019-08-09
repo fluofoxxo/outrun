@@ -5,7 +5,4 @@ type LeaderboardRequest struct {
 	Mode int64 `json:"mode,string"`
 }
 
-type LeagueDataRequest struct {
-	LeaderboardRequest                    // Also includes a Mode
-	LeagueData         objects.LeagueData `json:"leagueData"`
-}
+type LeagueDataRequest LeaderboardRequest // are the same
