@@ -1,8 +1,12 @@
 package responses
 
 import (
-    "github.com/fluofoxxo/outrun/playerdata"
+    "encoding/json"
     "time"
+
+    "github.com/fluofoxxo/outrun/consts"
+    "github.com/fluofoxxo/outrun/objects"
+    "github.com/fluofoxxo/outrun/playerdata"
 )
 
 /*
@@ -81,4 +85,79 @@ func NewLoginSuccessResponse(base BaseInfo, sid, username string) LoginSuccessRe
         username,
     }
     return lsr
+}
+
+type TickerResponse struct {
+    BaseResponse
+    TickerList []objects.Ticker `json:"tickerList"`
+}
+
+func NewTickerResponse(base BaseInfo, tickerList []objects.Ticker) TickerResponse {
+    br := NewBaseResponse(base)
+    tr := TickerResponse{
+        br,
+        tickerList,
+    }
+    return tr
+}
+
+func DefaultTickerResponse(base BaseInfo) TickerResponse {
+    return NewTickerResponse(
+        base,
+        []objects.Ticker{},
+    )
+}
+
+type LoginBonusResponse struct {
+    BaseResponse
+    LoginBonusStatus          objects.LoginBonusStatus   `json:"loginBonusStatus"`
+    StartTime                 int64                      `json:"startTime"`
+    EndTime                   int64                      `json:"endTime"`
+    LoginBonusRewardList      []objects.LoginBonusReward `json:"loginBonusRewardList"`
+    FirstLoginBonusRewardList []objects.LoginBonusReward `json:"firstLoginBonusRewardList"`
+    RewardID                  int64                      `json:"rewardId"`
+    RewardDays                int64                      `json:"rewardDays"`
+    FirstRewardDays           int64                      `json:"firstRewardDays"`
+}
+
+func NewLoginBonusResponse(base BaseInfo, lbs objects.LoginBonusStatus, st, et int64, lbrl, flbrl []objects.LoginBonusReward, rid, rd, frd int64) LoginBonusResponse {
+    br := NewBaseResponse(base)
+    lbr := LoginBonusResponse{
+        br,
+        lbs,
+        st,
+        et,
+        lbrl,
+        flbrl,
+        rid,
+        rd,
+        frd,
+    }
+    return lbr
+}
+
+func DefaultLoginBonusResponse(base BaseInfo) LoginBonusResponse {
+    // TODO: change these constants and find out what they do!!
+    lbs := objects.LoginBonusStatus{2, 2, 1465830000}
+    var loginBonusRewardList []objects.LoginBonusReward
+    var firstLoginBonusRewardList []objects.LoginBonusReward
+    err := json.Unmarshal([]byte(consts.JSON_DEFAULT_LOGINBONUS_LOGINBONUSREWARDLIST), &loginBonusRewardList)
+    if err != nil {
+        panic(err)
+    }
+    err = json.Unmarshal([]byte(consts.JSON_DEFAULT_LOGINBONUS_FIRSTLOGINBONUSREWARDLIST), &firstLoginBonusRewardList)
+    if err != nil {
+        panic(err)
+    }
+    return NewLoginBonusResponse(
+        base,
+        lbs,
+        1465743600,
+        1466348400,
+        loginBonusRewardList,
+        firstLoginBonusRewardList,
+        -1,
+        -1,
+        -1,
+    )
 }

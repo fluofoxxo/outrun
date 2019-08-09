@@ -13,8 +13,34 @@ import (
     "github.com/fluofoxxo/outrun/responses"
 )
 
-func GetTickerHandler(w http.ResponseWriter, r *http.Request) {
+func LoginBonusHandler(w http.ResponseWriter, r *http.Request) {
+    // TODO: This is _definitely_ player dependent, but we aren't right now!!
+    baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
+    resp := responses.DefaultLoginBonusResponse(baseInfo)
+    respJ, err := responses.ToJSON(resp)
+    if err != nil {
+        log.Println("[ERR] (LoginBonusHandler) Error in JSON marshalling: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    log.Println("[OUT] (LoginBonusHandler) All OK")
+    helper.Respond([]byte(respJ), w)
+}
 
+func GetTickerHandler(w http.ResponseWriter, r *http.Request) {
+    // TODO: player agnostic for now. Needs testing!
+    baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
+    resp := responses.DefaultTickerResponse(baseInfo)
+    respJ, err := responses.ToJSON(resp)
+    if err != nil {
+        log.Println("[ERR] (GetTickerHandler) Error in JSON marshalling: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    log.Println("[OUT] (GetTickerHandler) All OK")
+    helper.Respond([]byte(respJ), w)
 }
 
 func GetInformationHandler(w http.ResponseWriter, r *http.Request) {

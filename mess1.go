@@ -43,5 +43,7 @@ func main() {
 	mux.HandleFunc("/Leaderboard/getLeagueData/", handlers.GetLeagueData)
 	mux.HandleFunc("/Leaderboard/getWeeklyLeaderboardEntries/", handlers.GetWeeklyLeaderboardEntriesHandler)
 	mux.HandleFunc("/Player/setUserName/", handlers.SetUserNameHandler)
+	mux.HandleFunc("/login/getTicker/", handlers.GetTickerHandler)
+	mux.HandleFunc("/Login/loginBonus/", handlers.LoginBonusHandler)
 	panic(http.ListenAndServe(":9001", mux))
 }
