@@ -14,5 +14,3 @@ type MileageMapState struct {
 	StageMaxScore    int64 `json:"stageMaxScore"`
 	ChapterStartTime int64 `json:"chapterStartTime"`
 }
-
-// TODO: This was the last thing left off on 8/5/2019. Pick up here!

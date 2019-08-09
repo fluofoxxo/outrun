@@ -13,6 +13,10 @@ import (
     "github.com/fluofoxxo/outrun/responses"
 )
 
+func GetTickerHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
 func GetInformationHandler(w http.ResponseWriter, r *http.Request) {
     // player agnostic
     baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
