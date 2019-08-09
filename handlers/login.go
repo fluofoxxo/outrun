@@ -144,7 +144,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
     } else if rUserID != "0" && rPassword != "" { // gate LoginDelta
         // game is trying to log in using given key
-        // for now, let's pretend like it worked no matter what
         baseInfo.SetErrorMessage(consts.EM_OK)
         sid, err := db.AssignSessionID(rUserID)
         if err != nil {
@@ -153,8 +152,14 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
             w.Write([]byte("Internal server error"))
             return
         }
-        //response := responses.NewLoginSuccessResponse(baseInfo, sid, "DUMMY USERNAME")
-        response := responses.NewLoginSuccessResponse(baseInfo, sid, "")
+        player, err := db.SessionIDToPlayer(sid)
+        if err != nil {
+            log.Println("[ERR] (LoginHandler)" + logme + " Error getting player: " + err.Error())
+            w.WriteHeader(http.StatusInternalServerError)
+            w.Write([]byte("Internal server error"))
+            return
+        }
+        response := responses.NewLoginSuccessResponse(baseInfo, sid, player.Username)
         responseJ, err := json.Marshal(response)
         if err != nil {
             log.Println("[ERR] (LoginHandler)" + logme + " Error marshalling: " + err.Error())
