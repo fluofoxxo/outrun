@@ -2,11 +2,12 @@ package db
 
 import (
     "encoding/json"
-    bolt "go.etcd.io/bbolt"
     "log"
     "math/rand"
     "strconv"
     "time"
+
+    bolt "go.etcd.io/bbolt"
 
     "github.com/fluofoxxo/outrun/helper"
     "github.com/fluofoxxo/outrun/playerdata"
@@ -62,6 +63,15 @@ func SessionIDToUID(sid string) (string, error) {
     return string(result), nil
 }
 
+func SessionIDToPlayer(sid string) (pdata.Player, error) {
+    uid, err := SessionIDToUID(sid)
+    if err != nil {
+        return pdata.BLANK_PLAYER, err
+    }
+    player, err := GetPlayerByUID(uid)
+    return player, err
+}
+
 func UIDToSessionID(uid string) (string, error) {
     // TODO: IMPLEMENT MAX TIME FOR SESSION (1 HR)
     result, worked, err := Get("sessions/UIDtoSID", uid)
@@ -95,4 +105,14 @@ func GetPlayerByUID(uid string) (pdata.Player, error) {
         return pdata.BLANK_PLAYER, err
     }
     return userData, nil
+}
+
+func SavePlayer(player pdata.Player) error {
+    uid := player.UserID
+    playerJson, err := json.Marshal(player)
+    if err != nil {
+        return err
+    }
+    err = Set("players", uid, playerJson)
+    return err
 }
