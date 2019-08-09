@@ -23,3 +23,5 @@ If you wish to run this code, clone the repository and build/run `mess1.go` in t
 ### Misc.
 
 Any pull requests deemed code improvements are strongly encouraged. Refactors may be merged into a different branch.
+
+In closed testing, the server consumes around 4 MB of memory. This will probably be increased as the `bbolt` database increases in size.
