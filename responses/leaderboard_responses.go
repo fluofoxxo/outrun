@@ -77,3 +77,47 @@ func DefaultLeagueDataResponse(base BaseInfo, mode int64) LeagueDataResponse {
     }
     return NewLeagueDataResponse(base, leagueData, mode)
 }
+
+type LeaderboardEntriesResponse struct {
+    BaseResponse
+    PlayerEntry  objects.PlayerEntry   `json:"playerEntry"`
+    LastOffset   int64                 `json:"lastOffset"`
+    ResetTime    int64                 `json:"resetTime"`
+    StartTime    int64                 `json:"startTime"`
+    StartIndex   int64                 `json:"startIndex"`
+    Mode         int64                 `json:"mode"`
+    EntriesList  []objects.PlayerEntry `json:"entriesList"` // TODO: we don't if the game expects PlayerEntry
+    TotalEntries int64                 `json:"totalEntries"`
+}
+
+func NewLeaderboardEntriesResponse(base BaseInfo, pe objects.PlayerEntry, lo, rt, st, si, m int64, pes []objects.PlayerEntry) LeaderboardEntriesResponse {
+    br := NewBaseResponse(base)
+    ler := LeaderboardEntriesResponse{
+        br,
+        pe,
+        lo,
+        rt,
+        st,
+        si,
+        m,
+        pes,
+        int64(len(pes)),
+    }
+    return ler
+}
+
+func DefaultLeaderboardEntriesResponse(base BaseInfo, uid string, mode int64) LeaderboardEntriesResponse {
+    // TODO: const the below
+    startTime := now.BeginningOfDay().UTC().Unix()
+    resetTime := startTime + 86400 // + 1 Day
+    return NewLeaderboardEntriesResponse(
+        base,
+        objects.DefaultPlayerEntry(uid),
+        -1,
+        resetTime,
+        startTime,
+        1,
+        0,
+        []objects.PlayerEntry{},
+    )
+}
