@@ -23,7 +23,7 @@ func GetReceivedMessage(r *http.Request) []byte {
     iv := r.Form.Get("key")
     secure := r.Form.Get("secure")
     if secure != "1" {
-        log.Println("[WARN] The secure flag from the client was not 1. Something's up.")
+        return []byte(param) // message is not encrypted!
     }
     EncryptionIv = []byte(iv)
     paramUnB64 := B64Decode(param)
