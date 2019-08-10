@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/objects"
 	"github.com/fluofoxxo/outrun/playerdata"
 )
@@ -84,4 +85,40 @@ func DefaultQuickPostGameResultsResponse(base BaseInfo, player pdata.Player) (Qu
 		),
 	}
 	return NewQuickPostGameResultsResponse(base, ps, dci, ml, oml, pcs), nil
+}
+
+type FreeItemListResponse struct {
+	BaseResponse
+	FreeItemList []objects.FreeItem `json:"freeItemList"`
+	ResetTime    int64              `json:"resetTime"`
+}
+
+func NewFreeItemListResponse(base BaseInfo, fil []objects.FreeItem, rt int64) FreeItemListResponse {
+	br := NewBaseResponse(base)
+	return FreeItemListResponse{
+		br,
+		fil,
+		rt,
+	}
+}
+
+var defaultFreeItems = makeDefaultFreeItems()
+
+func DefaultFreeItemListResponse(base BaseInfo) FreeItemListResponse {
+	resetTime := time.Now().UTC().Unix() + 7200 // two hours from now (For debugging)
+	filr := NewFreeItemListResponse(
+		base,
+		defaultFreeItems,
+		resetTime,
+	)
+	return filr
+}
+
+func makeDefaultFreeItems() []objects.FreeItem {
+	dfi := []objects.FreeItem{}
+	for _, id := range consts.ITEM_IDS {
+		fi := objects.NewFreeItem(id, 1, 1)
+		dfi = append(dfi, fi)
+	}
+	return dfi
 }

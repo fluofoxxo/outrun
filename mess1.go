@@ -73,6 +73,7 @@ func main() {
 	// timed mode
 	mux.HandleFunc("/Game/quickActStart/", handlers.QuickActStartHandler)
 	mux.HandleFunc("/Game/quickPostGameResults/", handlers.QuickPostGameResultsHandler)
+	mux.HandleFunc("/Game/getFreeItemList/", handlers.GetFreeItemListHandler)
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	panic(http.ListenAndServe(":9001", mux))

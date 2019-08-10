@@ -14,6 +14,38 @@ import (
     "github.com/fluofoxxo/outrun/responses"
 )
 
+func GetFreeItemListHandler(w http.ResponseWriter, r *http.Request) {
+    recv := cryption.GetReceivedMessage(r)
+
+    var request requests.BasicRequest
+    err := json.Unmarshal(recv, &request)
+    if err != nil {
+        log.Println("[ERR] (GetFreeItemListHandler) Error unmarshalling: " + err.Error())
+        w.WriteHeader(http.StatusBadRequest)
+        w.Write([]byte("Invalid request"))
+        return
+    }
+
+    // TODO: this is player agnostic for now!
+    baseInfo := responses.NewBaseInfo(consts.EM_OK, 0, 0)
+    response := responses.DefaultFreeItemListResponse(baseInfo)
+    if err != nil {
+        log.Println("[ERR] (GetFreeItemListHandler) Error making response: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    respJ, err := responses.ToJSON(response)
+    if err != nil {
+        log.Println("[ERR] (GetFreeItemListHandler) Error marshalling: " + err.Error())
+        w.WriteHeader(http.StatusInternalServerError)
+        w.Write([]byte("Internal server error"))
+        return
+    }
+    log.Println("[OUT] (GetFreeItemListHandler) All OK")
+    helper.Respond([]byte(respJ), w)
+}
+
 func QuickPostGameResultsHandler(w http.ResponseWriter, r *http.Request) {
     recv := cryption.GetReceivedMessage(r)
 
