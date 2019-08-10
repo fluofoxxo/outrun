@@ -1,9 +1,17 @@
 package requests
 
+import "github.com/fluofoxxo/outrun/objects"
+
 type QuickActStartRequest struct {
 	BasicRequest
 	Modifier []int64 `json:"modifire"`           // Seems to be list of item IDs.
 	Tutorial int64   `json:"tutorial,omitempty"` // will omit the field if not found
+}
+
+type ActStartRequest struct {
+	QuickActStartRequest
+	DistanceFriendList []objects.Friend `json:"distanceFriendList"` // TODO: Are we sure that it's not MileageFriend?
+	Tutorial           int64            `json:"tutorial"`
 }
 
 type QuickPostGameResultsRequest struct {

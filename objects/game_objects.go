@@ -4,6 +4,9 @@ import (
 	"github.com/fluofoxxo/outrun/playerdata"
 )
 
+type Friend struct { // TODO: discover fields
+}
+
 type OperatorMessage struct { // is this the same as a normal message?
 	MessageID  string      `json:"messageId"`
 	Contents   string      `json:"contents"`

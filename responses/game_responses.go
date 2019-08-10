@@ -9,24 +9,53 @@ import (
 	"github.com/fluofoxxo/outrun/playerdata"
 )
 
-type QuickActStartResponse struct {
+type ActResponseBase struct {
 	BaseResponse
 	PlayerState  pdata.PlayerState  `json:"playerState"`
 	CampaignList []objects.Campaign `json:"campaignList"`
 }
 
-func NewQuickActStartResponse(base BaseInfo, playerState pdata.PlayerState, campaignList []objects.Campaign) QuickActStartResponse {
+func NewActResponseBase(base BaseInfo, playerState pdata.PlayerState, campaignList []objects.Campaign) ActResponseBase {
 	br := NewBaseResponse(base)
-	qasr := QuickActStartResponse{
+	return ActResponseBase{
 		br,
 		playerState,
 		campaignList,
+	}
+}
+
+type QuickActStartResponse struct {
+	ActResponseBase
+}
+
+func NewQuickActStartResponse(base BaseInfo, playerState pdata.PlayerState, campaignList []objects.Campaign) QuickActStartResponse {
+	arb := NewActResponseBase(base, playerState, campaignList)
+	qasr := QuickActStartResponse{
+		arb,
 	}
 	return qasr
 }
 
 func DefaultQuickActStartResponse(base BaseInfo, playerState pdata.PlayerState) QuickActStartResponse {
 	return NewQuickActStartResponse(base, playerState, []objects.Campaign{})
+}
+
+type ActStartResponse struct {
+	ActResponseBase
+	DistanceFriendList []objects.Friend `json:"distanceFriendList"` // TODO: discover if this is really what is needed
+}
+
+func NewActStartResponse(base BaseInfo, playerState pdata.PlayerState, campaignList []objects.Campaign, distFriends []objects.Friend) ActStartResponse {
+	arb := NewActResponseBase(base, playerState, campaignList)
+	asr := ActStartResponse{
+		arb,
+		distFriends, // TODO: find out if distFriends should just be the DistanceFriendList received from request
+	}
+	return asr
+}
+
+func DefaultActStartResponse(base BaseInfo, playerState pdata.PlayerState) ActStartResponse {
+	return NewActStartResponse(base, playerState, []objects.Campaign{}, []objects.Friend{})
 }
 
 type QuickPostGameResultsResponse struct {
