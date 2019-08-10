@@ -14,7 +14,7 @@ type ActStartRequest struct {
 	Tutorial           int64            `json:"tutorial"`
 }
 
-type QuickPostGameResultsRequest struct {
+type GameResultsRequestBase struct {
 	BasicRequest
 	Closed                 int64  `json:"closed"`
 	Score                  int64  `json:"score,string"`
@@ -27,4 +27,17 @@ type QuickPostGameResultsRequest struct {
 	NumAnimals             int64  `json:"numAnimals,string"`
 	CheatResult            string `json:"cheatResult"`
 	MaxCombo               int64  `json:"maxCombo,string"`
+}
+
+type QuickPostGameResultsRequest struct {
+	GameResultsRequestBase
+}
+
+type PostGameResultsRequest struct {
+	GameResultsRequestBase
+	BossDestroyed int64 `json:"bossDestroyed"`
+	ChapterClear  int64 `json:"chapterClear"`
+	GetChaoEgg    int64 `json:"getChaoEgg"`
+	NumBossAttack int64 `json:"numBossAttack,string"`
+	ReachPoint    int64 `json:"reachPoint,string"`
 }
