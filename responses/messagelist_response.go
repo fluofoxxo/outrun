@@ -6,10 +6,10 @@ import (
 
 type MessageListResponse struct {
     BaseResponse
-    MessageList          []objects.Message `json:"messageList"`
-    TotalMessage         int64             `json:"totalMessage"`
-    OperatorMessageList  []objects.Message `json:"operatorMessageList"`
-    TotalOperatorMessage int64             `json:"totalOperatorMessage"`
+    MessageList          []objects.Message         `json:"messageList"`
+    TotalMessage         int64                     `json:"totalMessage"`
+    OperatorMessageList  []objects.OperatorMessage `json:"operatorMessageList"`
+    TotalOperatorMessage int64                     `json:"totalOperatorMessage"`
 }
 
 func NewMessageListResponse(base BaseInfo) MessageListResponse {
@@ -18,7 +18,7 @@ func NewMessageListResponse(base BaseInfo) MessageListResponse {
         br,
         []objects.Message{}, // TODO: Find a good replacement for this
         0,
-        []objects.Message{}, // TODO: Find a good replacement for this
+        []objects.OperatorMessage{}, // TODO: Find a good replacement for this
         0,
     }
     return mlr

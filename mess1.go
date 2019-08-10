@@ -45,6 +45,7 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	log.Println("Starting server on port 9001")
 	mux := http.NewServeMux()
+	// login and main menu (primary)
 	mux.HandleFunc("/Login/login/", handlers.LoginHandler)
 	mux.HandleFunc("/Sgn/sendApollo/", handlers.SendApolloHandler)
 	mux.HandleFunc("/Sgn/setNoahId/", handlers.SetNoahIDHandler)
@@ -69,6 +70,9 @@ func main() {
 	mux.HandleFunc("/Player/setUserName/", handlers.SetUserNameHandler)
 	mux.HandleFunc("/login/getTicker/", handlers.GetTickerHandler)
 	mux.HandleFunc("/Login/loginBonus/", handlers.LoginBonusHandler)
+	// timed mode
+	mux.HandleFunc("/Game/quickActStart/", handlers.QuickActStartHandler)
+	mux.HandleFunc("/Game/quickPostGameResults/", handlers.QuickPostGameResultsHandler)
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	panic(http.ListenAndServe(":9001", mux))

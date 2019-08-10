@@ -1,6 +1,8 @@
 package pdata
 
 import (
+	"errors"
+
 	"github.com/fluofoxxo/outrun/consts"
 
 	"encoding/json"
@@ -37,6 +39,25 @@ type Player struct {
 	CharacterStates []CharacterState `json:"characterState"`
 	PlayerState     `json:"playerState"`
 	ChaoState       []Chao `json:"chaoState"`
+}
+
+func (p Player) GetCharacter(cid string) (CharacterState, error) {
+	for _, c := range p.CharacterStates {
+		if c.CharacterID == cid {
+			return c, nil
+		}
+	}
+	return BLANK_CHARACTERSTATE, errors.New("no such character '" + cid + "'")
+}
+func (p Player) GetMainCharacter() (CharacterState, error) {
+	cid := p.PlayerState.MainCharaID
+	c, e := p.GetCharacter(cid)
+	return c, e
+}
+func (p Player) GetSubCharacter() (CharacterState, error) {
+	cid := p.PlayerState.SubCharaID
+	c, e := p.GetCharacter(cid)
+	return c, e
 }
 
 func MakePlayer(uid, username, password, key string, cs []CharacterState, ps PlayerState, chs []Chao) Player {
@@ -77,25 +98,26 @@ func NewPlayer(uid, username, password, key string) Player {
 }
 
 var BLANK_PLAYER = NewPlayer("", "", "", "")
+var BLANK_CHARACTERSTATE = CharacterState{"", 0, 0, 0, []int64{}, []int64{}, 0, 0, 0, 0, 0, 0, 0, []string{}}
 
 type CharacterState struct {
 	CharacterID      string   `json:"characterId"`
 	Level            int64    `json:"level,string"`
 	NumRings         int64    `json:"numRings,string"`
 	NumRedRings      int64    `json:"numRedRings,string"`
-	AbilityLevel     []string `json:"abilityLevel"` // the strings annoyingly are str(num)
+	AbilityLevel     []int64  `json:"abilityLevel"`
 	AbilityNumRings  []int64  `json:"abilityNumRings"`
 	Exp              int64    `json:"exp"`
-	Star             int64    `json:"star"`
-	StarMax          int64    `json:"starMax"`
-	LockCondition    int64    `json:"lockCondition"`
-	PriceNumRings    int64    `json:"priceNumRings"`
-	PriceNumRedRings int64    `json:"priceNumRedRings"`
+	Star             int64    `json:"star,string"`
+	StarMax          int64    `json:"starMax,string"`
+	LockCondition    int64    `json:"lockCondition,string"`
+	PriceNumRings    int64    `json:"priceNumRings,string"`
+	PriceNumRedRings int64    `json:"priceNumRedRings,string"`
 	Status           int64    `json:"status"`
-	CampaignList     []string `json:"campaignlist"` // unknown, do more research
+	CampaignList     []string `json:"campaignList"` // unknown, do more research
 }
 
-func MakeCharacterState(cid string, lvl, nr, nrr int64, al []string, anr []int64, exp, st, stm, lc, pnr, pnrr, s int64, cl []string) CharacterState {
+func MakeCharacterState(cid string, lvl, nr, nrr int64, al, anr []int64, exp, st, stm, lc, pnr, pnrr, s int64, cl []string) CharacterState {
 	cs := CharacterState{
 		cid,
 		lvl,
