@@ -41,3 +41,9 @@ type PostGameResultsRequest struct {
 	NumBossAttack int64 `json:"numBossAttack,string"`
 	ReachPoint    int64 `json:"reachPoint,string"`
 }
+
+type MileageRewardRequest struct {
+	BasicRequest
+	Episode int64 `json:"episode,string"`
+	Chapter int64 `json:"chapter,string"`
+}
