@@ -3,15 +3,16 @@ package responses
 import (
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/objects"
+	"github.com/fluofoxxo/outrun/playerdata"
 )
 
 type MileageDataResponse struct {
 	BaseResponse
-	MileageFriendList       []objects.MileageFriend `json:"mileageFriendList"`
-	objects.MileageMapState `json:"mileageMapState"`
+	MileageFriendList     []objects.MileageFriend `json:"mileageFriendList"`
+	pdata.MileageMapState `json:"mileageMapState"`
 }
 
-func NewMileageDataResponse(base BaseInfo, mileageFriendList []objects.MileageFriend, mileageMapState objects.MileageMapState) MileageDataResponse {
+func NewMileageDataResponse(base BaseInfo, mileageFriendList []objects.MileageFriend, mileageMapState pdata.MileageMapState) MileageDataResponse {
 	br := NewBaseResponse(base)
 	mdr := MileageDataResponse{
 		br,
@@ -22,7 +23,7 @@ func NewMileageDataResponse(base BaseInfo, mileageFriendList []objects.MileageFr
 }
 
 func DefaultMileageDataResponse(base BaseInfo) MileageDataResponse {
-	mileageMapState := objects.MileageMapState{
+	mileageMapState := pdata.MileageMapState{
 		consts.MILE_EPISODE,
 		consts.MILE_CHAPTER,
 		consts.MILE_POINT,

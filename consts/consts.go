@@ -149,6 +149,7 @@ const USR_DEFAULT_PLAYERSTATE_QUICKTOTALHIGHSCORE = 0
 
 const USR_DEFAULT_CHAO_STATUS = 0
 const USR_DEFAULT_CHAO_LEVEL = 0
+const USR_DEFAULT_CHAO_DEALING = CHAO_DEALING_NONE
 const USR_DEFAULT_CHAO_ACQUIRED = 0
 const USR_DEFAULT_CHAO_RARITY = 0
 const USR_DEFAULT_CHAO_HIDDEN = 0
@@ -164,6 +165,14 @@ const MILE_STAGETOTALSCORE = 0
 const MILE_STAGEMAXSCORE = 0
 const MILE_CHAPTERSTARTTIME = 1469718000 // Is there significance to this magic number?
 
+// chao consts
+const CHAO_STATUS_NOTOWNED = 0
+const CHAO_STATUS_OWNED = 1
+const CHAO_STATUS_MAXLEVEL = 2
+const CHAO_DEALING_NONE = 0
+const CHAO_DEALING_LEADER = 1
+const CHAO_DEALING_SUB = 2
+
 // chao wheel consts
 var CHAOWHEEL_RARITY = []int64{2, 1, 100, 1, 2, 1, 100, 1}
 var CHAOWHEEL_ITEMWEIGHT = []int64{6, 17, 5, 17, 16, 17, 5, 17}
@@ -178,6 +187,38 @@ const CHAOWHEEL_NUMCHAOROULETTE = 0
 const CHAOWHEEL_NUMCHAOROULETTETOKEN = 0
 const CHAOWHEEL_STARTTIME = 1564822800 // this const should never be used. it should be current day at 9 AM UTC
 const CHAOWHEEL_ENDTIME = 1564909199   // this const should never be used. it should be next day at 8:59 AM UTC
+
+// wheel consts
+const WHEEL_RANK_NORMAL = int64(0)
+const WHEEL_RANK_BIG = int64(1)
+const WHEEL_RANK_SUPER = int64(2)
+const WHEEL_RANK_MAX = int64(3)
+
+// incentive consts
+const MILEAGE_INCENTIVE_NONE = 0
+const MILEAGE_INCENTIVE_POINT = 1
+const MILEAGE_INCENTIVE_CHAPTER = 2
+const MILEAGE_INCENTIVE_EPISODE = 3
+const MILEAGE_INCENTIVE_FRIEND = 4
+
+// campaign consts
+const CAMPAIGN_TYPE_BANKEDRINGBONUS = 0
+const CAMPAIGN_TYPE_DAILYMISSIONBONUS = 1
+const CAMPAIGN_TYPE_CHAOROULETTECOST = 2
+const CAMPAIGN_TYPE_GAMEITEMCOST = 3
+const CAMPAIGN_TYPE_CHARACTERUPGRADECOST = 4
+const CAMPAIGN_TYPE_PURCHASEADDRINGS = 5
+const CAMPAIGN_TYPE_JACKPOTVALUEBONUS = 6
+const CAMPAIGN_TYPE_MILEAGEPASSINGRINGBONUS = 7
+const CAMPAIGN_TYPE_PURCHASEADDENERGIES = 8
+const CAMPAIGN_TYPE_PURCHASEADDREDRINGS = 9
+const CAMPAIGN_TYPE_PURCHASEADDREDRINGSNOCHARGEUSER = 10
+const CAMPAIGN_TYPE_SENDADDENERGIES = 11
+const CAMPAIGN_TYPE_INVITECOUNT = 12
+const CAMPAIGN_TYPE_PREMIUMROULETTEODDS = 13
+const CAMPAIGN_TYPE_FREEWHEELSPINCOUNT = 14
+const CAMPAIGN_TYPE_CONTINUECOST = 15
+const CAMPAIGN_TYPE_PURCHASEADDRAIDENERGIES = 16
 
 // json consts
 const JSON_DEFAULT_PRIZECHAOWHEEL_PRIZELIST = `[{"chao_id":"300000","rarity":"100"},{"chao_id":"300001","rarity":"100"},{"chao_id":"300002","rarity":"100"},{"chao_id":"401000","rarity":"1"},{"chao_id":"401001","rarity":"1"},{"chao_id":"401002","rarity":"1"},{"chao_id":"401010","rarity":"1"},{"chao_id":"401015","rarity":"1"},{"chao_id":"401005","rarity":"1"},{"chao_id":"401003","rarity":"1"},{"chao_id":"401004","rarity":"1"},{"chao_id":"401022","rarity":"1"},{"chao_id":"401016","rarity":"1"},{"chao_id":"401029","rarity":"1"},{"chao_id":"401020","rarity":"1"},{"chao_id":"401031","rarity":"1"},{"chao_id":"401033","rarity":"1"},{"chao_id":"401026","rarity":"1"},{"chao_id":"401027","rarity":"1"},{"chao_id":"401009","rarity":"1"},{"chao_id":"401017","rarity":"1"},{"chao_id":"401030","rarity":"1"},{"chao_id":"401038","rarity":"1"},{"chao_id":"401037","rarity":"1"},{"chao_id":"401034","rarity":"1"},{"chao_id":"401035","rarity":"1"},{"chao_id":"401036","rarity":"1"},{"chao_id":"401028","rarity":"1"},{"chao_id":"402001","rarity":"2"},{"chao_id":"402003","rarity":"2"},{"chao_id":"402005","rarity":"2"},{"chao_id":"402008","rarity":"2"},{"chao_id":"402015","rarity":"2"},{"chao_id":"402007","rarity":"2"},{"chao_id":"402021","rarity":"2"},{"chao_id":"402014","rarity":"2"},{"chao_id":"402024","rarity":"2"},{"chao_id":"402000","rarity":"2"},{"chao_id":"402002","rarity":"2"},{"chao_id":"402020","rarity":"2"},{"chao_id":"402016","rarity":"2"},{"chao_id":"402017","rarity":"2"},{"chao_id":"402018","rarity":"2"},{"chao_id":"402006","rarity":"2"},{"chao_id":"300005","rarity":"100"},{"chao_id":"300014","rarity":"100"},{"chao_id":"300015","rarity":"100"},{"chao_id":"300018","rarity":"100"},{"chao_id":"300020","rarity":"100"},{"chao_id":"300016","rarity":"100"},{"chao_id":"300017","rarity":"100"},{"chao_id":"300019","rarity":"100"},{"chao_id":"401011","rarity":"1"},{"chao_id":"401023","rarity":"1"},{"chao_id":"401024","rarity":"1"},{"chao_id":"401025","rarity":"1"},{"chao_id":"401046","rarity":"1"},{"chao_id":"401047","rarity":"1"},{"chao_id":"401040","rarity":"1"},{"chao_id":"401041","rarity":"1"},{"chao_id":"402034","rarity":"2"},{"chao_id":"402030","rarity":"2"}]`

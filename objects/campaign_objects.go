@@ -1,7 +1,7 @@
 package objects
 
 type Campaign struct {
-    CampaignType       int64 `json:"campaignType"`
+    CampaignType       int64 `json:"campaignType"` // consts.CAMPAIGN_TYPE_*
     CampaignContent    int64 `json:"campaignContent"`
     CampaignSubContent int64 `json:"campaignSubContent"`
     CampaignStartTime  int64 `json:"campaignStartTime"` // 6 days from 8/3/2019 at 9:00. Indicates week long event

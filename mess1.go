@@ -74,6 +74,7 @@ func main() {
 	mux.HandleFunc("/Game/quickActStart/", handlers.QuickActStartHandler)
 	mux.HandleFunc("/Game/quickPostGameResults/", handlers.QuickPostGameResultsHandler)
 	mux.HandleFunc("/Game/actStart/", handlers.ActStartHandler)
+	mux.HandleFunc("/Game/postGameResults/", handlers.PostGameResultsHandler)
 	mux.HandleFunc("/Game/getFreeItemList/", handlers.GetFreeItemListHandler)
 
 	mux.HandleFunc("/", OutputUnknownRequest)

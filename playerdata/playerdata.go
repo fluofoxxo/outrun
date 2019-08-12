@@ -2,6 +2,7 @@ package pdata
 
 import (
 	"errors"
+	"time"
 
 	"github.com/fluofoxxo/outrun/consts"
 
@@ -36,9 +37,10 @@ type Player struct {
 	Username        string           `json:"username"`
 	Password        string           `json:"password"`
 	Key             string           `json:"key"`
-	CharacterStates []CharacterState `json:"characterState"`
+	CharacterStates []CharacterState `json:"characterState"` // TODO: change the name of this to CharacterState
 	PlayerState     `json:"playerState"`
-	ChaoState       []Chao `json:"chaoState"`
+	ChaoState       []Chao          `json:"chaoState"`
+	MileageMapState MileageMapState `json:"mileageMapState"`
 }
 
 func (p Player) GetCharacter(cid string) (CharacterState, error) {
@@ -60,7 +62,7 @@ func (p Player) GetSubCharacter() (CharacterState, error) {
 	return c, e
 }
 
-func MakePlayer(uid, username, password, key string, cs []CharacterState, ps PlayerState, chs []Chao) Player {
+func MakePlayer(uid, username, password, key string, cs []CharacterState, ps PlayerState, chs []Chao, mms MileageMapState) Player {
 	player := Player{
 		uid,
 		username,
@@ -69,6 +71,7 @@ func MakePlayer(uid, username, password, key string, cs []CharacterState, ps Pla
 		cs,
 		ps,
 		chs,
+		mms,
 	}
 	return player
 }
@@ -85,6 +88,7 @@ func NewPlayer(uid, username, password, key string) Player {
 		chao := NewChao(chid) // TODO: use proper values to create Chao (see notes in consts)
 		chaostate = append(chaostate, chao)
 	}
+	mileageMapState := StartingMileageMapState()
 	player := MakePlayer(
 		uid,
 		username,
@@ -93,6 +97,7 @@ func NewPlayer(uid, username, password, key string) Player {
 		cstates,
 		pstate,
 		chaostate,
+		mileageMapState,
 	)
 	return player
 }
@@ -299,18 +304,20 @@ func MakePlayerVarious(cmsc, erm, ert, opcc, opcct, ip int64) PlayerVarious {
 
 type Chao struct {
 	ChaoID   string `json:"chaoId"`
-	Status   int64  `json:"status,string"`
+	Status   int64  `json:"status,string"` // consts.CHAO_STATUS_*
 	Level    int64  `json:"level"`
+	Dealing  int64  `json:"setStatus,string"` // consts.CHAO_DEALING_*
 	Acquired int64  `json:"acquired"`
 	Rarity   int64  `json:"rarity,string"`
 	Hidden   int64  `json:"hidden,string"` // it is likely that if something is an int, they do not need to be stringed, as the game will automatically int any strings
 }
 
-func MakeChao(chid string, status, level, acquired, rarity, hidden int64) Chao {
+func MakeChao(chid string, status, dealing, level, acquired, rarity, hidden int64) Chao {
 	chao := Chao{
 		chid,
 		status,
 		level,
+		dealing,
 		acquired,
 		rarity,
 		hidden,
@@ -323,9 +330,37 @@ func NewChao(chid string) Chao {
 		chid,
 		consts.USR_DEFAULT_CHAO_STATUS,
 		consts.USR_DEFAULT_CHAO_LEVEL,
+		consts.USR_DEFAULT_CHAO_DEALING,
 		consts.USR_DEFAULT_CHAO_ACQUIRED,
 		consts.USR_DEFAULT_CHAO_RARITY,
 		consts.USR_DEFAULT_CHAO_HIDDEN,
 	)
 	return chao
+}
+
+type MileageMapState struct {
+	Episode          int64 `json:"episode"`
+	Chapter          int64 `json:"chapter"`
+	Point            int64 `json:"point"`
+	MapDistance      int64 `json:"mapDistance"`      // this field is used very sparingly in the game...
+	NumBossAttack    int64 `json:"numBossAttack"`    // number of boss fights per this level?
+	StageDistance    int64 `json:"stageDistance"`    // how long the stage is?
+	StageTotalScore  int64 `json:"stageTotalScore"`  // ?
+	StageMaxScore    int64 `json:"stageMaxScore"`    // max score needed to pass?
+	ChapterStartTime int64 `json:"chapterStartTime"` // when the chapter starts..?
+}
+
+func StartingMileageMapState() MileageMapState {
+	// TODO: const the below!
+	return MileageMapState{
+		1,
+		1,
+		0,
+		0,
+		2,
+		300,
+		10000000,
+		10000000,
+		time.Now().UTC().Unix(),
+	}
 }
