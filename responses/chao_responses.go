@@ -80,3 +80,20 @@ func DefaultPrizeChaoWheelResponse(base BaseInfo) PrizeChaoWheelResponse {
 	}
 	return NewPrizeChaoWheelResponse(base, prizeList)
 }
+
+type EquipChaoResponse struct {
+    BaseResponse
+    PlayerState pdata.PlayerState `json:"playerState"`
+}
+
+func NewEquipChaoResponse(base BaseInfo, playerState pdata.PlayerState) EquipChaoResponse {
+    br := NewBaseResponse(base)
+    return EquipChaoResponse{
+        br,
+        playerState,
+    }
+}
+
+func DefaultEquipChaoResponse(base BaseInfo, player pdata.Player) EquipChaoResponse {
+    return NewEquipChaoResponse(base, player.PlayerState)
+}

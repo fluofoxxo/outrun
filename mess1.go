@@ -81,6 +81,8 @@ func main() {
 	mux.HandleFunc("/Game/getMileageReward/", handlers.GetMileageRewardHandler)
 	// Character
 	mux.HandleFunc("/Character/changeCharacter/", handlers.ChangeCharacterHandler)
+	// Chao
+	mux.HandleFunc("/Chao/equipChao/", handlers.EquipChaoHandler)
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	panic(http.ListenAndServe(":9001", mux))
