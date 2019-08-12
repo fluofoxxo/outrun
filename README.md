@@ -12,7 +12,7 @@
 
 ### Current functionality
 
-Most of the login sequence functions. However, some of the functions which should retain player data do not retain such data. These are typically signed with in-code comments.
+The game functions "normally" all through timed mode. The story mode (campaign) starts, but the server sends values that break the game flow (i.e. "score to next point" value being ridiculously low). Ancillary menu functions such as viewing your ID may not work as intended, although changing your username does work.
 
 ### State
 
