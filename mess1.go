@@ -78,6 +78,7 @@ func main() {
 	// Campaign mode
 	mux.HandleFunc("/Game/actStart/", handlers.ActStartHandler)
 	mux.HandleFunc("/Game/postGameResults/", handlers.PostGameResultsHandler)
+	mux.HandleFunc("/Game/getMileageReward/", handlers.GetMileageRewardHandler)
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	panic(http.ListenAndServe(":9001", mux))

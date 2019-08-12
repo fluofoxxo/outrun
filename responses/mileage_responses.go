@@ -41,3 +41,23 @@ func DefaultMileageDataResponse(base BaseInfo) MileageDataResponse {
 	)
 	return mdr
 }
+
+type MileageRewardResponse struct {
+	BaseResponse
+	MileageRewards []objects.MileageReward `json:"mileageMapRewardList"`
+}
+
+func NewMileageRewardResponse(base BaseInfo, mrs []objects.MileageReward) MileageRewardResponse {
+	br := NewBaseResponse(base)
+	return MileageRewardResponse{
+		br,
+		mrs,
+	}
+}
+
+func DefaultMileageRewardResponse(base BaseInfo) MileageRewardResponse {
+	// only give one reward for now
+	mr := objects.DefaultMileageReward()
+	mrs := []objects.MileageReward{mr}
+	return NewMileageRewardResponse(base, mrs)
+}
