@@ -83,6 +83,8 @@ func main() {
 	mux.HandleFunc("/Character/changeCharacter/", handlers.ChangeCharacterHandler)
 	// Chao
 	mux.HandleFunc("/Chao/equipChao/", handlers.EquipChaoHandler)
+	// Roulette
+	mux.HandleFunc("/RaidbossSpin/getItemStockNum/", handlers.GetItemStockNumHandler)
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	panic(http.ListenAndServe(":9001", mux))
