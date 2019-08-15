@@ -1,0 +1,51 @@
+package status
+
+const (
+	OK                         = 0
+	ServerSecurityError        = -19001
+	VersionDifference          = -19002
+	DecryptionFailure          = -19003
+	ParamHashDifference        = -19004
+	ServerNextVersion          = -19990
+	ServerMaintenance          = -19997
+	ServerBusyError            = -19998
+	ServerSystemError          = -19999
+	RequestParamError          = -10100
+	NotAvailablePlayer         = -10101
+	MissingPlayer              = -10102
+	ExpiredSession             = -10103
+	InvalidPassword            = -10104
+	InvalidSerialCode          = -10105
+	UsedSerialCode             = -10106
+	HSPWebAPIError             = -10115
+	ApolloWebAPIError          = -10115
+	DataMismatch               = -30120
+	MasterDataMismatch         = -10121
+	NotEnoughRedRings          = -21030
+	NotEnoughRings             = -20131
+	NotEnoughEnergy            = -20132
+	RouletteUseLimit           = -30401
+	RouletteBoardReset         = -30411
+	CharacterLevelLimit        = -20601
+	AllChaoLevelLimit          = -20602
+	AlreadyInvitedFriend       = -30801
+	AlreadyRequestedEnergy     = -30901
+	AlreadySentEnergy          = -30902
+	ReceiveFailureMessage      = -30910
+	AlreadyExistedPrePurchase  = -11001
+	AlreadyRemovedPrePurchase  = -11002
+	InvalidReceiptData         = -11003
+	AlreadyProcessedReceipt    = -11004
+	EnergyLimitPurchaseTrigger = -21010
+	NotStartEvent              = -10201
+	AlreadyEndEvent            = -10202
+	VersionForApplication      = -999002
+	Timeout                    = -7
+	OtherError                 = -8
+	NotReachable               = -10
+	InvalidResponse            = -20
+	ClientError                = -400
+	InternalServerError        = -500
+	HSPPurchaseError           = -600
+	ServerBusy                 = -700 // why different from other busy?
+)
