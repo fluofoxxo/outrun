@@ -46,6 +46,8 @@ func main() {
 	// Login
 	mux.HandleFunc("/Login/login/", h(muxhandlers.Login, LogExecutionTime))
 	mux.HandleFunc("/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
+	mux.HandleFunc("/Login/getVariousParameter/", h(muxhandlers.GetVariousParameter, LogExecutionTime))
+	mux.HandleFunc("/Player/getPlayerState/", h(muxhandlers.GetPlayerState, LogExecutionTime))
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	log.Println("Starting server on port 9001")

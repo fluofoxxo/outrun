@@ -92,3 +92,26 @@ func Login(helper *helper.Helper) {
 		return
 	}
 }
+
+func GetVariousParameter(helper *helper.Helper) {
+	recv := helper.GetGameRequest()
+	var request requests.Base
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		helper.Err("Error unmarshalling", err)
+		return
+	}
+	sid := request.SessionID
+	player, err := db.GetPlayerBySessionID(sid)
+	if err != nil {
+		helper.InternalErr("Error getting player by session ID", err)
+		return
+	}
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.VariousParameter(baseInfo, player)
+	err = helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+		return
+	}
+}

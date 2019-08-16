@@ -1,6 +1,8 @@
 package netobj
 
 import (
+	"time"
+
 	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/obj"
 	"github.com/fluofoxxo/outrun/obj/constobjs"
@@ -16,6 +18,22 @@ type Player struct {
 	CharacterState  []Character     `json:"characterState"`
 	ChaoState       []Chao          `json:"chaoState"`
 	MileageMapState MileageMapState `json:"mileageMapState"`
+	PlayerVarious   PlayerVarious   `json:"playerVarious"`
+}
+
+func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, playerVarious PlayerVarious) Player {
+	return Player{
+		id,
+		username,
+		password,
+		key,
+		time.Now().Unix(),
+		playerState,
+		characterState,
+		chaoState,
+		mileageMapState,
+		playerVarious,
+	}
 }
 
 /*

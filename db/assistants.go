@@ -34,22 +34,22 @@ func NewAccount() netobj.Player {
 	username := ""
 	password := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
 	key := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
-	lastLogin := time.Now().Unix()
 	playerState := netobj.DefaultPlayerState()
 	characterState := netobj.DefaultCharacterState()
 	chaoState := []netobj.Chao{} // no chao for now
 	mileageMapState := netobj.DefaultMileageMapState()
-	return netobj.Player{
+	playerVarious := netobj.DefaultPlayerVarious()
+	return netobj.NewPlayer(
 		uid,
 		username,
 		password,
 		key,
-		lastLogin,
 		playerState,
 		characterState,
 		chaoState,
 		mileageMapState,
-	}
+		playerVarious,
+	)
 }
 
 func SavePlayer(player netobj.Player) error {
@@ -68,6 +68,19 @@ func GetPlayer(uid string) (netobj.Player, error) {
 		return constnetobjs.BlankPlayer, err
 	}
 	err = json.Unmarshal(playerData, &player)
+	if err != nil {
+		return constnetobjs.BlankPlayer, err
+	}
+	return player, nil
+}
+
+func GetPlayerBySessionID(sid string) (netobj.Player, error) {
+	sidResult, err := dbaccess.Get(consts.DBBucketSessionIDs, sid)
+	if err != nil {
+		return constnetobjs.BlankPlayer, err
+	}
+	uid, _ := ParseSIDEntry(sidResult)
+	player, err := GetPlayer(uid)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
 	}

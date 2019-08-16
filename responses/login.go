@@ -3,6 +3,7 @@ package responses
 import (
     "time"
 
+    "github.com/fluofoxxo/outrun/netobj"
     "github.com/fluofoxxo/outrun/obj"
     "github.com/fluofoxxo/outrun/responses/responseobjs"
 )
@@ -64,6 +65,20 @@ func LoginSuccess(base responseobjs.BaseInfo, sid, username string) LoginSuccess
         360,                      // 6 minutes from now, regen energy
         17171,
         obj.NewItem("900000", 13),
+    }
+    return out
+}
+
+type VariousParameterResponse struct {
+    BaseResponse
+    netobj.PlayerVarious
+}
+
+func VariousParameter(base responseobjs.BaseInfo, player netobj.Player) VariousParameterResponse {
+    baseResponse := NewBaseResponse(base)
+    out := VariousParameterResponse{
+        baseResponse,
+        player.PlayerVarious,
     }
     return out
 }

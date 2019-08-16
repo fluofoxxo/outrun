@@ -3,7 +3,6 @@ package constnetobjs
 import (
     "math/rand"
     "strconv"
-    "time"
 
     "github.com/fluofoxxo/outrun/netobj"
 )
@@ -21,20 +20,20 @@ var BlankPlayer = func() netobj.Player {
     username := ""
     password := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
     key := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
-    lastLogin := time.Now().Unix()
     playerState := netobj.DefaultPlayerState()
     characterState := netobj.DefaultCharacterState()
     chaoState := []netobj.Chao{} // no chao for now
     mileageMapState := netobj.DefaultMileageMapState()
-    return netobj.Player{
+    playerVarious := netobj.DefaultPlayerVarious()
+    return netobj.NewPlayer(
         uid,
         username,
         password,
         key,
-        lastLogin,
         playerState,
         characterState,
         chaoState,
         mileageMapState,
-    }
+        playerVarious,
+    )
 }() // copied from db.NewPlayer to avoid import loop
