@@ -2,8 +2,9 @@ package dbaccess
 
 import (
 	"errors"
-	bolt "go.etcd.io/bbolt"
 	"time"
+
+	bolt "go.etcd.io/bbolt"
 
 	"github.com/fluofoxxo/outrun/consts"
 )

@@ -7,7 +7,7 @@ import (
 )
 
 type Player struct {
-	UserID          string `json:"userID"`
+	ID              string `json:"userID"`
 	Username        string `json:"username"`
 	Password        string `json:"password"`
 	Key             string `json:"key"`

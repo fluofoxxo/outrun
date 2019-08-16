@@ -10,13 +10,14 @@ import (
 )
 
 const (
+	// TODO: use proper naming conventions
 	PREFIX_ERR             = "ERR"
 	PREFIX_OUT             = "OUT"
 	PREFIX_WARN            = "WARN"
 	PREFIX_UNCATCHABLE_ERR = "UNCATCHABLE ERR"
 
-	LOGOUT_BASE = "{%s} (%s) %s\n"
-	LOGERR_BASE = "{%s} (%s) %s: %s\n"
+	LOGOUT_BASE = "[%s] (%s) %s\n"
+	LOGERR_BASE = "[%s] (%s) %s: %s\n"
 
 	INTERNAL_SRV_ERR = "Internal server error"
 	BAD_REQUEST      = "Bad request"
@@ -66,7 +67,7 @@ func (r *Helper) RespondRaw(out []byte, secureFlag, iv string) {
 	response["secure"] = secureFlag
 	response["key"] = iv
 	if secureFlag == "1" {
-		encrypted := cryption.Encrypt(out, cryption.EncryptionKey, []byte(out))
+		encrypted := cryption.Encrypt(out, cryption.EncryptionKey, []byte(iv))
 		encryptedBase64 := cryption.B64Encode(encrypted)
 		response["param"] = encryptedBase64
 	} else {
@@ -122,4 +123,8 @@ func (r *Helper) Fatal(msg string, err error) {
 }
 func (r *Helper) BaseInfo(em string, statusCode int64) responseobjs.BaseInfo {
 	return responseobjs.NewBaseInfo(em, statusCode)
+}
+func (r *Helper) InvalidRequest() {
+	r.RespW.WriteHeader(http.StatusBadRequest)
+	r.RespW.Write([]byte(BAD_REQUEST))
 }

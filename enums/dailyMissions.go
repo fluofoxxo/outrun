@@ -1,5 +1,5 @@
 package enums
 
 const (
-    DailyMissionDontKnowYet = iota
+	DailyMissionDontKnowYet = iota
 )

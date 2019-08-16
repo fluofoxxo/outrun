@@ -1,4 +1,4 @@
-package muxhandlers
+package muxobj
 
 import (
 	"net/http"
@@ -15,14 +15,14 @@ func Handle(f func(*helper.Helper), logExecutionTime bool) func(w http.ResponseW
 		return func(w http.ResponseWriter, r *http.Request) {
 			startTime := time.Now()
 			help := helper.MakeHelper(funcname, w, r)
-			f(help, r)
+			f(help)
 			endTime := time.Now()
 			timeDiff := endTime.Sub(startTime)
 			help.Out("Done executing in " + timeDiff.String())
 		}
 	}
 	return func(w http.ResponseWriter, r *http.Request) {
-		help := helper.MakeHelper(funcname, w)
-		f(help, r)
+		help := helper.MakeHelper(funcname, w, r)
+		f(help)
 	}
 }

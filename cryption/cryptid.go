@@ -18,9 +18,6 @@ func B64Encode(b []byte) string {
 }
 
 func Decrypt(content, key, iv []byte) []byte {
-	//println(content, " ", key, " ", iv)
-	//fmt.Println(string(content))
-	//fmt.Println(content, " ", key, " ", iv)
 	block, err := aes.NewCipher(key) // get cipher block from key
 	if err != nil {
 		panic(err)

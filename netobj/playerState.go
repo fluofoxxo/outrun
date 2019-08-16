@@ -1,9 +1,9 @@
 package netobj
 
 import (
-    "time"
+	"time"
 
-    "github.com/fluofoxxo/outrun/enums"
+	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/obj"
 )
 
@@ -32,12 +32,12 @@ type PlayerState struct {
 	QuickRankingLeague     int64      `json:"quickRankingLeague,string"` // same as above, but for timed mode
 	NumRouletteTicket      int64      `json:"numRouletteTicket,string"`
 	HighScore              int64      `json:"totalHighScore,string"`
-    TimedHighScore         int64      `json:"quickTotalHighScore,string"`
+	TimedHighScore         int64      `json:"quickTotalHighScore,string"`
 	TotalDistance          int64      `json:"totalDistance,string"`
 	HighDistance           int64      `json:"maximumDistance,string"` // high distance in one go?
 	DailyMissionID         int64      `json:"dailyMissionId,string"`
 	DailyMissionEndTime    int64      `json:"dailyMissionEndTime"` // 11:59 pm of current day
-	DailyChallengeValue    int64      `json:"dailyChallengeValue"`  // internally listed as ProgressStatus...
+	DailyChallengeValue    int64      `json:"dailyChallengeValue"` // internally listed as ProgressStatus...
 	DailyChallengeComplete int64      `json:"dailyChallengeComplete"`
 	NumDailyChallenge      int64      `json:"numDailyChalCont"`
 	NumPlaying             int64      `json:"numPlaying,string"` // ?
@@ -48,64 +48,65 @@ type PlayerState struct {
 var ChaoIDs = []string{"400000", "400001", "400002", "400003", "400004", "400005", "400006", "400007", "400008", "400009", "400010", "400011", "400012", "400013", "400014", "400015", "400016", "400017", "400018", "400019", "400020", "400021", "400022", "400023", "400024", "400025", "401000", "401001", "401002", "401003", "401004", "401005", "401006", "401007", "401008", "401009", "401010", "401011", "401012", "401013", "401014", "401015", "401016", "401017", "401018", "401019", "401020", "401021", "401022", "401023", "401024", "401025", "401026", "401027", "401028", "401029", "401030", "401031", "401032", "401033", "401034", "401035", "401036", "401037", "401038", "401039", "401040", "401041", "401042", "401043", "401044", "401045", "401046", "401047", "402000", "402001", "402002", "402003", "402004", "402005", "402006", "402007", "402008", "402009", "402010", "402011", "402012", "402013", "402014", "402015", "402016", "402017", "402018", "402019", "402020", "402021", "402022", "402023", "402024", "402025", "402026", "402027", "402028", "402029", "402030", "402031", "402032", "402033", "402034"}
 
 func DefaultPlayerState() PlayerState {
-    // TODO: establish as constants
+	// TODO: establish as constants
 	items := []obj.Item{}
-    equippedItemIDs := []string{"-1", "-1", "-1"}
-    mainCharaID := enums.CTStrSonic
-    subCharaID := enums.CTStrTails
-    mainChaoID := ChaoIDs[0]
-    subChaoID := ChaoIDs[1]
-    numRings := int64(9000)
-    numBuyRings := int64(1)
-    numRedRings := int64(1330)
-    numBuyRedRings := int64(7)
-    energy := int64(4)
-    energyBuy := int64(1)
-    energyRenewsAt := time.Now.Unix() + 600   // in ten minutes
-    mumMessages := int64(0)
-    rankingLeague := enums.RankingLeagueNone
-    quickRankingLeague := enums.RankingLeagueNone
-    numRouletteTicket := int64(909)
-    highScore := int64(0)
-    timedHighScore := int64(0)
-    totalDistance := int64(0)
-    highDistance := int64(0)
-    dailyMissionID := enums.DailyMissionDontKnowYet
-    dailyMissionEndTime := time.Now().Unix() + 120  // two minutes from now
-    dailyChallengeValue := int64(28282)
-    dailyChallengeComplete := int64(0)
-    numDailyChallenge := int64(0)
-    numPlayer := int64(0)
-    animals := int64(0)
-    rank := int64(1)
-    return PlayerState{
-        equippedItemIDs,
-        mainCharaID,
-        subCharaID,
-        mainChaoID,
-        subChaoID,
-        numRings,
-        numBuyRings,
-        numRedRings,
-        numBuyRedRings,
-        energy,
-        energyBuy,
-        energyRenewsAt,
-        mumMessages,
-        rankingLeague,
-        quickRankingLeague,
-        numRouletteTicket,
-        highScore,
-        timedHighScore,
-        totalDistance,
-        highDistance,
-        dailyMissionID,
-        dailyMissionEndTime,
-        dailyChallengeValue,
-        dailyChallengeComplete,
-        numDailyChallenge,
-        numPlayer,
-        animals,
-        rank,
-    }
+	equippedItemIDs := []string{"-1", "-1", "-1"}
+	mainCharaID := enums.CTStrSonic
+	subCharaID := enums.CTStrTails
+	mainChaoID := ChaoIDs[0]
+	subChaoID := ChaoIDs[1]
+	numRings := int64(9000)
+	numBuyRings := int64(1)
+	numRedRings := int64(1330)
+	numBuyRedRings := int64(7)
+	energy := int64(4)
+	energyBuy := int64(1)
+	energyRenewsAt := time.Now().Unix() + 600 // in ten minutes
+	mumMessages := int64(0)
+	rankingLeague := int64(enums.RankingLeagueNone)
+	quickRankingLeague := int64(enums.RankingLeagueNone)
+	numRouletteTicket := int64(909)
+	highScore := int64(0)
+	timedHighScore := int64(0)
+	totalDistance := int64(0)
+	highDistance := int64(0)
+	dailyMissionID := int64(enums.DailyMissionDontKnowYet)
+	dailyMissionEndTime := time.Now().Unix() + 120 // two minutes from now
+	dailyChallengeValue := int64(28282)
+	dailyChallengeComplete := int64(0)
+	numDailyChallenge := int64(0)
+	numPlayer := int64(0)
+	animals := int64(0)
+	rank := int64(1)
+	return PlayerState{
+		items,
+		equippedItemIDs,
+		mainCharaID,
+		subCharaID,
+		mainChaoID,
+		subChaoID,
+		numRings,
+		numBuyRings,
+		numRedRings,
+		numBuyRedRings,
+		energy,
+		energyBuy,
+		energyRenewsAt,
+		mumMessages,
+		rankingLeague,
+		quickRankingLeague,
+		numRouletteTicket,
+		highScore,
+		timedHighScore,
+		totalDistance,
+		highDistance,
+		dailyMissionID,
+		dailyMissionEndTime,
+		dailyChallengeValue,
+		dailyChallengeComplete,
+		numDailyChallenge,
+		numPlayer,
+		animals,
+		rank,
+	}
 }
