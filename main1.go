@@ -45,6 +45,7 @@ func main() {
 	mux := http.NewServeMux()
 	// Login
 	mux.HandleFunc("/Login/login/", h(muxhandlers.Login, LogExecutionTime))
+	mux.HandleFunc("/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	log.Println("Starting server on port 9001")
