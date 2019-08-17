@@ -32,3 +32,17 @@ func CharacterState(base responseobjs.BaseInfo, characterState []netobj.Characte
     }
     return out
 }
+
+type ChaoStateResponse struct {
+    BaseResponse
+    ChaoState []netobj.Chao `json:"chaoState"`
+}
+
+func ChaoState(base responseobjs.BaseInfo, chaoState []netobj.Chao) ChaoStateResponse {
+    baseResponse := NewBaseResponse(base)
+    out := ChaoStateResponse{
+        baseResponse,
+        chaoState,
+    }
+    return out
+}
