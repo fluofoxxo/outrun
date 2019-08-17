@@ -1,8 +1,10 @@
 package enums
 
+// TODO: Apparently the IDs are different in game code versus what is sent. How is this achieved...?
+
 const (
 	CharaTypeUnknown = iota - 1
-	CharaTypeSonic   = iota + 300000 // used to match up with networked characters
+	CharaTypeSonic   = iota + 300000 - 1 // used to match up with networked characters
 	CharaTypeTails
 	CharaTypeKnuckles
 	CharaTypeAmy

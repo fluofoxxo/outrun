@@ -18,3 +18,17 @@ func PlayerState(base responseobjs.BaseInfo, playerState netobj.PlayerState) Pla
     }
     return out
 }
+
+type CharacterStateResponse struct {
+    BaseResponse
+    CharacterState []netobj.Character `json:"characterState"`
+}
+
+func CharacterState(base responseobjs.BaseInfo, characterState []netobj.Character) CharacterStateResponse {
+    baseResponse := NewBaseResponse(base)
+    out := CharacterStateResponse{
+        baseResponse,
+        characterState,
+    }
+    return out
+}

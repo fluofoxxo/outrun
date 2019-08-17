@@ -14,17 +14,17 @@ Notes:
 
 type Character struct { // Can also be used as PlayCharacter
 	obj.Character
-	Status        int64          `json:"status"` // value from enums.CharacterStatus*
-	Level         int64          `json:"level"`
-	Exp           int64          `json:"exp"`
-	Star          int64          `json:"star"`
-	StarMax       int64          `json:"starMax"`
-	LockCondition int64          `json:"lockCondition"` // value from enums.LockCondition*
-	CampaignList  []obj.Campaign `json:"campaignList"`
-	AbilityLevel  []int64        `json:"abilityLevel"` // levels for each ability
-	//AbilityNumRings []int64 `json:"abilityNumRings"`  // this was in the original code, but isn't in the game code. this may be a point of failure
-	AbilityLevelUp    []int64 `json:"abilityLevelup"` // this is a list of items using enums.ItemID*
-	AbilityLevelUpExp []int64 `json:"abilityLevelupExp,omitempty"`
+	Status            int64          `json:"status"` // value from enums.CharacterStatus*
+	Level             int64          `json:"level"`
+	Exp               int64          `json:"exp"`
+	Star              int64          `json:"star"`
+	StarMax           int64          `json:"starMax"`
+	LockCondition     int64          `json:"lockCondition"` // value from enums.LockCondition*
+	CampaignList      []obj.Campaign `json:"campaignList"`
+	AbilityLevel      []int64        `json:"abilityLevel"`    // levels for each ability
+	AbilityNumRings   []int64        `json:"abilityNumRings"` // where is this being checked? I can't find the string using dnSpy...
+	AbilityLevelUp    []int64        `json:"abilityLevelup"`  // this is a list of items using enums.ItemID*
+	AbilityLevelUpExp []int64        `json:"abilityLevelupExp,omitempty"`
 }
 
 func DefaultCharacter(char obj.Character) Character {
@@ -36,6 +36,7 @@ func DefaultCharacter(char obj.Character) Character {
 	lockCondition := int64(enums.LockConditionOpen)
 	campaignList := []obj.Campaign{}
 	abilityLevel := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} // 11 abilities?
+	abilityNumRings := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	abilityLevelUp := []int64{enums.ItemIDInvincible}
 	abilityLevelUpExp := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	return Character{
@@ -48,12 +49,14 @@ func DefaultCharacter(char obj.Character) Character {
 		lockCondition,
 		campaignList,
 		abilityLevel,
+		abilityNumRings,
 		abilityLevelUp,
 		abilityLevelUpExp,
 	}
 }
 
 func DefaultCharacterState() []Character { // every character
+	// TODO: It looks like the game only wants 300000-300020, otherwise and index error is created. Investigate this in game!
 	return []Character{
 		DefaultCharacter(constobjs.CharacterSonic),
 		DefaultCharacter(constobjs.CharacterTails),
@@ -76,13 +79,13 @@ func DefaultCharacterState() []Character { // every character
 		DefaultCharacter(constobjs.CharacterGothicAmy),
 		DefaultCharacter(constobjs.CharacterHalloweenShadow),
 		DefaultCharacter(constobjs.CharacterHalloweenRouge),
-		DefaultCharacter(constobjs.CharacterHalloweenOmega),
-		DefaultCharacter(constobjs.CharacterMephiles),
-		DefaultCharacter(constobjs.CharacterPSISilver),
-		DefaultCharacter(constobjs.CharacterXMasSonic),
-		DefaultCharacter(constobjs.CharacterXMasTails),
-		DefaultCharacter(constobjs.CharacterXMasKnuckles),
-		DefaultCharacter(constobjs.CharacterWerehog),
-		DefaultCharacter(constobjs.CharacterSticks),
+		//DefaultCharacter(constobjs.CharacterHalloweenOmega),
+		//DefaultCharacter(constobjs.CharacterMephiles),
+		//DefaultCharacter(constobjs.CharacterPSISilver),
+		//DefaultCharacter(constobjs.CharacterXMasSonic),
+		//DefaultCharacter(constobjs.CharacterXMasTails),
+		//DefaultCharacter(constobjs.CharacterXMasKnuckles),
+		//DefaultCharacter(constobjs.CharacterWerehog),
+		//DefaultCharacter(constobjs.CharacterSticks),
 	}
 }

@@ -22,6 +22,8 @@ which can be detected through a logcat reading.
 const NumRedRings = 1337
 const PriceRedRings = 9001
 
+// TODO: replace strconv.Itoa conversions to their string equivalents in enums. This should be done after #10 is solved and closed!
+
 var CharacterSonic = obj.Character{
 	strconv.Itoa(enums.CharaTypeSonic),
 	0,             // unlocked from the start, no cost
