@@ -38,6 +38,7 @@ func NewAccount() netobj.Player {
 	characterState := netobj.DefaultCharacterState()
 	chaoState := []netobj.Chao{} // no chao for now
 	mileageMapState := netobj.DefaultMileageMapState()
+	mileageFriends := []netobj.MileageFriend{}
 	playerVarious := netobj.DefaultPlayerVarious()
 	return netobj.NewPlayer(
 		uid,
@@ -48,6 +49,7 @@ func NewAccount() netobj.Player {
 		characterState,
 		chaoState,
 		mileageMapState,
+		mileageFriends,
 		playerVarious,
 	)
 }

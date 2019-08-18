@@ -24,6 +24,7 @@ var BlankPlayer = func() netobj.Player {
     characterState := netobj.DefaultCharacterState()
     chaoState := []netobj.Chao{} // no chao for now
     mileageMapState := netobj.DefaultMileageMapState()
+    mileageFriends := []netobj.MileageFriend{}
     playerVarious := netobj.DefaultPlayerVarious()
     return netobj.NewPlayer(
         uid,
@@ -34,6 +35,7 @@ var BlankPlayer = func() netobj.Player {
         characterState,
         chaoState,
         mileageMapState,
+        mileageFriends,
         playerVarious,
     )
 }() // copied from db.NewPlayer to avoid import loop

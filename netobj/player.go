@@ -18,10 +18,11 @@ type Player struct {
 	CharacterState  []Character     `json:"characterState"`
 	ChaoState       []Chao          `json:"chaoState"`
 	MileageMapState MileageMapState `json:"mileageMapState"`
+	MileageFriends  []MileageFriend `json:"mileageFriendList"`
 	PlayerVarious   PlayerVarious   `json:"playerVarious"`
 }
 
-func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, playerVarious PlayerVarious) Player {
+func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious) Player {
 	return Player{
 		id,
 		username,
@@ -32,6 +33,7 @@ func NewPlayer(id, username, password, key string, playerState PlayerState, char
 		characterState,
 		chaoState,
 		mileageMapState,
+		mf,
 		playerVarious,
 	}
 }

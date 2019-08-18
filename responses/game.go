@@ -4,7 +4,9 @@ import (
     "strconv"
 
     "github.com/fluofoxxo/outrun/enums"
+    "github.com/fluofoxxo/outrun/netobj"
     "github.com/fluofoxxo/outrun/obj"
+    "github.com/fluofoxxo/outrun/obj/constobjs"
     "github.com/fluofoxxo/outrun/responses/responseobjs"
 )
 
@@ -44,4 +46,51 @@ func DailyChallengeData(base responseobjs.BaseInfo) DailyChallengeDataResponse {
         maxDailyChallengeDay,
         endTime,
     }
+}
+
+type CostListResponse struct {
+    BaseResponse
+    ConsumedCostList []obj.ConsumedItem `json:"consumedCostList"`
+}
+
+func CostList(base responseobjs.BaseInfo, consumedCostList []obj.ConsumedItem) CostListResponse {
+    baseResponse := NewBaseResponse(base)
+    out := CostListResponse{
+        baseResponse,
+        consumedCostList,
+    }
+    return out
+}
+
+func DefaultCostList(base responseobjs.BaseInfo) CostListResponse {
+    return CostList(
+        base,
+        constobjs.DefaultCostList,
+    )
+}
+
+type MileageDataResponse struct {
+    BaseResponse
+    MileageFriendList []netobj.MileageFriend `json:"mileageFriendList"`
+    MileageMapState   netobj.MileageMapState `json:"mileageMapState"`
+}
+
+func MileageData(base responseobjs.BaseInfo, mileageFriendList []netobj.MileageFriend, mileageMapState netobj.MileageMapState) MileageDataResponse {
+    baseResponse := NewBaseResponse(base)
+    out := MileageDataResponse{
+        baseResponse,
+        mileageFriendList,
+        mileageMapState,
+    }
+    return out
+}
+
+func DefaultMileageData(base responseobjs.BaseInfo, player netobj.Player) MileageDataResponse {
+    mileageFriendList := player.MileageFriends
+    mileageMapState := player.MileageMapState
+    return MileageData(
+        base,
+        mileageFriendList,
+        mileageMapState,
+    )
 }
