@@ -107,3 +107,12 @@ func GetVariousParameter(helper *helper.Helper) {
 		return
 	}
 }
+
+func GetInformation(helper *helper.Helper) {
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultInformation(baseInfo)
+	err := helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}

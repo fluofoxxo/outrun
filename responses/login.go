@@ -5,6 +5,7 @@ import (
 
     "github.com/fluofoxxo/outrun/netobj"
     "github.com/fluofoxxo/outrun/obj"
+    "github.com/fluofoxxo/outrun/obj/constobjs"
     "github.com/fluofoxxo/outrun/responses/responseobjs"
 )
 
@@ -81,4 +82,34 @@ func VariousParameter(base responseobjs.BaseInfo, player netobj.Player) VariousP
         player.PlayerVarious,
     }
     return out
+}
+
+type InformationResponse struct {
+    BaseResponse
+    Infos             []obj.Information         `json:"informations"`
+    OperatorInfos     []obj.OperatorInformation `json:"operatorEachInfos"`
+    NumOperatorUnread int64                     `json:"numOperatorInfo"`
+}
+
+func Information(base responseobjs.BaseInfo, infos []obj.Information, opinfos []obj.OperatorInformation, numOpUnread int64) InformationResponse {
+    baseResponse := NewBaseResponse(base)
+    out := InformationResponse{
+        baseResponse,
+        infos,
+        opinfos,
+        numOpUnread,
+    }
+    return out
+}
+
+func DefaultInformation(base responseobjs.BaseInfo) InformationResponse {
+    infos := constobjs.DefaultInformations
+    opinfos := []obj.OperatorInformation{}
+    numOpUnread := int64(len(opinfos))
+    return Information(
+        base,
+        infos,
+        opinfos,
+        numOpUnread,
+    )
 }
