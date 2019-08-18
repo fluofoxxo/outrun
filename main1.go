@@ -52,6 +52,8 @@ func main() {
 	mux.HandleFunc("/Player/getChaoState/", h(muxhandlers.GetChaoState, LogExecutionTime))
 	mux.HandleFunc("/Spin/getWheelOptions/", h(muxhandlers.GetWheelOptions, LogExecutionTime))
 	mux.HandleFunc("/Game/getDailyChalData/", h(muxhandlers.GetDailyChallengeData, LogExecutionTime))
+	mux.HandleFunc("/Message/getMessageList/", h(muxhandlers.GetMessageList, LogExecutionTime))
+	mux.HandleFunc("/Store/getRedstarExchangeList/", h(muxhandlers.GetRedStarExchangeList, LogExecutionTime))
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	log.Println("Starting server on port 9001")
