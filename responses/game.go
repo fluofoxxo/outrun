@@ -94,3 +94,25 @@ func DefaultMileageData(base responseobjs.BaseInfo, player netobj.Player) Mileag
         mileageMapState,
     )
 }
+
+type CampaignListResponse struct {
+    BaseResponse
+    CampaignList []obj.Campaign `json:"campaignList"`
+}
+
+func CampaignList(base responseobjs.BaseInfo, campaignList []obj.Campaign) CampaignListResponse {
+    baseResponse := NewBaseResponse(base)
+    out := CampaignListResponse{
+        baseResponse,
+        campaignList,
+    }
+    return out
+}
+
+func DefaultCampaignList(base responseobjs.BaseInfo) CampaignListResponse {
+    campaignList := []obj.Campaign{}
+    return CampaignList(
+        base,
+        campaignList,
+    )
+}
