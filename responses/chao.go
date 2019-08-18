@@ -2,6 +2,7 @@ package responses
 
 import (
     "github.com/fluofoxxo/outrun/obj"
+    "github.com/fluofoxxo/outrun/obj/constobjs"
     "github.com/fluofoxxo/outrun/responses/responseobjs"
 )
 
@@ -25,4 +26,23 @@ func DefaultChaoWheelOptions(base responseobjs.BaseInfo) ChaoWheelOptionsRespons
         base,
         chaoWheelOptions,
     )
+}
+
+type PrizeChaoWheelResponse struct {
+    BaseResponse
+    PrizeList []obj.ChaoPrize `json:"prizeList"`
+}
+
+func PrizeChaoWheel(base responseobjs.BaseInfo, prizeList []obj.ChaoPrize) PrizeChaoWheelResponse {
+    baseResponse := NewBaseResponse(base)
+    out := PrizeChaoWheelResponse{
+        baseResponse,
+        prizeList,
+    }
+    return out
+}
+
+func DefaultPrizeChaoWheel(base responseobjs.BaseInfo) PrizeChaoWheelResponse {
+    prizeList := constobjs.DefaultChaoPrizeWheelPrizeList
+    return PrizeChaoWheel(base, prizeList)
 }

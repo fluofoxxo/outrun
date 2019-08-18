@@ -16,3 +16,13 @@ func GetChaoWheelOptions(helper *helper.Helper) {
         helper.InternalErr("Error sending response", err)
     }
 }
+
+func GetPrizeChaoWheelSpin(helper *helper.Helper) {
+    // agnostic
+    baseInfo := helper.BaseInfo(emess.OK, status.OK)
+    response := responses.DefaultPrizeChaoWheel(baseInfo)
+    err := helper.SendResponse(response)
+    if err != nil {
+        helper.InternalErr("Error sending response", err)
+    }
+}
