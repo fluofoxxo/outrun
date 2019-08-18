@@ -6,6 +6,10 @@ import (
 	"net/http"
 
 	"github.com/fluofoxxo/outrun/cryption"
+	"github.com/fluofoxxo/outrun/db"
+	"github.com/fluofoxxo/outrun/netobj"
+	"github.com/fluofoxxo/outrun/netobj/constnetobjs"
+	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses/responseobjs"
 )
 
@@ -127,4 +131,19 @@ func (r *Helper) BaseInfo(em string, statusCode int64) responseobjs.BaseInfo {
 func (r *Helper) InvalidRequest() {
 	r.RespW.WriteHeader(http.StatusBadRequest)
 	r.RespW.Write([]byte(BAD_REQUEST))
+}
+func (r *Helper) GetCallingPlayer() (netobj.Player, error) {
+	// Powerful function to get the player directly from the response
+	recv := r.GetGameRequest()
+	var request requests.Base
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		return constnetobjs.BlankPlayer, err
+	}
+	sid := request.SessionID
+	player, err := db.GetPlayerBySessionID(sid)
+	if err != nil {
+		return constnetobjs.BlankPlayer, err
+	}
+	return player, nil
 }
