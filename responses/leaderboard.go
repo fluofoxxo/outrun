@@ -1,6 +1,8 @@
 package responses
 
 import (
+    "github.com/fluofoxxo/outrun/obj"
+    "github.com/fluofoxxo/outrun/obj/constobjs"
     "github.com/fluofoxxo/outrun/responses/responseobjs"
     "github.com/jinzhu/now"
 )
@@ -14,7 +16,7 @@ type WeeklyLeaderboardOptionsResponse struct {
     ResetTime int64 `json:"resetTime"`
 }
 
-func NewWeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode, ltype, param, startTime, resetTime int64) WeeklyLeaderboardOptionsResponse {
+func WeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode, ltype, param, startTime, resetTime int64) WeeklyLeaderboardOptionsResponse {
     baseResponse := NewBaseResponse(base)
     return WeeklyLeaderboardOptionsResponse{
         baseResponse,
@@ -31,5 +33,31 @@ func DefaultWeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode int64) Wee
     resetTime := startTime + 86400 // + 1 Day
     ltype := int64(1)
     param := int64(0)
-    return NewWeeklyLeaderboardOptions(base, mode, ltype, param, startTime, resetTime)
+    return WeeklyLeaderboardOptions(base, mode, ltype, param, startTime, resetTime)
+}
+
+type LeagueDataResponse struct {
+    BaseResponse
+    LeagueData obj.LeagueData `json:"leagueData"`
+    Mode       int64          `json:"mode"`
+}
+
+func LeagueData(base responseobjs.BaseInfo, leagueData obj.LeagueData, mode int64) LeagueDataResponse {
+    baseResponse := NewBaseResponse(base)
+    out := LeagueDataResponse{
+        baseResponse,
+        leagueData,
+        mode,
+    }
+    return out
+}
+
+func DefaultLeagueData(base responseobjs.BaseInfo, mode int64) LeagueDataResponse {
+    var leagueData obj.LeagueData
+    if mode == 0 {
+        leagueData = constobjs.DefaultLeagueDataMode0
+    } else if mode == 1 {
+        leagueData = constobjs.DefaultLeagueDataMode1
+    }
+    return LeagueData(base, leagueData, mode)
 }
