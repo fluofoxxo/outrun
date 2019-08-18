@@ -36,6 +36,50 @@ func DefaultWeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode int64) Wee
     return WeeklyLeaderboardOptions(base, mode, ltype, param, startTime, resetTime)
 }
 
+type WeeklyLeaderboardEntriesResponse struct {
+    BaseResponse
+    PlayerEntry  obj.LeaderboardEntry   `json:"playerEntry"`
+    LastOffset   int64                  `json:"lastOffset"`
+    StartTime    int64                  `json:"startTime"`
+    ResetTime    int64                  `json:"resetTime"`
+    StartIndex   int64                  `json:"startIndex"`
+    Mode         int64                  `json:"mode"`
+    TotalEntries int64                  `json:"totalEntries"`
+    EntriesList  []obj.LeaderboardEntry `json:"entriesList"`
+}
+
+func WeeklyLeaderboardEntries(base responseobjs.BaseInfo, pe obj.LeaderboardEntry, lo, st, rt, si, m, te int64, el []obj.LeaderboardEntry) WeeklyLeaderboardEntriesResponse {
+    baseResponse := NewBaseResponse(base)
+    out := WeeklyLeaderboardEntriesResponse{
+        baseResponse,
+        pe,
+        lo,
+        st,
+        rt,
+        si,
+        m,
+        te,
+        el,
+    }
+    return out
+}
+
+func DefaultWeeklyLeaderboardEntries(base responseobjs.BaseInfo, uid string, mode int64) WeeklyLeaderboardEntriesResponse {
+    startTime := now.BeginningOfDay().UTC().Unix()
+    resetTime := startTime + 86400 // +1 Day
+    return WeeklyLeaderboardEntries(
+        base,
+        obj.DefaultLeaderboardEntry(uid),
+        -1,
+        startTime,
+        resetTime,
+        1,
+        mode,
+        0,
+        []obj.LeaderboardEntry{},
+    )
+}
+
 type LeagueDataResponse struct {
     BaseResponse
     LeagueData obj.LeagueData `json:"leagueData"`
