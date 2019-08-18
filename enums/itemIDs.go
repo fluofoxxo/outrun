@@ -4,12 +4,12 @@ const (
 	ItemIDNone = -1
 )
 const (
-	ItemIDBoostScore = iota + 110000
+	ItemIDBoostScore = int64(iota) + 110000
 	ItemIDBoostTrampoline
 	ItemIDBoostSubChara
 )
 const (
-	ItemIDInvincible = iota + 120000
+	ItemIDInvincible = int64(iota) + 120000
 	ItemIDBarrier
 	ItemIDMagnet
 	ItemIDTrampoline
@@ -22,7 +22,7 @@ const (
 	ItemIDAnimalBonus
 )
 const (
-	ItemIDPackedInvincible0 = iota + 120100
+	ItemIDPackedInvincible0 = int64(iota) + 120100
 	ItemIDPackedBarrier0
 	ItemIDPackedMagnet0
 	ItemIDPackedTrampoline0
@@ -35,7 +35,7 @@ const (
 	ItemIDPackedAnimalBonus0
 )
 const (
-	ItemIDPackedInvincible1 = iota + 121000
+	ItemIDPackedInvincible1 = int64(iota) + 121000
 	ItemIDPackedBarrier1
 	ItemIDPackedMagnet1
 	ItemIDPackedTrampoline1
