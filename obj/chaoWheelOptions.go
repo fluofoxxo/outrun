@@ -1,6 +1,9 @@
 package obj
 
-import "github.com/fluofoxxo/outrun/enums"
+import (
+    "github.com/fluofoxxo/outrun/enums"
+    "github.com/jinzhu/now"
+)
 
 type ChaoWheelOptions struct {
     Rarity               []int64    `json:"rarity"`
@@ -12,9 +15,11 @@ type ChaoWheelOptions struct {
     RouletteAvailable    int64      `json:"rouletteAvailable"`    // flag
     NumChaoRouletteToken int64      `json:"numChaoRouletteToken"` // number of premium roulette tickets
     NumChaoRoulette      int64      `json:"numChaoRoulette"`      // == 0 --> chaoWheelOptions.IsTutorial
+    StartTime            int64      `json:"startTime"`
+    EndTime              int64      `json:"endTime"`
 }
 
-func NewChaoWheelOptions(rarity, itemWeight []int64, campaignList []Campaign, spinCost, chaoRouletteType, numSpecialEgg, rouletteAvailable, numChaoRouletteToken, numChaoRoulette int64) ChaoWheelOptions {
+func NewChaoWheelOptions(rarity, itemWeight []int64, campaignList []Campaign, spinCost, chaoRouletteType, numSpecialEgg, rouletteAvailable, numChaoRouletteToken, numChaoRoulette, startTime, endTime int64) ChaoWheelOptions {
     return ChaoWheelOptions{
         rarity,
         itemWeight,
@@ -25,6 +30,8 @@ func NewChaoWheelOptions(rarity, itemWeight []int64, campaignList []Campaign, sp
         rouletteAvailable,
         numChaoRouletteToken,
         numChaoRoulette,
+        startTime,
+        endTime,
     }
 }
 
@@ -38,5 +45,7 @@ func DefaultChaoWheelOptions() ChaoWheelOptions {
     rouletteAvailable := int64(1)
     numChaoRouletteToken := int64(47)
     numChaoRoulette := int64(1)
-    return NewChaoWheelOptions(rarity, itemWeight, campaignList, spinCost, chaoRouletteType, numSpecialEgg, rouletteAvailable, numChaoRouletteToken, numChaoRoulette)
+    startTime := now.BeginningOfDay().UTC().Unix() + 32400 // 12 AM + 9 hours = 9 AM
+    endTime := startTime + 86399                           // 23:59:59 later
+    return NewChaoWheelOptions(rarity, itemWeight, campaignList, spinCost, chaoRouletteType, numSpecialEgg, rouletteAvailable, numChaoRouletteToken, numChaoRoulette, startTime, endTime)
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/obj"
+	"github.com/fluofoxxo/outrun/obj/constobjs"
 )
 
 /*
@@ -49,7 +50,7 @@ var ChaoIDs = []string{"400000", "400001", "400002", "400003", "400004", "400005
 
 func DefaultPlayerState() PlayerState {
 	// TODO: establish as constants
-	items := []obj.Item{}
+	items := constobjs.DefaultPlayerStateItems
 	equippedItemIDs := []string{"-1", "-1", "-1"}
 	mainCharaID := enums.CTStrSonic
 	subCharaID := enums.CTStrTails

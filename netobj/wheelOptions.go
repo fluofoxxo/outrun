@@ -16,7 +16,7 @@ type WheelOptions struct {
     RouletteRank         int64      `json:"rouletteRank"`
     NumRouletteToken     int64      `json:"numRouletteToken"`
     NumJackpotRing       int64      `json:"numJackpotRing"`
-    NumRemainingRoulette int64      `json:"numRemainingRoulette`
+    NumRemainingRoulette int64      `json:"numRemainingRoulette"`
     ItemList             []obj.Item `json:"itemList"`
 }
 

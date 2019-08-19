@@ -31,8 +31,10 @@ func WeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode, ltype, param, st
 func DefaultWeeklyLeaderboardOptions(base responseobjs.BaseInfo, mode int64) WeeklyLeaderboardOptionsResponse {
     startTime := now.BeginningOfDay().UTC().Unix()
     resetTime := startTime + 86400 // + 1 Day
-    ltype := int64(1)
-    param := int64(0)
+    //ltype := int64(1)
+    ltype := int64(0)
+    //param := int64(0)
+    param := int64(5)
     return WeeklyLeaderboardOptions(base, mode, ltype, param, startTime, resetTime)
 }
 

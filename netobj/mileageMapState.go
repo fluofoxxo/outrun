@@ -31,8 +31,8 @@ func DefaultMileageMapState() MileageMapState {
     mapInfo := obj.DefaultMapInfo()
     return MileageMapState{
         mapInfo,
-        0,
-        0,
+        1,
+        1,
         0,
         0,
         time.Now().Unix(),
