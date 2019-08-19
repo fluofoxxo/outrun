@@ -54,7 +54,7 @@ func DefaultPlayerState() PlayerState {
 	mainCharaID := enums.CTStrSonic
 	subCharaID := enums.CTStrTails
 	mainChaoID := ChaoIDs[0]
-	subChaoID := ChaoIDs[1]
+	subChaoID := ChaoIDs[5] // changed from [1]...
 	numRings := int64(9000)
 	numBuyRings := int64(1)
 	numRedRings := int64(1330)
