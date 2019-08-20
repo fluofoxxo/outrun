@@ -116,3 +116,12 @@ func GetInformation(helper *helper.Helper) {
 		helper.InternalErr("Error sending response", err)
 	}
 }
+
+func GetTicker(helper *helper.Helper) {
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultTicker(baseInfo)
+	err := helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}
