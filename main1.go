@@ -66,6 +66,7 @@ func main() {
 	mux.HandleFunc("/Leaderboard/getWeeklyLeaderboardEntries/", h(muxhandlers.GetWeeklyLeaderboardEntries, LogExecutionTime))
 	mux.HandleFunc("/Player/setUserName/", h(muxhandlers.SetUsername, LogExecutionTime))
 	mux.HandleFunc("/login/getTicker/", h(muxhandlers.GetTicker, LogExecutionTime))
+	mux.HandleFunc("/Login/loginBonus/", h(muxhandlers.LoginBonus, LogExecutionTime))
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	log.Println("Starting server on port 9001")

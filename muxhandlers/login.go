@@ -125,3 +125,13 @@ func GetTicker(helper *helper.Helper) {
 		helper.InternalErr("Error sending response", err)
 	}
 }
+
+func LoginBonus(helper *helper.Helper) {
+	// TODO: Is agnostic, but shouldn't be!
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultLoginBonus(baseInfo)
+	err := helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}

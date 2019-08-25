@@ -140,3 +140,42 @@ func DefaultTicker(base responseobjs.BaseInfo) TickerResponse {
 		tickerList,
 	)
 }
+
+type LoginBonusResponse struct {
+	BaseResponse
+	LoginBonusStatus          obj.LoginBonusStatus   `json:"loginBonusStatus"`
+	LoginBonusRewardList      []obj.LoginBonusReward `json:"loginBonusRewardList"`
+	FirstLoginBonusRewardList []obj.LoginBonusReward `json:"firstLoginBonusRewardList"`
+	StartTime                 int64                  `json:"startTime"`
+	EndTime                   int64                  `json:"endTime"`
+	RewardID                  int64                  `json:"rewardId"`
+	RewardDays                int64                  `json:"rewardDays"`
+	FirstRewardDays           int64                  `json:"firstRewardDays"`
+}
+
+func LoginBonus(base responseobjs.BaseInfo, lbs obj.LoginBonusStatus, lbrl, flbrl []obj.LoginBonusReward, st, et, rid, rd, frd int64) LoginBonusResponse {
+	baseResponse := NewBaseResponse(base)
+	return LoginBonusResponse{
+		baseResponse,
+		lbs,
+		lbrl,
+		flbrl,
+		st,
+		et,
+		rid,
+		rd,
+		frd,
+	}
+}
+
+func DefaultLoginBonus(base responseobjs.BaseInfo) LoginBonusResponse {
+	lbs := obj.NewLoginBonusStatus(2, 2, 1465830000)
+	lbrl := constobjs.DefaultLoginBonusRewardList
+	flbrl := constobjs.DefaultFirstLoginBonusRewardList
+	st := int64(1465743600)
+	et := int64(1466348400)
+	rid := int64(-1)
+	rd := int64(-1)
+	frd := int64(-1)
+	return LoginBonus(base, lbs, lbrl, flbrl, st, et, rid, rd, frd)
+}
