@@ -1,6 +1,7 @@
 package netobj
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/fluofoxxo/outrun/enums"
@@ -156,4 +157,52 @@ func (p Player) HasChao(chid string) bool {
 		}
 	}
 	return false
+}
+func (p Player) GetChara(cid string) (Character, error) {
+	var char Character
+	found := false
+	for _, c := range p.CharacterState {
+		if c.ID == cid {
+			char = c
+			found = true
+		}
+	}
+	if !found {
+		return char, fmt.Errorf("character not found")
+	}
+	return char, nil
+}
+func (p Player) GetChao(chid string) (Chao, error) {
+	var chao Chao
+	found := false
+	for _, c := range p.ChaoState {
+		if c.ID == chid {
+			chao = c
+			found = true
+		}
+	}
+	if !found {
+		return chao, fmt.Errorf("chao not found")
+	}
+	return chao, nil
+}
+func (p Player) GetMainChara() (Character, error) {
+	cid := p.PlayerState.MainCharaID
+	char, err := p.GetChara(cid)
+	return char, err
+}
+func (p Player) GetSubChara() (Character, error) {
+	cid := p.PlayerState.SubCharaID
+	char, err := p.GetChara(cid)
+	return char, err
+}
+func (p Player) GetMainChao() (Chao, error) {
+	chid := p.PlayerState.MainChaoID
+	chao, err := p.GetChao(chid)
+	return chao, err
+}
+func (p Player) GetSubChao() (Chao, error) {
+	chid := p.PlayerState.SubChaoID
+	chao, err := p.GetChao(chid)
+	return chao, err
 }

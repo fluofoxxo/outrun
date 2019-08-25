@@ -1,6 +1,7 @@
 package responses
 
 import (
+	"log"
 	"strconv"
 
 	"github.com/fluofoxxo/outrun/netobj"
@@ -150,5 +151,73 @@ func DefaultQuickActStart(base responseobjs.BaseInfo, player netobj.Player) Quic
 		base,
 		playerState,
 		campaignList,
+	)
+}
+
+type QuickPostGameResultsResponse struct {
+	BaseResponse
+	PlayerState             netobj.PlayerState    `json:"playerState"`
+	ChaoState               []netobj.Chao         `json:"chaoState"`
+	DailyChallengeIncentive []obj.Incentive       `json:"dailyChallengeIncentive"` // should be obj.Item, but game doesn't care
+	CharacterState          []netobj.Character    `json:"characterState"`
+	MessageList             []obj.Message         `json:"messageList"`
+	OperatorMessageList     []obj.OperatorMessage `json:"operatorMessageList"`
+	TotalMessage            int64                 `json:"totalMessage"`
+	TotalOperatorMessage    int64                 `json:"totalOperatorMessage"`
+	PlayCharacterState      []netobj.Character    `json:"playCharacterState"` // Character can substitute PlayCharacter
+}
+
+func QuickPostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj.Incentive, ml []obj.Message, oml []obj.OperatorMessage, pcs []netobj.Character) QuickPostGameResultsResponse {
+	baseResponse := NewBaseResponse(base)
+	playerState := player.PlayerState
+	chaoState := player.ChaoState
+	dailyChallengeIncentive := dci
+	characterState := player.CharacterState
+	messageList := []obj.Message{}
+	operatorMessageList := []obj.OperatorMessage{}
+	totalMessage := int64(len(messageList))
+	totalOperatorMessage := int64(len(operatorMessageList))
+	playCharacterState := pcs
+	return QuickPostGameResultsResponse{
+		baseResponse,
+		playerState,
+		chaoState,
+		dailyChallengeIncentive,
+		characterState,
+		messageList,
+		operatorMessageList,
+		totalMessage,
+		totalOperatorMessage,
+		playCharacterState,
+	}
+}
+
+func DefaultQuickPostGameResults(base responseobjs.BaseInfo, player netobj.Player) QuickPostGameResultsResponse {
+	dci := []obj.Incentive{}
+	ml := []obj.Message{}
+	oml := []obj.OperatorMessage{
+		obj.DefaultOperatorMessage(),
+	}
+	mainC, err := player.GetMainChara()
+	if err != nil {
+		// TODO: use better error handling!
+		log.Println("[ERR] (DefaultQuickPostGameResults) Error getting main character: ", err)
+	}
+	subC, err := player.GetSubChara()
+	if err != nil {
+		// TODO: use better error handling!
+		log.Println("[ERR] (DefaultQuickPostGameResults) Error getting sub character: ", err)
+	}
+	pcs := []netobj.Character{
+		mainC,
+		subC,
+	}
+	return QuickPostGameResults(
+		base,
+		player,
+		dci,
+		ml,
+		oml,
+		pcs,
 	)
 }
