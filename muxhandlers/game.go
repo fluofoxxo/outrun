@@ -101,11 +101,15 @@ func QuickPostGameResults(helper *helper.Helper) {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
-	player.AddRings(request.Rings)
-	player.AddRedRings(request.RedRings)
-	player.AddAnimals(request.Animals)
-	player.ApplyHighScore(request.Score)
-	player.AddDistance(request.Distance)
+
+	player.PlayerState.NumRings += request.Rings
+	player.PlayerState.NumRedRings += request.RedRings
+	player.PlayerState.Animals += request.Animals
+	playerTimedHighScore := player.PlayerState.TimedHighScore
+	if request.Score > playerTimedHighScore {
+		player.PlayerState.TimedHighScore = request.Score
+	}
+	//player.PlayerState.TotalDistance += request.Distance  // We don't do this in timed mode!
 	err = db.SavePlayer(player)
 	if err != nil {
 		helper.InternalErr("Error saving player", err)

@@ -40,87 +40,105 @@ func NewPlayer(id, username, password, key string, playerState PlayerState, char
 }
 
 /*
-func (p Player) Save() {
+func (p *Player) Save() {
 
 }
 */
-func (p Player) AddRings(amount int64) {
-	p.PlayerState.NumRings += amount
+// TODO: remove any functions that access p.PlayerState since we are not calling from a pointer anyways and it will not modify the object
+func (p *Player) AddRings(amount int64) {
+	ps := p.PlayerState
+	ps.NumRings += amount
 }
-func (p Player) SubRings(amount int64) {
-	p.PlayerState.NumRings -= amount
+func (p *Player) SubRings(amount int64) {
+	ps := p.PlayerState
+	ps.NumRings -= amount
 }
-func (p Player) AddRedRings(amount int64) {
-	p.PlayerState.NumRedRings += amount
+func (p *Player) AddRedRings(amount int64) {
+	ps := p.PlayerState
+	ps.NumRedRings += amount
 }
-func (p Player) SubRedRings(amount int64) {
-	p.PlayerState.NumRedRings -= amount
+func (p *Player) SubRedRings(amount int64) {
+	ps := p.PlayerState
+	ps.NumRedRings -= amount
 }
-func (p Player) SetUsername(username string) {
+func (p *Player) SetUsername(username string) {
 	p.Username = username
 }
-func (p Player) SetPassword(password string) {
+func (p *Player) SetPassword(password string) {
 	p.Password = password
 }
-func (p Player) AddEnergy(amount int64) {
-	p.PlayerState.Energy += amount
+func (p *Player) AddEnergy(amount int64) {
+	ps := p.PlayerState
+	ps.Energy += amount
 }
-func (p Player) SubEnergy(amount int64) {
-	p.PlayerState.Energy -= amount
+func (p *Player) SubEnergy(amount int64) {
+	ps := p.PlayerState
+	ps.Energy -= amount
 }
-func (p Player) SetMainCharacter(cid string) {
-	p.PlayerState.MainCharaID = cid
+func (p *Player) SetMainCharacter(cid string) {
+	ps := p.PlayerState
+	ps.MainCharaID = cid
 }
-func (p Player) SetSubCharacter(cid string) {
-	p.PlayerState.SubCharaID = cid
+func (p *Player) SetSubCharacter(cid string) {
+	ps := p.PlayerState
+	ps.SubCharaID = cid
 }
-func (p Player) SetMainChao(chid string) {
-	p.PlayerState.MainChaoID = chid
+func (p *Player) SetMainChao(chid string) {
+	ps := p.PlayerState
+	ps.MainChaoID = chid
 }
-func (p Player) SetSubChao(chid string) {
-	p.PlayerState.SubChaoID = chid
+func (p *Player) SetSubChao(chid string) {
+	ps := p.PlayerState
+	ps.SubChaoID = chid
 }
-func (p Player) AddItem(item obj.Item) {
-	p.PlayerState.Items = append(p.PlayerState.Items, item)
+func (p *Player) AddItem(item obj.Item) {
+	ps := p.PlayerState
+	ps.Items = append(ps.Items, item)
 }
-func (p Player) RemoveItemOf(iid string) bool {
+func (p *Player) RemoveItemOf(iid string) bool {
 	newItems := []obj.Item{}
 	foundItem := false
-	for _, item := range p.PlayerState.Items {
+	ps := p.PlayerState
+	for _, item := range ps.Items {
 		if item.ID != iid || foundItem {
 			newItems = append(newItems, item)
 		} else if !foundItem {
 			foundItem = true
 		}
 	}
-	p.PlayerState.Items = newItems
+	ps.Items = newItems
 	return foundItem
 }
-func (p Player) RemoveAllItemsOf(iid string) {
+func (p *Player) RemoveAllItemsOf(iid string) {
 	for p.RemoveItemOf(iid) {
 	}
 }
-func (p Player) AddAnimals(amount int64) {
-	p.PlayerState.Animals += amount
+func (p *Player) AddAnimals(amount int64) {
+	ps := p.PlayerState
+	ps.Animals += amount
 }
-func (p Player) SubAnimals(amount int64) {
-	p.PlayerState.Animals -= amount
+func (p *Player) SubAnimals(amount int64) {
+	ps := p.PlayerState
+	ps.Animals -= amount
 }
-func (p Player) ApplyHighScore(score int64) bool {
-	if p.PlayerState.HighScore < score {
-		p.PlayerState.HighScore = score
+func (p *Player) ApplyHighScore(score int64) bool {
+	ps := p.PlayerState
+	if ps.HighScore < score {
+		ps.HighScore = score
 		return true
 	}
 	return false
 }
-func (p Player) AddDistance(amount int64) {
-	p.PlayerState.TotalDistance += amount
+func (p *Player) AddDistance(amount int64) {
+	ps := p.PlayerState
+	ps.TotalDistance += amount
 	p.ApplyHighDistance(amount)
 }
-func (p Player) ApplyHighDistance(amount int64) {
-	p.PlayerState.HighDistance = amount
+func (p *Player) ApplyHighDistance(amount int64) {
+	ps := p.PlayerState
+	ps.HighDistance = amount
 }
-func (p Player) AddNewChaoByID(chid string) bool {
+func (p *Player) AddNewChaoByID(chid string) bool {
 	chao := constobjs.Chao[chid]
 	netchao := NewNetChao(
 		chao,
@@ -131,7 +149,7 @@ func (p Player) AddNewChaoByID(chid string) bool {
 	)
 	return p.AddNetChao(netchao)
 }
-func (p Player) AddNewChao(chao obj.Chao) bool {
+func (p *Player) AddNewChao(chao obj.Chao) bool {
 	netchao := NewNetChao(
 		chao,
 		enums.ChaoStatusOwned,
@@ -141,7 +159,7 @@ func (p Player) AddNewChao(chao obj.Chao) bool {
 	)
 	return p.AddNetChao(netchao)
 }
-func (p Player) AddNetChao(netchao Chao) bool {
+func (p *Player) AddNetChao(netchao Chao) bool {
 	// Returns whether or not the Chao was already found.
 	// It will not add Chao already in the ChaoState.
 	if !p.HasChao(netchao.Chao.ID) {
@@ -150,7 +168,7 @@ func (p Player) AddNetChao(netchao Chao) bool {
 	}
 	return true
 }
-func (p Player) HasChao(chid string) bool {
+func (p *Player) HasChao(chid string) bool {
 	for _, netchao := range p.ChaoState {
 		if netchao.Chao.ID == chid {
 			return true
@@ -158,7 +176,7 @@ func (p Player) HasChao(chid string) bool {
 	}
 	return false
 }
-func (p Player) GetChara(cid string) (Character, error) {
+func (p *Player) GetChara(cid string) (Character, error) {
 	var char Character
 	found := false
 	for _, c := range p.CharacterState {
@@ -172,7 +190,7 @@ func (p Player) GetChara(cid string) (Character, error) {
 	}
 	return char, nil
 }
-func (p Player) GetChao(chid string) (Chao, error) {
+func (p *Player) GetChao(chid string) (Chao, error) {
 	var chao Chao
 	found := false
 	for _, c := range p.ChaoState {
@@ -186,23 +204,27 @@ func (p Player) GetChao(chid string) (Chao, error) {
 	}
 	return chao, nil
 }
-func (p Player) GetMainChara() (Character, error) {
-	cid := p.PlayerState.MainCharaID
+func (p *Player) GetMainChara() (Character, error) {
+	ps := p.PlayerState
+	cid := ps.MainCharaID
 	char, err := p.GetChara(cid)
 	return char, err
 }
-func (p Player) GetSubChara() (Character, error) {
-	cid := p.PlayerState.SubCharaID
+func (p *Player) GetSubChara() (Character, error) {
+	ps := p.PlayerState
+	cid := ps.SubCharaID
 	char, err := p.GetChara(cid)
 	return char, err
 }
-func (p Player) GetMainChao() (Chao, error) {
-	chid := p.PlayerState.MainChaoID
+func (p *Player) GetMainChao() (Chao, error) {
+	ps := p.PlayerState
+	chid := ps.MainChaoID
 	chao, err := p.GetChao(chid)
 	return chao, err
 }
-func (p Player) GetSubChao() (Chao, error) {
-	chid := p.PlayerState.SubChaoID
+func (p *Player) GetSubChao() (Chao, error) {
+	ps := p.PlayerState
+	chid := ps.SubChaoID
 	chao, err := p.GetChao(chid)
 	return chao, err
 }
