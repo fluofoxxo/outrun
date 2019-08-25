@@ -221,3 +221,24 @@ func DefaultQuickPostGameResults(base responseobjs.BaseInfo, player netobj.Playe
 		pcs,
 	)
 }
+
+type FreeItemListResponse struct {
+	BaseResponse
+	FreeItemList []obj.Item `json:"freeItemList"`
+}
+
+func FreeItemList(base responseobjs.BaseInfo, freeItemList []obj.Item) FreeItemListResponse {
+	baseResponse := NewBaseResponse(base)
+	return FreeItemListResponse{
+		baseResponse,
+		freeItemList,
+	}
+}
+
+func DefaultFreeItemList(base responseobjs.BaseInfo) FreeItemListResponse {
+	freeItemList := constobjs.AllItems
+	return FreeItemList(
+		base,
+		freeItemList,
+	)
+}

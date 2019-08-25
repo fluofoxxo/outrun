@@ -72,6 +72,8 @@ func main() {
 	mux.HandleFunc("/Game/quickPostGameResults/", h(muxhandlers.QuickPostGameResults, LogExecutionTime))
 	// Retry
 	mux.HandleFunc("/Game/actRetry/", h(muxhandlers.ActRetry, LogExecutionTime))
+	// Gameplay
+	mux.HandleFunc("/Game/getFreeItemList/", h(muxhandlers.GetFreeItemList, LogExecutionTime))
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	log.Println("Starting server on port 9001")
