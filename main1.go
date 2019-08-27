@@ -70,6 +70,8 @@ func main() {
 	// Timed mode
 	mux.HandleFunc("/Game/quickActStart/", h(muxhandlers.QuickActStart, LogExecutionTime))
 	mux.HandleFunc("/Game/quickPostGameResults/", h(muxhandlers.QuickPostGameResults, LogExecutionTime))
+	// Story mode
+	mux.HandleFunc("/Game/actStart/", h(muxhandlers.ActStart, LogExecutionTime))
 	// Retry
 	mux.HandleFunc("/Game/actRetry/", h(muxhandlers.ActRetry, LogExecutionTime))
 	// Gameplay

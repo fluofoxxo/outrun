@@ -154,6 +154,31 @@ func DefaultQuickActStart(base responseobjs.BaseInfo, player netobj.Player) Quic
 	)
 }
 
+type ActStartResponse struct {
+	ActStartBaseResponse
+	DistanceFriendList []netobj.MileageFriend `json:"distanceFriendList"` // TODO: Discover if correct type
+}
+
+func ActStart(base responseobjs.BaseInfo, playerState netobj.PlayerState, campaignList []obj.Campaign, distFriends []netobj.MileageFriend) ActStartResponse {
+	actStartBase := ActStartBase(base, playerState, campaignList)
+	return ActStartResponse{
+		actStartBase,
+		distFriends,
+	}
+}
+
+func DefaultActStart(base responseobjs.BaseInfo, player netobj.Player) ActStartResponse {
+	campaignList := []obj.Campaign{}
+	playerState := player.PlayerState
+	distFriends := []netobj.MileageFriend{}
+	return ActStart(
+		base,
+		playerState,
+		campaignList,
+		distFriends,
+	)
+}
+
 type QuickPostGameResultsResponse struct {
 	BaseResponse
 	PlayerState             netobj.PlayerState    `json:"playerState"`

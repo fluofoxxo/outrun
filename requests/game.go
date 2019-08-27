@@ -1,5 +1,7 @@
 package requests
 
+import "github.com/fluofoxxo/outrun/netobj"
+
 type QuickPostGameResultsRequest struct {
 	Base
 	Score                  int64  `json:"score,string"`
@@ -22,4 +24,15 @@ type PostGameResultsRequest struct {
 	GetChaoEgg    int64 `json:"getChaoEgg"`
 	NumBossAttack int64 `json:"numBossAttack,string"`
 	ReachPoint    int64 `json:"reachPoint,string"`
+}
+
+type QuickActStartRequest struct {
+	Base
+	Modifier []int64 `json:"modifire"`           // Seems to be list of item IDs.
+	Tutorial int64   `json:"tutorial,omitempty"` // will omit the field if not found
+}
+
+type ActStartRequest struct {
+	QuickActStartRequest
+	DistanceFriendList []netobj.MileageFriend `json:"distanceFriendList"` // TODO: Discover correct type... This might be list of strings
 }
