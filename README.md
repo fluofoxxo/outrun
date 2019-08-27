@@ -28,7 +28,7 @@ Functional:
 2. [Download and install Git](https://git-scm.com/downloads) (for `go get`)
 3. Set your [GOPATH](https://github.com/golang/go/wiki/SettingGOPATH) environment variable
 4. Open a terminal/command prompt
-5. Use `cd` ([Windows,](https://www.digitalcitizen.life/command-prompt-how-use-basic-commands) [Linux/macOS](https://www.macworld.com/article/2042378/master-the-command-line-navigating-files-and-folders.html) to navigate to a directory of choice
+5. Use `cd` ([Windows,](https://www.digitalcitizen.life/command-prompt-how-use-basic-commands) [Linux/macOS](https://www.macworld.com/article/2042378/master-the-command-line-navigating-files-and-folders.html)) to navigate to a directory of choice
 6. Run `go build github.com/fluofoxxo/outrun` and wait until the build is complete
 7. Run the produced executable (`outrun.exe` on Windows, `outrun` on Linux/macOS)
 
