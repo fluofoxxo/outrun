@@ -74,6 +74,7 @@ func main() {
 	mux.HandleFunc("/Game/actRetry/", h(muxhandlers.ActRetry, LogExecutionTime))
 	// Gameplay
 	mux.HandleFunc("/Game/getFreeItemList/", h(muxhandlers.GetFreeItemList, LogExecutionTime))
+	mux.HandleFunc("/Game/postGameResults/", h(muxhandlers.PostGameResults, LogExecutionTime))
 	// Misc.
 	mux.HandleFunc("/Character/changeCharacter/", h(muxhandlers.ChangeCharacter, LogExecutionTime))
 	mux.HandleFunc("/Chao/equipChao/", h(muxhandlers.EquipChao, LogExecutionTime))

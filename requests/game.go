@@ -14,3 +14,12 @@ type QuickPostGameResultsRequest struct {
 	Closed                 int64  `json:"closed"`
 	CheatResult            string `json:"cheatResult"`
 }
+
+type PostGameResultsRequest struct {
+	QuickPostGameResultsRequest
+	BossDestroyed int64 `json:"bossDestroyed"`
+	ChapterClear  int64 `json:"chapterClear"`
+	GetChaoEgg    int64 `json:"getChaoEgg"`
+	NumBossAttack int64 `json:"numBossAttack,string"`
+	ReachPoint    int64 `json:"reachPoint,string"`
+}

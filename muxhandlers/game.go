@@ -102,21 +102,62 @@ func QuickPostGameResults(helper *helper.Helper) {
 		return
 	}
 
-	player.PlayerState.NumRings += request.Rings
-	player.PlayerState.NumRedRings += request.RedRings
-	player.PlayerState.Animals += request.Animals
-	playerTimedHighScore := player.PlayerState.TimedHighScore
-	if request.Score > playerTimedHighScore {
-		player.PlayerState.TimedHighScore = request.Score
+	if request.Closed == 0 { // If the game wasn't exited out of
+		player.PlayerState.NumRings += request.Rings
+		player.PlayerState.NumRedRings += request.RedRings
+		player.PlayerState.Animals += request.Animals
+		playerTimedHighScore := player.PlayerState.TimedHighScore
+		if request.Score > playerTimedHighScore {
+			player.PlayerState.TimedHighScore = request.Score
+		}
+		//player.PlayerState.TotalDistance += request.Distance  // We don't do this in timed mode!
+		err = db.SavePlayer(player)
 	}
-	//player.PlayerState.TotalDistance += request.Distance  // We don't do this in timed mode!
-	err = db.SavePlayer(player)
+
 	if err != nil {
 		helper.InternalErr("Error saving player", err)
 		return
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultQuickPostGameResults(baseInfo, player)
+	err = helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}
+
+func PostGameResults(helper *helper.Helper) {
+	recv := helper.GetGameRequest()
+	var request requests.PostGameResultsRequest
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		helper.Err("Error unmarshalling", err)
+		return
+	}
+	player, err := helper.GetCallingPlayer()
+	if err != nil {
+		helper.InternalErr("Error getting calling player", err)
+		return
+	}
+
+	if request.Closed == 0 { // If the game wasn't exited out of
+		player.PlayerState.NumRings += request.Rings
+		player.PlayerState.NumRedRings += request.RedRings
+		player.PlayerState.Animals += request.Animals
+		playerTimedHighScore := player.PlayerState.TimedHighScore
+		if request.Score > playerTimedHighScore {
+			player.PlayerState.TimedHighScore = request.Score
+		}
+		player.PlayerState.TotalDistance += request.Distance
+		err = db.SavePlayer(player)
+	}
+
+	if err != nil {
+		helper.InternalErr("Error saving player", err)
+		return
+	}
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultPostGameResults(baseInfo, player)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
