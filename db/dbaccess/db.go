@@ -16,8 +16,6 @@ func Set(bucket, key string, value []byte) error {
 	CheckIfDBSet()
 	value = Compress(value) // compress the input first
 	err := db.Update(func(tx *bolt.Tx) error {
-		LockDB()
-		defer UnlockDB()
 		bucket, err := tx.CreateBucketIfNotExists([]byte(bucket))
 		if err != nil {
 			return err
@@ -33,32 +31,17 @@ func Set(bucket, key string, value []byte) error {
 
 func Get(bucket, key string) ([]byte, error) {
 	CheckIfDBSet()
-	resultChan := make(chan []byte)
-	errChan := make(chan error)
-	go db.View(func(tx *bolt.Tx) error {
-		LockDB()
-		defer UnlockDB()
+	var value []byte
+	err := db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(bucket))
-		value := b.Get([]byte(key))
+		value = b.Get([]byte(key))
 		if value == nil {
-			go func() {
-				resultChan <- []byte{}
-				errChan <- errors.New("no value named '" + key + "' in bucket '" + bucket + "'")
-			}()
-			return nil // don't return anything since we never use this function's returned error
+			return errors.New("no value named '" + key + "' in bucket '" + bucket + "'")
 		}
-		resultChan <- value
-		errChan <- nil
 		return nil
 	})
-	// TODO: handle timeouts, as unoften as they are
-	resultRecv := <-resultChan
-	err := <-errChan
-	result, derr := Decompress(resultRecv) // decompress the result
+	result, derr := Decompress(value) // decompress the result
 	if derr != nil {
-		if err != nil {
-			return result, err
-		}
 		return result, derr
 	}
 	return result, err
@@ -66,8 +49,6 @@ func Get(bucket, key string) ([]byte, error) {
 
 func Delete(bucket, key string) error {
 	CheckIfDBSet()
-	LockDB()
-	UnlockDB()
 	return db.View(func(tx *bolt.Tx) error {
 		return tx.Bucket([]byte(bucket)).Delete([]byte(key))
 	})
@@ -75,22 +56,8 @@ func Delete(bucket, key string) error {
 
 func ForEachLogic(each func(tx *bolt.Tx) error) error {
 	CheckIfDBSet()
-	LockDB()
-	defer UnlockDB()
 	err := db.View(each)
 	return err
-}
-
-func LockDB() {
-	// TODO: this whole locking mechanism is a race condition, but goroutines on the database can be extremely dangerous.
-	// find a better way to do this!
-	for DatabaseIsBusy { // wait until we're not busy anymore
-	}
-	DatabaseIsBusy = true
-}
-
-func UnlockDB() {
-	DatabaseIsBusy = false
 }
 
 func CheckIfDBSet() {
