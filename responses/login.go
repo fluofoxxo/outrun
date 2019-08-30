@@ -1,6 +1,7 @@
 package responses
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/fluofoxxo/outrun/netobj"
@@ -127,12 +128,32 @@ func Ticker(base responseobjs.BaseInfo, tickerList []obj.Ticker) TickerResponse 
 	}
 }
 
-func DefaultTicker(base responseobjs.BaseInfo) TickerResponse {
+func DefaultTicker(base responseobjs.BaseInfo, player netobj.Player) TickerResponse {
 	tickerList := []obj.Ticker{
 		obj.NewTicker(
 			1,
 			time.Now().UTC().Unix()+3600, // one hour later
 			"Welcome to OUTRUN!",
+		),
+		obj.NewTicker(
+			2,
+			time.Now().UTC().Unix()+7200,
+			"ID: "+player.ID,
+		),
+		obj.NewTicker(
+			3,
+			time.Now().UTC().Unix()+7200, // two hours later
+			"High score (Timed Mode): "+strconv.Itoa(int(player.PlayerState.TimedHighScore)),
+		),
+		obj.NewTicker(
+			4,
+			time.Now().UTC().Unix()+7200, // two hours later
+			"High score (Story Mode): "+strconv.Itoa(int(player.PlayerState.HighScore)),
+		),
+		obj.NewTicker(
+			5,
+			time.Now().UTC().Unix()+7200, // two hours later
+			"Total distance ran (Story Mode): "+strconv.Itoa(int(player.PlayerState.TotalDistance)),
 		),
 	}
 	return Ticker(

@@ -118,9 +118,14 @@ func GetInformation(helper *helper.Helper) {
 }
 
 func GetTicker(helper *helper.Helper) {
+	player, err := helper.GetCallingPlayer()
+	if err != nil {
+		helper.InternalErr("Error getting calling player", err)
+		return
+	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultTicker(baseInfo)
-	err := helper.SendResponse(response)
+	response := responses.DefaultTicker(baseInfo, player)
+	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
 	}
