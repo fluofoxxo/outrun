@@ -158,9 +158,9 @@ func PostGameResults(helper *helper.Helper) {
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
 		player.PlayerState.Animals += request.Animals
-		playerTimedHighScore := player.PlayerState.TimedHighScore
-		if request.Score > playerTimedHighScore {
-			player.PlayerState.TimedHighScore = request.Score
+		playerHighScore := player.PlayerState.HighScore
+		if request.Score > playerHighScore {
+			player.PlayerState.HighScore = request.Score
 		}
 		player.PlayerState.TotalDistance += request.Distance
 		err = db.SavePlayer(player)
