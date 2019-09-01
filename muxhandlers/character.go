@@ -2,7 +2,9 @@ package muxhandlers
 
 import (
 	"encoding/json"
+	"strconv"
 
+	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/helper"
@@ -38,6 +40,57 @@ func ChangeCharacter(helper *helper.Helper) {
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.ChangeCharacter(baseInfo, player.PlayerState)
+	err = helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}
+
+func UpgradeCharacter(helper *helper.Helper) {
+	recv := helper.GetGameRequest()
+	var request requests.UpgradeCharacterRequest
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		helper.Err("Error unmarshalling", err)
+		return
+	}
+
+	player, err := helper.GetCallingPlayer()
+	if err != nil {
+		helper.InternalErr("Error getting calling player", err)
+		return
+	}
+
+	charaID := request.CharacterID
+	abilityID := request.AbilityID
+	abilityIDFromStr, err := strconv.Atoi(abilityID)
+	if err != nil {
+		helper.Err("Error in strconv.Atoi", err)
+		return
+	}
+
+	sum := func(in []int64) int64 {
+		v := int64(0)
+		for _, val := range in {
+			v += val
+		}
+		return v
+	}
+
+	sendStatus := status.OK
+	abilityIndex := abilityIDFromStr - 120000 // minus enums.UpgradeAbilityInvincibility
+	index := player.IndexOfChara(charaID)
+	abilitySum := sum(player.CharacterState[index].AbilityLevel)
+	if abilitySum < 100 {
+		player.CharacterState[index].AbilityLevel[abilityIndex]++
+		player.CharacterState[index].Exp -= consts.CharacterUpgradeIncrease // TODO: subtracting exp actually increases cost... Probably not what we need to do.
+		db.SavePlayer(player)
+	} else {
+		sendStatus = status.CharacterLevelLimit
+	}
+
+	baseInfo := helper.BaseInfo(emess.OK, int64(sendStatus))
+	response := responses.DefaultUpgradeCharacter(baseInfo, player)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

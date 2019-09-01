@@ -30,9 +30,9 @@ type Character struct { // Can also be used as PlayCharacter
 func DefaultCharacter(char obj.Character) Character {
 	status := int64(enums.CharacterStatusUnlocked)
 	level := int64(1)
-	exp := int64(31415)
-	star := int64(2)       // star value of the character? Differs based on rarity, I guess
-	starMax := int64(1331) // ????
+	exp := int64(0)
+	star := int64(1)       // Limit breaks
+	starMax := int64(1331) // Max number of limit breaks?
 	lockCondition := int64(enums.LockConditionOpen)
 	campaignList := []obj.Campaign{}
 	abilityLevel := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} // 11 abilities?

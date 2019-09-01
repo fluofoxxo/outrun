@@ -79,6 +79,7 @@ func main() {
 	mux.HandleFunc("/Game/postGameResults/", h(muxhandlers.PostGameResults, LogExecutionTime))
 	// Misc.
 	mux.HandleFunc("/Character/changeCharacter/", h(muxhandlers.ChangeCharacter, LogExecutionTime))
+	mux.HandleFunc("/Character/upgradeCharacter/", h(muxhandlers.UpgradeCharacter, LogExecutionTime))
 	mux.HandleFunc("/Chao/equipChao/", h(muxhandlers.EquipChao, LogExecutionTime))
 
 	mux.HandleFunc("/", OutputUnknownRequest)
