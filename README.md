@@ -52,7 +52,7 @@ Android app file (from Windows):
 5. Extract xdelta3 executable file (Ex. `xdelta3-3.1.0-x86_64.exe`) to PalmboundWorkspace
 6. Download [`Revival_to_Palmbound_v1.vcdiff`](http://pbassets.fluofoxxo.pw:9002/Revival_to_Palmbound_v1.vcdiff) and move it to PalmboundWorkspace
 7. Open PalmboundWorkspace in File Explorer, hold shift and right click on any location with visibly empty space in the folder, and click "Open PowerShell window here"
-8. In the window that opens, enter `.\xdelta3-3.1.0-x86_64.exe -d -s sr203_revival2.apk Revival_to_Palmbound.vcdiff palmbound.apk`
+8. In the window that opens, enter `.\xdelta3-3.1.0-x86_64.exe -d -s sr203_revival2.apk Revival_to_Palmbound_v1.vcdiff palmbound.apk`
 9. Move the newly created `palmbound.apk` to an Android device and install it
 
 Android app file (from Android):
