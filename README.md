@@ -40,7 +40,7 @@ Any pull requests deemed code improvements are strongly encouraged. Refactors ma
 
 #### Palmbound (Public Development Server)
 
-As of 1 September, 2019, an instance of this server named Palmbound is currently publically accessible.
+As of 1 September, 2019, an instance of this server named Palmbound is currently publicly accessible.
 
 ##### Installation
 
