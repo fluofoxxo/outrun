@@ -58,7 +58,7 @@ Android app file (from Windows):
 Android app file (from Android):
 1. Acquire a Sonic Runners Revival APK from the [Sonic Runners Revival website.](https://sonic.runner.es/) (`sr203_revival.apk`)
 2. Download [`Revival_to_Palmbound_v1.vcdiff`](http://pbassets.fluofoxxo.pw:9002/Revival_to_Palmbound_v1.vcdiff)
-3. Install [UniPatcher][https://play.google.com/store/apps/details?id=org.emunix.unipatcher] or any similar tool for xdelta3 patching
+3. Install (UniPatcher)[https://play.google.com/store/apps/details?id=org.emunix.unipatcher] or any similar tool for xdelta3 patching
 4. Set the patch file to `Revival_to_Palmbound_v1.vcdiff`
 5. Set the "ROM" file to `sr203_revival2.apk` (Revival's APK)
 6. Set the Output file to `palmbound.apk`
