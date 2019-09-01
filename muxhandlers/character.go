@@ -81,12 +81,18 @@ func UpgradeCharacter(helper *helper.Helper) {
 	abilityIndex := abilityIDFromStr - 120000 // minus enums.UpgradeAbilityInvincibility
 	index := player.IndexOfChara(charaID)
 	abilitySum := sum(player.CharacterState[index].AbilityLevel)
-	if abilitySum < 100 {
-		player.CharacterState[index].AbilityLevel[abilityIndex]++
-		player.CharacterState[index].Exp -= consts.CharacterUpgradeIncrease // TODO: subtracting exp actually increases cost... Probably not what we need to do.
-		db.SavePlayer(player)
+	amountNeedToBePaid := player.CharacterState[index].Cost - player.CharacterState[index].Exp
+	if player.PlayerState.NumRings-amountNeedToBePaid < 0 {
+		sendStatus = status.NotEnoughRings
 	} else {
-		sendStatus = status.CharacterLevelLimit
+		if abilitySum < 100 {
+			player.CharacterState[index].AbilityLevel[abilityIndex]++
+			player.CharacterState[index].Exp -= consts.CharacterUpgradeIncrease // TODO: subtracting exp actually increases cost... Probably not what we need to do.
+			player.PlayerState.NumRings -= amountNeedToBePaid
+			db.SavePlayer(player)
+		} else {
+			sendStatus = status.CharacterLevelLimit
+		}
 	}
 
 	baseInfo := helper.BaseInfo(emess.OK, int64(sendStatus))
