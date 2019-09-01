@@ -2,7 +2,7 @@
 
 ### Summary
 
-`outrun` ('ORN' for short) is a custom server for Sonic Runners, reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) project.
+Outrun is a custom server for Sonic Runners, reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) project.
 
 ### Goals
 
@@ -56,7 +56,7 @@ Android app file (from Windows):
 9. Move the newly created `palmbound.apk` to an Android device and install it
 
 Android app file (from Android):
-1. Acquire a Sonic Runners Revival APK from the [Sonic Runners Revival website.](https://sonic.runner.es/) (`sr203_revival.apk`)
+1. Acquire a Sonic Runners Revival APK from the [Sonic Runners Revival website.](https://sonic.runner.es/) (`sr203_revival2.apk`)
 2. Download [`Revival_to_Palmbound_v1.vcdiff`](http://pbassets.fluofoxxo.pw:9002/Revival_to_Palmbound_v1.vcdiff)
 3. Install [UniPatcher](https://play.google.com/store/apps/details?id=org.emunix.unipatcher) or any similar tool for xdelta3 patching
 4. Set the patch file to `Revival_to_Palmbound_v1.vcdiff`
