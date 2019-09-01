@@ -57,6 +57,10 @@ func Login(helper *helper.Helper) {
 		player, err := db.GetPlayer(uid)
 		if err != nil {
 			helper.InternalErr("Error getting player", err)
+			// likely account that wasn't found, so let's tell them that:
+			response := responses.LoginCheckKey(baseInfo, "")
+			baseInfo.StatusCode = status.MissingPlayer
+			helper.SendResponse(response)
 			return
 		}
 		response := responses.LoginCheckKey(baseInfo, player.Key)
