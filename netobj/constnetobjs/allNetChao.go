@@ -26,10 +26,10 @@ func GetAllNetChao() map[string]netobj.Chao {
 		)
 		netchao := netobj.NewNetChao(
 			chao,
-			enums.ChaoStatusNotOwned,
+			enums.ChaoStatusOwned,
 			0,
 			enums.ChaoDealingNone,
-			0,
+			1,
 		)
 		chaos[chaoID] = netchao
 	}
