@@ -36,7 +36,7 @@ func NewAccount() netobj.Player {
 	key := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
 	playerState := netobj.DefaultPlayerState()
 	characterState := netobj.DefaultCharacterState()
-	chaoState := constnetobjs.NetChaoList // all chao, but unacquired. having no chao may be problematic
+	chaoState := constnetobjs.NetChaoList
 	mileageMapState := netobj.DefaultMileageMapState()
 	mileageFriends := []netobj.MileageFriend{}
 	playerVarious := netobj.DefaultPlayerVarious()
