@@ -81,6 +81,8 @@ func main() {
 	mux.HandleFunc("/Character/changeCharacter/", h(muxhandlers.ChangeCharacter, LogExecutionTime))
 	mux.HandleFunc("/Character/upgradeCharacter/", h(muxhandlers.UpgradeCharacter, LogExecutionTime))
 	mux.HandleFunc("/Chao/equipChao/", h(muxhandlers.EquipChao, LogExecutionTime))
+	// Shop
+	mux.HandleFunc("/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
 
 	mux.HandleFunc("/", OutputUnknownRequest)
 	log.Println("Starting server on port 9001")

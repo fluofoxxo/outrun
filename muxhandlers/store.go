@@ -4,6 +4,7 @@ import (
     "encoding/json"
     "strconv"
 
+    "github.com/fluofoxxo/outrun/db"
     "github.com/fluofoxxo/outrun/emess"
     "github.com/fluofoxxo/outrun/helper"
     "github.com/fluofoxxo/outrun/obj"
@@ -40,6 +41,76 @@ func GetRedStarExchangeList(helper *helper.Helper) {
     }
 
     response = responses.RedStarExchangeList(baseInfo, redStarItems, 0, "1900-1-1")
+    err = helper.SendResponse(response)
+    if err != nil {
+        helper.InternalErr("Error sending response", err)
+    }
+}
+
+func RedStarExchange(helper *helper.Helper) {
+    recv := helper.GetGameRequest()
+    var request requests.RedStarExchange
+    err := json.Unmarshal(recv, &request)
+    if err != nil {
+        helper.Err("Error unmarshalling", err)
+        return
+    }
+
+    player, err := helper.GetCallingPlayer()
+    if err != nil {
+        helper.InternalErr("Error getting calling player", err)
+        return
+    }
+
+    baseInfo := helper.BaseInfo(emess.OK, status.OK)
+    itemID := request.ItemID
+    getItemType := func(iid string) (string, int64, bool) {
+        var itemType string
+        itemPrice, ok := constobjs.ShopRingPrices[iid]
+        if !ok {
+            // it's not a ring item
+            itemPrice, ok = constobjs.ShopEnergyPrices[iid]
+            if !ok {
+                // it's not ring nor energy item
+                // unrecognized item!
+                return "", 0, false
+            }
+            itemType = "energy"
+            return itemType, itemPrice, true
+        }
+        itemType = "ring"
+        return itemType, itemPrice, true
+    }
+
+    itemType, itemPrice, found := getItemType(itemID)
+    if found {
+        switch itemType {
+        case "ring":
+            if player.PlayerState.NumRedRings-itemPrice < 0 {
+                baseInfo.StatusCode = status.NotEnoughRedRings
+                return
+            }
+            player.PlayerState.NumRedRings -= itemPrice
+            player.PlayerState.NumRings += constobjs.ShopRingAmounts[itemID]
+            db.SavePlayer(player)
+        case "energy":
+            if player.PlayerState.NumRedRings-itemPrice < 0 {
+                baseInfo.StatusCode = status.NotEnoughRedRings
+                return
+            }
+            player.PlayerState.NumRedRings -= itemPrice
+            player.PlayerState.Energy += constobjs.ShopEnergyAmounts[itemID]
+            db.SavePlayer(player)
+        default:
+            // this should never execute!
+            baseInfo.StatusCode = status.MasterDataMismatch
+            helper.Out("Default case executed... Something went wrong!")
+        }
+    } else {
+        baseInfo.StatusCode = status.MasterDataMismatch
+    }
+
+    response := responses.DefaultRedStarExchange(baseInfo, player)
     err = helper.SendResponse(response)
     if err != nil {
         helper.InternalErr("Error sending response", err)

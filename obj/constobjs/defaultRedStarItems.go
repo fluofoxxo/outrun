@@ -4,9 +4,9 @@ import (
 	"github.com/fluofoxxo/outrun/obj"
 )
 
-var RedStarItemsType1 = rsiDefaultsIT1()
-var RedStarItemsType2 = rsiDefaultsIT2()
-var RedStarItemsType4 = rsiDefaultsIT4()
+var RedStarItemsType1 = rsiDefaultsIT1() // Rings
+var RedStarItemsType2 = rsiDefaultsIT2() // Energies
+var RedStarItemsType4 = rsiDefaultsIT4() // Red Rings?? See ShopUI.ServerEexchangeType
 
 func rsiDefaultsIT1() []obj.RedStarItem {
 	redstaritems := []obj.RedStarItem{}

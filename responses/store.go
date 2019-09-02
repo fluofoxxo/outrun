@@ -1,6 +1,7 @@
 package responses
 
 import (
+    "github.com/fluofoxxo/outrun/netobj"
     "github.com/fluofoxxo/outrun/obj"
     "github.com/fluofoxxo/outrun/responses/responseobjs"
 )
@@ -30,4 +31,25 @@ func DefaultRedStarExchangeList(base responseobjs.BaseInfo) RedStarExchangeListR
     monthPurchase := int64(0)
     birthday := "1900-1-1"
     return RedStarExchangeList(base, itemList, monthPurchase, birthday)
+}
+
+type RedStarExchangeResponse struct {
+    BaseResponse
+    PlayerState netobj.PlayerState `json:"playerState"`
+}
+
+func RedStarExchange(base responseobjs.BaseInfo, playerState netobj.PlayerState) RedStarExchangeResponse {
+    baseResponse := NewBaseResponse(base)
+    return RedStarExchangeResponse{
+        baseResponse,
+        playerState,
+    }
+}
+
+func DefaultRedStarExchange(base responseobjs.BaseInfo, player netobj.Player) RedStarExchangeResponse {
+    playerState := player.PlayerState
+    return RedStarExchange(
+        base,
+        playerState,
+    )
 }
