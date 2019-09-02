@@ -13,6 +13,8 @@ import (
 func Handle(f func(*helper.Helper), logExecutionTime bool) func(w http.ResponseWriter, r *http.Request) {
 	funcnameSplit := strings.Split(runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name(), "/")
 	funcname := funcnameSplit[len(funcnameSplit)-1]
+	funcnameSplit = strings.Split(funcname, ".") // just get function name
+	funcname = funcnameSplit[len(funcnameSplit)-1]
 	if logExecutionTime {
 		return func(w http.ResponseWriter, r *http.Request) {
 			startTime := time.Now()
