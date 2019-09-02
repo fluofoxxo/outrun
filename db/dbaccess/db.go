@@ -54,6 +54,16 @@ func Delete(bucket, key string) error {
 	})
 }
 
+func ForEachKey(bucket string, each func(k, v []byte) error) error {
+	CheckIfDBSet()
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucket))
+		err2 := b.ForEach(each)
+		return err2
+	})
+	return err
+}
+
 func ForEachLogic(each func(tx *bolt.Tx) error) error {
 	CheckIfDBSet()
 	err := db.View(each)
