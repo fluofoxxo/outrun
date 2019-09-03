@@ -130,6 +130,8 @@ func QuickPostGameResults(helper *helper.Helper) {
 		helper.InternalErr("Error getting sub character", err)
 		return
 	}
+	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
+	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
 	playCharacters := []netobj.Character{
 		mainC,
 		subC,
@@ -149,48 +151,49 @@ func QuickPostGameResults(helper *helper.Helper) {
 		for abilityIndex == 1 { // unused ability is at index 1
 			abilityIndex = rand.Intn(len(mainC.AbilityLevel))
 		}
-		if mainC.Level < 100 {
-			mainC.Exp += expIncrease
-			for mainC.Exp >= mainC.Cost { // while loop allows for multiple level ups
-				// level up!
-				levelIncrease, ok := consts.UpgradeIncreases[mainC.ID]
-				if !ok {
-					helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", mainC.ID))
-					return
-				}
-				mainC.Level++
-				mainC.Exp -= mainC.Cost
-				mainC.Cost += levelIncrease
-				mainC.AbilityLevel[abilityIndex]++
-				if mainC.Level >= 100 {
-					break
-				}
-			}
+		// check that increases exist
+		_, ok := consts.UpgradeIncreases[mainC.ID]
+		if !ok {
+			helper.InternalErr("Error getting upgrade increase", fmt.Errorf("no key '%s' in consts.UpgradeIncreases", mainC.ID))
+			return
 		}
-		if subC.Level < 100 {
-			for subC.Exp >= subC.Cost { // while loop allows for multiple level ups
-				subC.Exp += expIncrease
-				// level up!
-				levelIncrease, ok := consts.UpgradeIncreases[subC.ID]
-				if !ok {
-					helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", subC.ID))
-					return
-				}
-				subC.Level++
-				subC.Exp -= subC.Cost
-				subC.Cost += levelIncrease
-				subC.AbilityLevel[abilityIndex]++
-				if subC.Level >= 100 {
-					break
-				}
-			}
+		_, ok = consts.UpgradeIncreases[subC.ID]
+		if !ok {
+			helper.InternalErr("Error getting upgrade increase", fmt.Errorf("no key '%s' in consts.UpgradeIncreases", subC.ID))
+			return
 		}
+		if mainC.Level >= 100 {
+			goto AfterClose
+		}
+		if subC.Level >= 100 {
+			goto AfterClose
+		}
+
+		// mainC exp increase
+		mainC.Exp += expIncrease
+		for mainC.Exp >= mainC.Cost {
+			// more exp than cost = level up
+			mainC.Level++                                   // increase level
+			mainC.AbilityLevel[abilityIndex]++              // increase ability level
+			mainC.Exp -= mainC.Cost                         // remove cost from exp
+			mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
+		}
+		subC.Exp += expIncrease
+		for subC.Exp >= mainC.Cost {
+			// more exp than cost = level up
+			subC.Level++                                  // increase level
+			subC.AbilityLevel[abilityIndex]++             // increase ability level
+			subC.Exp -= subC.Cost                         // remove cost from exp
+			subC.Cost += consts.UpgradeIncreases[subC.ID] // increase cost
+		}
+
 		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
 			mainC,
 			subC,
 		}
 		//err = db.SavePlayer(player)
 	}
+AfterClose:
 
 	/*
 		if err != nil {
@@ -198,9 +201,6 @@ func QuickPostGameResults(helper *helper.Helper) {
 			return
 		}
 	*/
-
-	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
-	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultQuickPostGameResults(baseInfo, player, playCharacters)
@@ -263,48 +263,49 @@ func PostGameResults(helper *helper.Helper) {
 		for abilityIndex == 1 { // unused ability is at index 1
 			abilityIndex = rand.Intn(len(mainC.AbilityLevel))
 		}
-		if mainC.Level < 100 {
-			mainC.Exp += expIncrease
-			for mainC.Exp >= mainC.Cost { // while loop allows for multiple level ups
-				// level up!
-				levelIncrease, ok := consts.UpgradeIncreases[mainC.ID]
-				if !ok {
-					helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", mainC.ID))
-					return
-				}
-				mainC.Level++
-				mainC.Exp -= mainC.Cost
-				mainC.Cost += levelIncrease
-				mainC.AbilityLevel[abilityIndex]++
-				if mainC.Level >= 100 {
-					break
-				}
-			}
+		// check that increases exist
+		_, ok := consts.UpgradeIncreases[mainC.ID]
+		if !ok {
+			helper.InternalErr("Error getting upgrade increase", fmt.Errorf("no key '%s' in consts.UpgradeIncreases", mainC.ID))
+			return
 		}
-		if subC.Level < 100 {
-			for subC.Exp >= subC.Cost { // while loop allows for multiple level ups
-				subC.Exp += expIncrease
-				// level up!
-				levelIncrease, ok := consts.UpgradeIncreases[subC.ID]
-				if !ok {
-					helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", subC.ID))
-					return
-				}
-				subC.Level++
-				subC.Exp -= subC.Cost
-				subC.Cost += levelIncrease
-				subC.AbilityLevel[abilityIndex]++
-				if subC.Level >= 100 {
-					break
-				}
-			}
+		_, ok = consts.UpgradeIncreases[subC.ID]
+		if !ok {
+			helper.InternalErr("Error getting upgrade increase", fmt.Errorf("no key '%s' in consts.UpgradeIncreases", subC.ID))
+			return
 		}
+		if mainC.Level >= 100 {
+			goto AfterClose
+		}
+		if subC.Level >= 100 {
+			goto AfterClose
+		}
+
+		// mainC exp increase
+		mainC.Exp += expIncrease
+		for mainC.Exp >= mainC.Cost {
+			// more exp than cost = level up
+			mainC.Level++                                   // increase level
+			mainC.AbilityLevel[abilityIndex]++              // increase ability level
+			mainC.Exp -= mainC.Cost                         // remove cost from exp
+			mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
+		}
+		subC.Exp += expIncrease
+		for subC.Exp >= subC.Cost {
+			// more exp than cost = level up
+			subC.Level++                                  // increase level
+			subC.AbilityLevel[abilityIndex]++             // increase ability level
+			subC.Exp -= subC.Cost                         // remove cost from exp
+			subC.Cost += consts.UpgradeIncreases[subC.ID] // increase cost
+		}
+
 		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
 			mainC,
 			subC,
 		}
 		//err = db.SavePlayer(player)
 	}
+AfterClose:
 
 	/*
 		if err != nil {
@@ -314,7 +315,7 @@ func PostGameResults(helper *helper.Helper) {
 	*/
 
 	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
-	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
+	subCIndex := player.IndexOfChara(subC.ID) // TODO: check if -1
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters)
