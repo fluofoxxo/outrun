@@ -34,112 +34,112 @@ var CharacterSonic = obj.Character{
 
 var CharacterTails = obj.Character{
 	strconv.Itoa(enums.CharaTypeTails),
-	1000,
+	350,
 	NumRedRings,
-	1000, // synced with Cost
+	350, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterKnuckles = obj.Character{
 	strconv.Itoa(enums.CharaTypeKnuckles),
-	2500,
+	350,
 	NumRedRings,
-	2500, // synced with Cost
+	350, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterAmy = obj.Character{
 	strconv.Itoa(enums.CharaTypeAmy),
-	4000,
+	400,
 	NumRedRings,
-	4000, // synced with Cost
+	400, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterShadow = obj.Character{
 	strconv.Itoa(enums.CharaTypeShadow),
-	8000,
+	500,
 	NumRedRings,
-	8000, // synced with Cost
+	500, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterBlaze = obj.Character{
 	strconv.Itoa(enums.CharaTypeBlaze),
-	12500,
+	550,
 	NumRedRings,
-	12500, // synced with Cost
+	550, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterRouge = obj.Character{
 	strconv.Itoa(enums.CharaTypeRouge),
-	15000,
+	550,
 	NumRedRings,
-	15000, // synced with Cost
+	550, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterOmega = obj.Character{
 	strconv.Itoa(enums.CharaTypeOmega),
-	18500,
+	650,
 	NumRedRings,
-	18500, // synced with Cost
+	650, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterBig = obj.Character{
 	strconv.Itoa(enums.CharaTypeBig),
-	22500,
+	700,
 	NumRedRings,
-	22500, // synced with Cost
+	700, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterCream = obj.Character{
 	strconv.Itoa(enums.CharaTypeCream),
-	28000,
+	750,
 	NumRedRings,
-	28000, // synced with Cost
+	750, // synced with Cost
 	PriceRedRings,
 }
 var CharacterEspio = obj.Character{
 	strconv.Itoa(enums.CharaTypeEspio),
-	35000,
+	650,
 	NumRedRings,
-	35000, // synced with Cost
+	650, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterCharmy = obj.Character{
 	strconv.Itoa(enums.CharaTypeCharmy),
-	41500,
+	650,
 	NumRedRings,
-	41500, // synced with Cost
+	650, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterVector = obj.Character{
 	strconv.Itoa(enums.CharaTypeVector),
-	47500,
+	700,
 	NumRedRings,
-	47500, // synced with Cost
+	700, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterSilver = obj.Character{
 	strconv.Itoa(enums.CharaTypeSilver),
-	53500,
+	800,
 	NumRedRings,
-	53500, // synced with Cost
+	800, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterMetalSonic = obj.Character{
 	strconv.Itoa(enums.CharaTypeMetalSonic),
-	60000,
+	900,
 	NumRedRings,
-	60000, // synced with Cost
+	900, // synced with Cost
 	PriceRedRings,
 }
 
@@ -153,17 +153,17 @@ var CharacterAmitieAmy = obj.Character{
 
 var CharacterClassicSonic = obj.Character{
 	strconv.Itoa(enums.CharaTypeClassicSonic),
-	78500,
+	1000,
 	NumRedRings,
-	78500, // synced with Cost
+	1000, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterTikal = obj.Character{
 	strconv.Itoa(enums.CharaTypeTikal),
-	83000,
+	1100,
 	NumRedRings,
-	83000, // synced with Cost
+	1100, // synced with Cost
 	PriceRedRings,
 }
 
@@ -201,17 +201,17 @@ var CharacterHalloweenOmega = obj.Character{
 
 var CharacterMephiles = obj.Character{
 	strconv.Itoa(enums.CharaTypeMephiles),
-	125000,
+	1550,
 	NumRedRings,
-	125000, // synced with Cost
+	1550, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterPSISilver = obj.Character{
 	strconv.Itoa(enums.CharaTypePSISilver),
-	185000,
+	2300,
 	NumRedRings,
-	185000, // synced with Cost
+	2300, // synced with Cost
 	PriceRedRings,
 }
 
@@ -241,16 +241,16 @@ var CharacterXMasKnuckles = obj.Character{
 
 var CharacterWerehog = obj.Character{
 	strconv.Itoa(enums.CharaTypeWerehog),
-	96500,
+	800,
 	NumRedRings,
-	96500, // synced with Cost
+	800, // synced with Cost
 	PriceRedRings,
 }
 
 var CharacterSticks = obj.Character{
 	strconv.Itoa(enums.CharaTypeSticks),
-	110000,
+	750,
 	NumRedRings,
-	110000, // synced with Cost
+	750, // synced with Cost
 	PriceRedRings,
 }

@@ -27,11 +27,13 @@ type Character struct { // Can also be used as PlayCharacter
 	AbilityLevelUpExp []int64        `json:"abilityLevelupExp,omitempty"`
 }
 
+var tick = 0
+
 func DefaultCharacter(char obj.Character) Character {
 	status := int64(enums.CharacterStatusUnlocked)
 	level := int64(1)
 	exp := int64(0)
-	star := int64(1)       // Limit breaks
+	star := int64(0)       // Limit breaks
 	starMax := int64(1331) // Max number of limit breaks?
 	lockCondition := int64(enums.LockConditionOpen)
 	campaignList := []obj.Campaign{}
@@ -73,19 +75,11 @@ func DefaultCharacterState() []Character { // every character
 		DefaultCharacter(constobjs.CharacterVector),
 		DefaultCharacter(constobjs.CharacterSilver),
 		DefaultCharacter(constobjs.CharacterMetalSonic),
-		DefaultCharacter(constobjs.CharacterAmitieAmy),
 		DefaultCharacter(constobjs.CharacterClassicSonic),
+		DefaultCharacter(constobjs.CharacterWerehog),
+		DefaultCharacter(constobjs.CharacterSticks),
 		DefaultCharacter(constobjs.CharacterTikal),
-		DefaultCharacter(constobjs.CharacterGothicAmy),
-		DefaultCharacter(constobjs.CharacterHalloweenShadow),
-		DefaultCharacter(constobjs.CharacterHalloweenRouge),
-		//DefaultCharacter(constobjs.CharacterHalloweenOmega),
-		//DefaultCharacter(constobjs.CharacterMephiles),
-		//DefaultCharacter(constobjs.CharacterPSISilver),
-		//DefaultCharacter(constobjs.CharacterXMasSonic),
-		//DefaultCharacter(constobjs.CharacterXMasTails),
-		//DefaultCharacter(constobjs.CharacterXMasKnuckles),
-		//DefaultCharacter(constobjs.CharacterWerehog),
-		//DefaultCharacter(constobjs.CharacterSticks),
+		DefaultCharacter(constobjs.CharacterMephiles),
+		DefaultCharacter(constobjs.CharacterPSISilver),
 	}
 }
