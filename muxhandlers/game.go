@@ -134,8 +134,6 @@ func QuickPostGameResults(helper *helper.Helper) {
 		mainC,
 		subC,
 	}
-	fmt.Printf("Main Character Level (First): %v\n", mainC.Level)
-	fmt.Printf("Sub Character Level (First): %v\n", subC.Level)
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
