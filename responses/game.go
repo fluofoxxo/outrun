@@ -1,7 +1,6 @@
 package responses
 
 import (
-	"log"
 	"strconv"
 
 	"github.com/fluofoxxo/outrun/netobj"
@@ -217,26 +216,28 @@ func QuickPostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci 
 	}
 }
 
-func DefaultQuickPostGameResults(base responseobjs.BaseInfo, player netobj.Player) QuickPostGameResultsResponse {
+func DefaultQuickPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pcs []netobj.Character) QuickPostGameResultsResponse {
 	dci := []obj.Incentive{}
 	ml := []obj.Message{}
 	oml := []obj.OperatorMessage{
 		obj.DefaultOperatorMessage(),
 	}
-	mainC, err := player.GetMainChara()
-	if err != nil {
-		// TODO: use better error handling!
-		log.Println("[ERR] (DefaultQuickPostGameResults) Error getting main character: ", err)
-	}
-	subC, err := player.GetSubChara()
-	if err != nil {
-		// TODO: use better error handling!
-		log.Println("[ERR] (DefaultQuickPostGameResults) Error getting sub character: ", err)
-	}
-	pcs := []netobj.Character{
-		mainC,
-		subC,
-	}
+	/*
+		mainC, err := player.GetMainChara()
+		if err != nil {
+			// TODO: use better error handling!
+			log.Println("[ERR] (DefaultQuickPostGameResults) Error getting main character: ", err)
+		}
+		subC, err := player.GetSubChara()
+		if err != nil {
+			// TODO: use better error handling!
+			log.Println("[ERR] (DefaultQuickPostGameResults) Error getting sub character: ", err)
+		}
+		pcs := []netobj.Character{
+			mainC,
+			subC,
+		}
+	*/
 	return QuickPostGameResults(
 		base,
 		player,
@@ -287,8 +288,8 @@ func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj
 	}
 }
 
-func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player) PostGameResultsResponse {
-	qpgrr := DefaultQuickPostGameResults(base, player)
+func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pcs []netobj.Character) PostGameResultsResponse {
+	qpgrr := DefaultQuickPostGameResults(base, player, pcs)
 	mms := player.MileageMapState
 	mil := []obj.MileageIncentive{obj.DefaultMileageIncentive()}
 	eil := []obj.Item{}

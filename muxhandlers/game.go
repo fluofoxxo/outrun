@@ -2,10 +2,14 @@ package muxhandlers
 
 import (
 	"encoding/json"
+	"fmt"
+	"math/rand"
 
+	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/helper"
+	"github.com/fluofoxxo/outrun/netobj"
 	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses"
 	"github.com/fluofoxxo/outrun/status"
@@ -116,6 +120,22 @@ func QuickPostGameResults(helper *helper.Helper) {
 		return
 	}
 
+	mainC, err := player.GetMainChara()
+	if err != nil {
+		helper.InternalErr("Error getting main character", err)
+		return
+	}
+	subC, err := player.GetSubChara()
+	if err != nil {
+		helper.InternalErr("Error getting sub character", err)
+		return
+	}
+	playCharacters := []netobj.Character{
+		mainC,
+		subC,
+	}
+	fmt.Printf("Main Character Level (First): %v\n", mainC.Level)
+	fmt.Printf("Sub Character Level (First): %v\n", subC.Level)
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
@@ -125,15 +145,66 @@ func QuickPostGameResults(helper *helper.Helper) {
 			player.PlayerState.TimedHighScore = request.Score
 		}
 		//player.PlayerState.TotalDistance += request.Distance  // We don't do this in timed mode!
-		err = db.SavePlayer(player)
+		// increase character(s)'s experience
+		expIncrease := request.Rings + request.FailureRings // all rings collected
+		abilityIndex := 1
+		for abilityIndex == 1 { // unused ability is at index 1
+			abilityIndex = rand.Intn(len(mainC.AbilityLevel))
+		}
+		mainC.Exp += expIncrease
+		for mainC.Exp >= mainC.Cost { // while loop allows for multiple level ups
+			// level up!
+			levelIncrease, ok := consts.UpgradeIncreases[mainC.ID]
+			if !ok {
+				helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", mainC.ID))
+				return
+			}
+			mainC.Level++
+			mainC.Exp -= mainC.Cost
+			mainC.Cost += levelIncrease
+			mainC.AbilityLevel[abilityIndex]++
+		}
+		subC.Exp += expIncrease
+		for subC.Exp >= subC.Cost { // while loop allows for multiple level ups
+			// level up!
+			levelIncrease, ok := consts.UpgradeIncreases[subC.ID]
+			if !ok {
+				helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", subC.ID))
+				return
+			}
+			subC.Level++
+			subC.Exp -= subC.Cost
+			subC.Cost += levelIncrease
+			subC.AbilityLevel[abilityIndex]++
+		}
+		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
+			mainC,
+			subC,
+		}
+		//err = db.SavePlayer(player)
 	}
 
+	/*
+		if err != nil {
+			helper.InternalErr("Error saving player", err)
+			return
+		}
+	*/
+
+	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
+	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
+
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultQuickPostGameResults(baseInfo, player, playCharacters)
+	// apply the save after the response so that we don't break the leveling
+	player.CharacterState[mainCIndex] = mainC
+	player.CharacterState[subCIndex] = subC
+	err = db.SavePlayer(player)
 	if err != nil {
 		helper.InternalErr("Error saving player", err)
 		return
 	}
-	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultQuickPostGameResults(baseInfo, player)
+
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
@@ -154,6 +225,21 @@ func PostGameResults(helper *helper.Helper) {
 		return
 	}
 
+	mainC, err := player.GetMainChara()
+	if err != nil {
+		helper.InternalErr("Error getting main character", err)
+		return
+	}
+	subC, err := player.GetSubChara()
+	if err != nil {
+		helper.InternalErr("Error getting sub character", err)
+		return
+	}
+	playCharacters := []netobj.Character{
+		mainC,
+		subC,
+	}
+	fmt.Printf("%v\n", mainC.Level)
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
@@ -163,15 +249,66 @@ func PostGameResults(helper *helper.Helper) {
 			player.PlayerState.HighScore = request.Score
 		}
 		player.PlayerState.TotalDistance += request.Distance
-		err = db.SavePlayer(player)
+		// increase character(s)'s experience
+		expIncrease := request.Rings + request.FailureRings // all rings collected
+		abilityIndex := 1
+		for abilityIndex == 1 { // unused ability is at index 1
+			abilityIndex = rand.Intn(len(mainC.AbilityLevel))
+		}
+		mainC.Exp += expIncrease
+		for mainC.Exp >= mainC.Cost { // while loop allows for multiple level ups
+			// level up!
+			levelIncrease, ok := consts.UpgradeIncreases[mainC.ID]
+			if !ok {
+				helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", mainC.ID))
+				return
+			}
+			mainC.Level++
+			mainC.Exp -= mainC.Cost
+			mainC.Cost += levelIncrease
+			mainC.AbilityLevel[abilityIndex]++
+		}
+		subC.Exp += expIncrease
+		for subC.Exp >= subC.Cost { // while loop allows for multiple level ups
+			// level up!
+			levelIncrease, ok := consts.UpgradeIncreases[subC.ID]
+			if !ok {
+				helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", subC.ID))
+				return
+			}
+			subC.Level++
+			subC.Exp -= subC.Cost
+			subC.Cost += levelIncrease
+			subC.AbilityLevel[abilityIndex]++
+		}
+		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
+			mainC,
+			subC,
+		}
+		//err = db.SavePlayer(player)
 	}
 
+	/*
+		if err != nil {
+			helper.InternalErr("Error saving player", err)
+			return
+		}
+	*/
+
+	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
+	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
+
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters)
+	// apply the save after the response so that we don't break the leveling
+	player.CharacterState[mainCIndex] = mainC
+	player.CharacterState[subCIndex] = subC
+	err = db.SavePlayer(player)
 	if err != nil {
 		helper.InternalErr("Error saving player", err)
 		return
 	}
-	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultPostGameResults(baseInfo, player)
+
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

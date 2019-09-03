@@ -2,6 +2,7 @@ package muxhandlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	"github.com/fluofoxxo/outrun/consts"
@@ -86,8 +87,16 @@ func UpgradeCharacter(helper *helper.Helper) {
 		sendStatus = status.NotEnoughRings
 	} else {
 		if abilitySum < 100 {
+			// check if character is valid here
+			levelIncrease, ok := consts.UpgradeIncreases[charaID]
+			if !ok {
+				helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", charaID))
+				return
+			}
 			player.CharacterState[index].AbilityLevel[abilityIndex]++
-			player.CharacterState[index].Exp -= consts.CharacterUpgradeIncrease // TODO: subtracting exp actually increases cost... Probably not what we need to do.
+			player.CharacterState[index].Level += 1
+			player.CharacterState[index].Exp = 0 // reset exp
+			player.CharacterState[index].Cost += levelIncrease
 			player.PlayerState.NumRings -= amountNeedToBePaid
 			db.SavePlayer(player)
 		} else {

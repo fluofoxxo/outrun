@@ -31,7 +31,7 @@ var tick = 0
 
 func DefaultCharacter(char obj.Character) Character {
 	status := int64(enums.CharacterStatusUnlocked)
-	level := int64(1)
+	level := int64(0)
 	exp := int64(0)
 	star := int64(0)       // Limit breaks
 	starMax := int64(1331) // Max number of limit breaks?
