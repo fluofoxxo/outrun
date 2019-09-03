@@ -15,12 +15,17 @@ Outrun is a custom server for Sonic Runners, reverse engineered from the [Sonic 
 Notable:
   - Timed Mode
   - Ring/Red Star Ring keeping
+  - Functional shop
   - Character/Chao equipping
+  - Character leveling and progression
 
 Functional:
   - High score keeping
   - Notifications (pending revamp)
   - Ticker notices
+  - Small database size and memory footprint
+  - Low CPU usage
+  - Descriptive error reporting and handling
 
 ### Building
 
