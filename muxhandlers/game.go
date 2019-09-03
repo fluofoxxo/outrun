@@ -162,29 +162,25 @@ func QuickPostGameResults(helper *helper.Helper) {
 			helper.InternalErr("Error getting upgrade increase", fmt.Errorf("no key '%s' in consts.UpgradeIncreases", subC.ID))
 			return
 		}
-		if mainC.Level >= 100 {
-			goto AfterClose
+		if mainC.Level < 100 {
+			mainC.Exp += expIncrease
+			for mainC.Exp >= mainC.Cost {
+				// more exp than cost = level up
+				mainC.Level++                                   // increase level
+				mainC.AbilityLevel[abilityIndex]++              // increase ability level
+				mainC.Exp -= mainC.Cost                         // remove cost from exp
+				mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
+			}
 		}
-		if subC.Level >= 100 {
-			goto AfterClose
-		}
-
-		// mainC exp increase
-		mainC.Exp += expIncrease
-		for mainC.Exp >= mainC.Cost {
-			// more exp than cost = level up
-			mainC.Level++                                   // increase level
-			mainC.AbilityLevel[abilityIndex]++              // increase ability level
-			mainC.Exp -= mainC.Cost                         // remove cost from exp
-			mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
-		}
-		subC.Exp += expIncrease
-		for subC.Exp >= mainC.Cost {
-			// more exp than cost = level up
-			subC.Level++                                  // increase level
-			subC.AbilityLevel[abilityIndex]++             // increase ability level
-			subC.Exp -= subC.Cost                         // remove cost from exp
-			subC.Cost += consts.UpgradeIncreases[subC.ID] // increase cost
+		if subC.Level < 100 {
+			subC.Exp += expIncrease
+			for subC.Exp >= subC.Cost {
+				// more exp than cost = level up
+				subC.Level++                                  // increase level
+				subC.AbilityLevel[abilityIndex]++             // increase ability level
+				subC.Exp -= subC.Cost                         // remove cost from exp
+				subC.Cost += consts.UpgradeIncreases[subC.ID] // increase cost
+			}
 		}
 
 		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
@@ -193,7 +189,6 @@ func QuickPostGameResults(helper *helper.Helper) {
 		}
 		//err = db.SavePlayer(player)
 	}
-AfterClose:
 
 	/*
 		if err != nil {
@@ -274,29 +269,25 @@ func PostGameResults(helper *helper.Helper) {
 			helper.InternalErr("Error getting upgrade increase", fmt.Errorf("no key '%s' in consts.UpgradeIncreases", subC.ID))
 			return
 		}
-		if mainC.Level >= 100 {
-			goto AfterClose
+		if mainC.Level < 100 {
+			mainC.Exp += expIncrease
+			for mainC.Exp >= mainC.Cost {
+				// more exp than cost = level up
+				mainC.Level++                                   // increase level
+				mainC.AbilityLevel[abilityIndex]++              // increase ability level
+				mainC.Exp -= mainC.Cost                         // remove cost from exp
+				mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
+			}
 		}
-		if subC.Level >= 100 {
-			goto AfterClose
-		}
-
-		// mainC exp increase
-		mainC.Exp += expIncrease
-		for mainC.Exp >= mainC.Cost {
-			// more exp than cost = level up
-			mainC.Level++                                   // increase level
-			mainC.AbilityLevel[abilityIndex]++              // increase ability level
-			mainC.Exp -= mainC.Cost                         // remove cost from exp
-			mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
-		}
-		subC.Exp += expIncrease
-		for subC.Exp >= subC.Cost {
-			// more exp than cost = level up
-			subC.Level++                                  // increase level
-			subC.AbilityLevel[abilityIndex]++             // increase ability level
-			subC.Exp -= subC.Cost                         // remove cost from exp
-			subC.Cost += consts.UpgradeIncreases[subC.ID] // increase cost
+		if subC.Level < 100 {
+			subC.Exp += expIncrease
+			for subC.Exp >= subC.Cost {
+				// more exp than cost = level up
+				subC.Level++                                  // increase level
+				subC.AbilityLevel[abilityIndex]++             // increase ability level
+				subC.Exp -= subC.Cost                         // remove cost from exp
+				subC.Cost += consts.UpgradeIncreases[subC.ID] // increase cost
+			}
 		}
 
 		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
@@ -305,7 +296,6 @@ func PostGameResults(helper *helper.Helper) {
 		}
 		//err = db.SavePlayer(player)
 	}
-AfterClose:
 
 	/*
 		if err != nil {
@@ -315,7 +305,7 @@ AfterClose:
 	*/
 
 	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
-	subCIndex := player.IndexOfChara(subC.ID) // TODO: check if -1
+	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters)
