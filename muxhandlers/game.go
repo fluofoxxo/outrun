@@ -242,7 +242,6 @@ func PostGameResults(helper *helper.Helper) {
 		mainC,
 		subC,
 	}
-	fmt.Printf("%v\n", mainC.Level)
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
