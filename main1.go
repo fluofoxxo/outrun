@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/muxhandlers"
 	"github.com/fluofoxxo/outrun/muxhandlers/muxobj"
@@ -17,7 +18,7 @@ import (
 
 const UNKNOWN_REQUEST_DIRECTORY = "logging/unknown_requests/"
 
-const (
+var (
 	LogExecutionTime = true
 )
 
@@ -41,8 +42,16 @@ func OutputUnknownRequest(w http.ResponseWriter, r *http.Request) {
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
+	err := config.Parse("config.json")
+	if err != nil {
+		log.Printf("[INFO] No config file (config.json) found (%s), using defaults\n", err)
+	} else {
+		log.Println("[INFO] Config file (config.json) loaded")
+	}
+
 	h := muxobj.Handle
 	mux := http.NewServeMux()
+	LogExecutionTime = config.CFile.DoTimeLogging
 	// Login
 	mux.HandleFunc("/Login/login/", h(muxhandlers.Login, LogExecutionTime))
 	mux.HandleFunc("/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
@@ -84,7 +93,11 @@ func main() {
 	// Shop
 	mux.HandleFunc("/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
 
-	mux.HandleFunc("/", OutputUnknownRequest)
-	log.Println("Starting server on port 9001")
-	panic(http.ListenAndServe(":9001", mux))
+	if config.CFile.LogUnknownRequests {
+		mux.HandleFunc("/", OutputUnknownRequest)
+	}
+
+	port := config.CFile.Port
+	log.Printf("Starting server on port %s\n", port)
+	panic(http.ListenAndServe(":"+port, mux))
 }
