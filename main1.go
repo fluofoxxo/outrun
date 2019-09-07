@@ -14,6 +14,7 @@ import (
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/muxhandlers"
 	"github.com/fluofoxxo/outrun/muxhandlers/muxobj"
+	"github.com/gorilla/mux"
 )
 
 const UNKNOWN_REQUEST_DIRECTORY = "logging/unknown_requests/"
@@ -32,11 +33,21 @@ func OutputUnknownRequest(w http.ResponseWriter, r *http.Request) {
 	err := ioutil.WriteFile(path, recv, 0644)
 	if err != nil {
 		log.Println("[OUT] UNABLE TO WRITE UNKNOWN REQUEST: " + err.Error())
-		w.Write([]byte(""))
+		w.Write([]byte("O.U.R. ERR"))
 		return
 	}
 	log.Println("[OUT] !!!!!!!!!!!! Unknown request, output to " + path)
-	w.Write([]byte(""))
+	w.Write([]byte("O.U.R. COMPLETE"))
+}
+
+func removePrependingSlashes(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		for len(r.URL.Path) != 0 && string(r.URL.Path[0]) == "/" {
+			r.URL.Path = r.URL.Path[1:]
+		}
+		r.URL.Path = "/" + r.URL.Path
+		next.ServeHTTP(w, r)
+	})
 }
 
 func main() {
@@ -50,54 +61,55 @@ func main() {
 	}
 
 	h := muxobj.Handle
-	mux := http.NewServeMux()
+	router := mux.NewRouter()
+	router.StrictSlash(true)
 	LogExecutionTime = config.CFile.DoTimeLogging
 	// Login
-	mux.HandleFunc("/Login/login/", h(muxhandlers.Login, LogExecutionTime))
-	mux.HandleFunc("/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
-	mux.HandleFunc("/Login/getVariousParameter/", h(muxhandlers.GetVariousParameter, LogExecutionTime))
-	mux.HandleFunc("/Player/getPlayerState/", h(muxhandlers.GetPlayerState, LogExecutionTime))
-	mux.HandleFunc("/Player/getCharacterState/", h(muxhandlers.GetCharacterState, LogExecutionTime))
-	mux.HandleFunc("/Player/getChaoState/", h(muxhandlers.GetChaoState, LogExecutionTime))
-	mux.HandleFunc("/Spin/getWheelOptions/", h(muxhandlers.GetWheelOptions, LogExecutionTime))
-	mux.HandleFunc("/Game/getDailyChalData/", h(muxhandlers.GetDailyChallengeData, LogExecutionTime))
-	mux.HandleFunc("/Message/getMessageList/", h(muxhandlers.GetMessageList, LogExecutionTime))
-	mux.HandleFunc("/Store/getRedstarExchangeList/", h(muxhandlers.GetRedStarExchangeList, LogExecutionTime))
-	mux.HandleFunc("/Game/getCostList/", h(muxhandlers.GetCostList, LogExecutionTime))
-	mux.HandleFunc("/Event/getEventList/", h(muxhandlers.GetEventList, LogExecutionTime))
-	mux.HandleFunc("/Game/getMileageData/", h(muxhandlers.GetMileageData, LogExecutionTime))
-	mux.HandleFunc("/Game/getCampaignList/", h(muxhandlers.GetCampaignList, LogExecutionTime))
-	mux.HandleFunc("/Chao/getChaoWheelOptions/", h(muxhandlers.GetChaoWheelOptions, LogExecutionTime))
-	mux.HandleFunc("/Chao/getPrizeChaoWheelSpin/", h(muxhandlers.GetPrizeChaoWheelSpin, LogExecutionTime))
-	mux.HandleFunc("/login/getInformation/", h(muxhandlers.GetInformation, LogExecutionTime))
-	mux.HandleFunc("/Leaderboard/getWeeklyLeaderboardOptions/", h(muxhandlers.GetWeeklyLeaderboardOptions, LogExecutionTime))
-	mux.HandleFunc("/Leaderboard/getLeagueData/", h(muxhandlers.GetLeagueData, LogExecutionTime))
-	mux.HandleFunc("/Leaderboard/getWeeklyLeaderboardEntries/", h(muxhandlers.GetWeeklyLeaderboardEntries, LogExecutionTime))
-	mux.HandleFunc("/Player/setUserName/", h(muxhandlers.SetUsername, LogExecutionTime))
-	mux.HandleFunc("/login/getTicker/", h(muxhandlers.GetTicker, LogExecutionTime))
-	mux.HandleFunc("/Login/loginBonus/", h(muxhandlers.LoginBonus, LogExecutionTime))
+	router.HandleFunc("/Login/login/", h(muxhandlers.Login, LogExecutionTime))
+	router.HandleFunc("/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
+	router.HandleFunc("/Login/getVariousParameter/", h(muxhandlers.GetVariousParameter, LogExecutionTime))
+	router.HandleFunc("/Player/getPlayerState/", h(muxhandlers.GetPlayerState, LogExecutionTime))
+	router.HandleFunc("/Player/getCharacterState/", h(muxhandlers.GetCharacterState, LogExecutionTime))
+	router.HandleFunc("/Player/getChaoState/", h(muxhandlers.GetChaoState, LogExecutionTime))
+	router.HandleFunc("/Spin/getWheelOptions/", h(muxhandlers.GetWheelOptions, LogExecutionTime))
+	router.HandleFunc("/Game/getDailyChalData/", h(muxhandlers.GetDailyChallengeData, LogExecutionTime))
+	router.HandleFunc("/Message/getMessageList/", h(muxhandlers.GetMessageList, LogExecutionTime))
+	router.HandleFunc("/Store/getRedstarExchangeList/", h(muxhandlers.GetRedStarExchangeList, LogExecutionTime))
+	router.HandleFunc("/Game/getCostList/", h(muxhandlers.GetCostList, LogExecutionTime))
+	router.HandleFunc("/Event/getEventList/", h(muxhandlers.GetEventList, LogExecutionTime))
+	router.HandleFunc("/Game/getMileageData/", h(muxhandlers.GetMileageData, LogExecutionTime))
+	router.HandleFunc("/Game/getCampaignList/", h(muxhandlers.GetCampaignList, LogExecutionTime))
+	router.HandleFunc("/Chao/getChaoWheelOptions/", h(muxhandlers.GetChaoWheelOptions, LogExecutionTime))
+	router.HandleFunc("/Chao/getPrizeChaoWheelSpin/", h(muxhandlers.GetPrizeChaoWheelSpin, LogExecutionTime))
+	router.HandleFunc("/login/getInformation/", h(muxhandlers.GetInformation, LogExecutionTime))
+	router.HandleFunc("/Leaderboard/getWeeklyLeaderboardOptions/", h(muxhandlers.GetWeeklyLeaderboardOptions, LogExecutionTime))
+	router.HandleFunc("/Leaderboard/getLeagueData/", h(muxhandlers.GetLeagueData, LogExecutionTime))
+	router.HandleFunc("/Leaderboard/getWeeklyLeaderboardEntries/", h(muxhandlers.GetWeeklyLeaderboardEntries, LogExecutionTime))
+	router.HandleFunc("/Player/setUserName/", h(muxhandlers.SetUsername, LogExecutionTime))
+	router.HandleFunc("/login/getTicker/", h(muxhandlers.GetTicker, LogExecutionTime))
+	router.HandleFunc("/Login/loginBonus/", h(muxhandlers.LoginBonus, LogExecutionTime))
 	// Timed mode
-	mux.HandleFunc("/Game/quickActStart/", h(muxhandlers.QuickActStart, LogExecutionTime))
-	mux.HandleFunc("/Game/quickPostGameResults/", h(muxhandlers.QuickPostGameResults, LogExecutionTime))
+	router.HandleFunc("/Game/quickActStart/", h(muxhandlers.QuickActStart, LogExecutionTime))
+	router.HandleFunc("/Game/quickPostGameResults/", h(muxhandlers.QuickPostGameResults, LogExecutionTime))
 	// Story mode
-	mux.HandleFunc("/Game/actStart/", h(muxhandlers.ActStart, LogExecutionTime))
+	router.HandleFunc("/Game/actStart/", h(muxhandlers.ActStart, LogExecutionTime))
 	// Retry
-	mux.HandleFunc("/Game/actRetry/", h(muxhandlers.ActRetry, LogExecutionTime))
+	router.HandleFunc("/Game/actRetry/", h(muxhandlers.ActRetry, LogExecutionTime))
 	// Gameplay
-	mux.HandleFunc("/Game/getFreeItemList/", h(muxhandlers.GetFreeItemList, LogExecutionTime))
-	mux.HandleFunc("/Game/postGameResults/", h(muxhandlers.PostGameResults, LogExecutionTime))
+	router.HandleFunc("/Game/getFreeItemList/", h(muxhandlers.GetFreeItemList, LogExecutionTime))
+	router.HandleFunc("/Game/postGameResults/", h(muxhandlers.PostGameResults, LogExecutionTime))
 	// Misc.
-	mux.HandleFunc("/Character/changeCharacter/", h(muxhandlers.ChangeCharacter, LogExecutionTime))
-	mux.HandleFunc("/Character/upgradeCharacter/", h(muxhandlers.UpgradeCharacter, LogExecutionTime))
-	mux.HandleFunc("/Chao/equipChao/", h(muxhandlers.EquipChao, LogExecutionTime))
+	router.HandleFunc("/Character/changeCharacter/", h(muxhandlers.ChangeCharacter, LogExecutionTime))
+	router.HandleFunc("/Character/upgradeCharacter/", h(muxhandlers.UpgradeCharacter, LogExecutionTime))
+	router.HandleFunc("/Chao/equipChao/", h(muxhandlers.EquipChao, LogExecutionTime))
 	// Shop
-	mux.HandleFunc("/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
+	router.HandleFunc("/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
 
 	if config.CFile.LogUnknownRequests {
-		mux.HandleFunc("/", OutputUnknownRequest)
+		router.HandleFunc("/", OutputUnknownRequest)
 	}
 
 	port := config.CFile.Port
 	log.Printf("Starting server on port %s\n", port)
-	panic(http.ListenAndServe(":"+port, mux))
+	panic(http.ListenAndServe(":"+port, removePrependingSlashes(router)))
 }
