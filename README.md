@@ -20,6 +20,7 @@ Notable:
   - Character leveling and progression
 
 Functional:
+  - Android and iOS support
   - High score keeping
   - Notifications (pending revamp)
   - Ticker notices
@@ -69,6 +70,8 @@ Android app file (from Android):
 5. Set the "ROM" file to `sr203_revival2.apk` (Revival's APK)
 6. Set the Output file to `palmbound.apk`
 7. Install the new `palmbound.apk`
+
+Instructions for iOS versions coming soon.
 
 ### Credits
 
