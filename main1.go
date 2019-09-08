@@ -14,6 +14,7 @@ import (
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/muxhandlers"
 	"github.com/fluofoxxo/outrun/muxhandlers/muxobj"
+	"github.com/fluofoxxo/outrun/orpc"
 	"github.com/gorilla/mux"
 )
 
@@ -59,6 +60,8 @@ func main() {
 	} else {
 		log.Println("[INFO] Config file (config.json) loaded")
 	}
+
+	orpc.Start()
 
 	h := muxobj.Handle
 	router := mux.NewRouter()

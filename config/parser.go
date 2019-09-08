@@ -2,46 +2,59 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"reflect"
 )
 
 // defaults
-const (
-	DPort               = "9001"
-	DDoTimeLogging      = true
-	DLogUnknownRequests = true
-	DLogAllRequests     = false
-	DDebug              = false
-)
+// default variable names MUST be "D" + (nameOfVariable)
+var Defaults = map[string]interface{}{
+	"DPort":               "9001",
+	"DDoTimeLogging":      true,
+	"DLogUnknownRequests": true,
+	"DLogAllRequests":     false,
+	"DDebug":              false,
+	"DRPCPort":            "23432",
+}
 
 var CFile ConfigFile
 
 type ConfigFile struct {
-	Port               string `json:"port"`
-	DoTimeLogging      bool   `json:"doTimeLogging"`
-	LogUnknownRequests bool   `json:"logUnknownRequests"`
-	LogAllRequests     bool   `json:"logAllRequests"`
-	Debug              bool   `json:"debug"`
+	Port               string `json:"port,omitempty"`
+	DoTimeLogging      bool   `json:"doTimeLogging,omitempty"`
+	LogUnknownRequests bool   `json:"logUnknownRequests,omitempty"`
+	LogAllRequests     bool   `json:"logAllRequests,omitempty"`
+	Debug              bool   `json:"debug,omitempty"`
+	RPCPort            string `json:"rpcPort,omitempty"`
 }
 
 func Parse(filename string) error {
-	port := DPort
-	doTimeLogging := DDoTimeLogging
-	logUnknownRequests := DLogUnknownRequests
-	logAllRequests := DLogAllRequests
-	debug := DDebug
-
 	var ret error
 	file, err := loadFile(filename)
 	if err == nil {
 		var cf ConfigFile
 		err := json.Unmarshal(file, &cf)
 		if err == nil {
-			port = cf.Port
-			doTimeLogging = cf.DoTimeLogging
-			logUnknownRequests = cf.LogUnknownRequests
-			logAllRequests = cf.LogAllRequests
-			debug = cf.Debug
+			vo := reflect.ValueOf(cf)
+			rtype := vo.Type()
+			for i := 0; i < vo.NumField(); i++ {
+				fieldname := rtype.Field(i).Name
+				fieldVal := vo.Field(i).Interface()
+				defaultName := "D" + fieldname
+				defaultVal := Defaults[defaultName]
+				isZero, err := isZeroVal(fieldVal)
+				if err != nil {
+					ret = fmt.Errorf("error getting zero value: %s", err)
+					return ret
+				}
+				if isZero {
+					reflect.ValueOf(&cf).Elem().Field(i).Set(reflect.ValueOf(defaultVal)) // assign the variable with its default
+				}
+			}
+
+			CFile = cf
+			return ret
 		} else {
 			ret = err
 		}
@@ -50,11 +63,12 @@ func Parse(filename string) error {
 	}
 
 	CFile = ConfigFile{
-		port,
-		doTimeLogging,
-		logUnknownRequests,
-		logAllRequests,
-		debug,
+		Defaults["DPort"].(string),
+		Defaults["DDoTimeLogging"].(bool),
+		Defaults["DLogUnknownRequests"].(bool),
+		Defaults["DLogAllRequests"].(bool),
+		Defaults["DDebug"].(bool),
+		Defaults["DRPCPort"].(string),
 	}
 	return ret
 }
@@ -65,4 +79,12 @@ func loadFile(filename string) ([]byte, error) {
 		return []byte{}, err
 	}
 	return b, err
+}
+
+func isZeroVal(val interface{}) (bool, error) {
+	vartype := reflect.TypeOf(val)
+	if !vartype.Comparable() {
+		return false, fmt.Errorf("error comparing type %v", vartype)
+	}
+	return reflect.Zero(vartype).Interface() == val, nil
 }
