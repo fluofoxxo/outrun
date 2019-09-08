@@ -21,7 +21,7 @@ const (
 	SessionIDSchema = "OUTRUN_%s"
 )
 
-func NewAccount() netobj.Player {
+func NewAccountWithID(uid string) netobj.Player {
 	randChar := func(charset string, length int64) string {
 		runes := []rune(charset)
 		final := make([]rune, 10)
@@ -30,7 +30,7 @@ func NewAccount() netobj.Player {
 		}
 		return string(final)
 	}
-	uid := strconv.Itoa(rand.Intn(9999999999-1000000000) + 1000000000)
+
 	username := ""
 	password := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
 	key := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
@@ -52,6 +52,11 @@ func NewAccount() netobj.Player {
 		mileageFriends,
 		playerVarious,
 	)
+}
+
+func NewAccount() netobj.Player {
+	uid := strconv.Itoa(rand.Intn(9999999999-1000000000) + 1000000000)
+	return NewAccountWithID(uid)
 }
 
 func SavePlayer(player netobj.Player) error {
