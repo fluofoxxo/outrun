@@ -36,3 +36,9 @@ type ActStartRequest struct {
 	QuickActStartRequest
 	DistanceFriendList []netobj.MileageFriend `json:"distanceFriendList"` // TODO: Discover correct type... This might be list of strings
 }
+
+type MileageRewardRequest struct {
+	Base
+	Episode int64 `json:"episode,string"`
+	Chapter int64 `json:"chapter,string"`
+}

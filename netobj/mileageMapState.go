@@ -19,8 +19,8 @@ func (m MileageMapState) AdvanceChapter() {
     m.StageTotalScore = int64(0)
     m.ChapterStartTime = time.Now().Unix()
     m.Chapter += 1
-    m.Episode = int64(0)
-    m.Point = int64(0)
+    m.Episode = int64(1)
+    m.Point = int64(1)
 }
 func (m MileageMapState) AddScore(score int64) {
     m.StageTotalScore += score
@@ -33,7 +33,7 @@ func DefaultMileageMapState() MileageMapState {
         mapInfo,
         1,
         1,
-        0,
+        1,
         0,
         time.Now().Unix(),
     }

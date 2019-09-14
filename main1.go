@@ -96,6 +96,7 @@ func main() {
 	router.HandleFunc("/Game/quickPostGameResults/", h(muxhandlers.QuickPostGameResults, LogExecutionTime))
 	// Story mode
 	router.HandleFunc("/Game/actStart/", h(muxhandlers.ActStart, LogExecutionTime))
+	router.HandleFunc("/Game/getMileageReward/", h(muxhandlers.GetMileageReward, LogExecutionTime))
 	// Retry
 	router.HandleFunc("/Game/actRetry/", h(muxhandlers.ActRetry, LogExecutionTime))
 	// Gameplay

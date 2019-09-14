@@ -323,3 +323,23 @@ func DefaultFreeItemList(base responseobjs.BaseInfo) FreeItemListResponse {
 		freeItemList,
 	)
 }
+
+type MileageRewardResponse struct {
+	BaseResponse
+	MileageRewards []obj.MileageReward `json:"mileageMapRewardList"`
+}
+
+func MileageReward(base responseobjs.BaseInfo, mileageRewards []obj.MileageReward) MileageRewardResponse {
+	baseResponse := NewBaseResponse(base)
+	return MileageRewardResponse{
+		baseResponse,
+		mileageRewards,
+	}
+}
+
+func DefaultMileageReward(base responseobjs.BaseInfo, player netobj.Player) MileageRewardResponse {
+	return MileageReward(
+		base,
+		constobjs.GetAreaReward(player.MileageMapState.Chapter, player.MileageMapState.Episode, player.MileageMapState.Point),
+	)
+}

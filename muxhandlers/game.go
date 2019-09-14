@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"math/rand"
+	"strconv"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
@@ -296,12 +298,58 @@ func PostGameResults(helper *helper.Helper) {
 		//err = db.SavePlayer(player)
 	}
 
-	/*
-		if err != nil {
-			helper.InternalErr("Error saving player", err)
-			return
+	if config.CFile.Debug {
+		helper.Out("Pre-function")
+		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
+		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
+		helper.Out(strconv.Itoa(int(player.MileageMapState.StageTotalScore)))
+		helper.Out(strconv.Itoa(int(player.MileageMapState.Point)))
+		helper.Out(strconv.Itoa(int(request.Score)))
+	}
+	player.MileageMapState.StageTotalScore += request.Score
+	if player.MileageMapState.Point >= 5 {
+		player.MileageMapState.Episode++
+		player.MileageMapState.Point = 1
+		player.MileageMapState.StageTotalScore = 0
+	}
+	neededPoint := func() int64 {
+		ints, ok := consts.PointScores[player.MileageMapState.Episode]
+		if !ok {
+			return -2
 		}
-	*/
+		for i, v := range ints {
+			if v > player.MileageMapState.StageTotalScore {
+				// This point is higher than where we've hit
+				return int64(i)
+			}
+		}
+		return int64(len(ints) - 1)
+	}()
+	if config.CFile.Debug {
+		helper.Out("neededPoint: " + strconv.Itoa(int(neededPoint)))
+	}
+	if neededPoint == -2 {
+		// Error (point scores not implemented yet!)
+		// reset the episode and chapter and point
+		if config.CFile.Debug {
+			helper.Out("NEEDEDPOINT == -2")
+		}
+		player.MileageMapState.Episode = 1
+		player.MileageMapState.Chapter = 1
+		player.MileageMapState.Point = 1
+		player.MileageMapState.StageTotalScore = 0
+		neededPoint = 0
+	}
+	player.MileageMapState.Point = neededPoint
+
+	if config.CFile.Debug {
+		helper.Out("AFTER")
+		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
+		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
+		helper.Out(strconv.Itoa(int(player.MileageMapState.StageTotalScore)))
+		helper.Out(strconv.Itoa(int(player.MileageMapState.Point)))
+		helper.Out(strconv.Itoa(int(request.Score)))
+	}
 
 	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
 	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
@@ -328,6 +376,20 @@ func GetFreeItemList(helper *helper.Helper) {
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultFreeItemList(baseInfo)
 	err := helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}
+
+func GetMileageReward(helper *helper.Helper) {
+	player, err := helper.GetCallingPlayer()
+	if err != nil {
+		helper.InternalErr("Error getting calling player", err)
+		return
+	}
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultMileageReward(baseInfo, player)
+	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
 	}
