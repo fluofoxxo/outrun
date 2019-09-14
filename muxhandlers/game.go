@@ -336,7 +336,7 @@ func PostGameResults(helper *helper.Helper) {
 		}
 		player.MileageMapState.Episode = 1
 		player.MileageMapState.Chapter = 1
-		player.MileageMapState.Point = 1
+		player.MileageMapState.Point = 0
 		player.MileageMapState.StageTotalScore = 0
 		neededPoint = 0
 	}

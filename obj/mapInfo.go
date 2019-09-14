@@ -2,7 +2,7 @@ package obj
 
 const (
 	DefaultMapDistance   = 0
-	DefaultNumBossAttack = 1
+	DefaultNumBossAttack = 0 // Boss HP gets subtracted by this number, for some reason.
 	DefaultStageDistance = 1337000
 	DefaultStageMaxScore = 8008135
 )
