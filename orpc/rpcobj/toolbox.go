@@ -2,8 +2,11 @@ package rpcobj
 
 import (
 	"strconv"
+	"strings"
 
+	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
+	"github.com/fluofoxxo/outrun/db/dbaccess"
 	"github.com/fluofoxxo/outrun/netobj"
 )
 
@@ -51,6 +54,18 @@ func (t *Toolbox) Debug_GetCampaignStatus(uid string, reply *ToolboxReply) error
 	}
 	reply.Status = StatusOK
 	reply.Info = strconv.Itoa(int(player.MileageMapState.Chapter)) + "," + strconv.Itoa(int(player.MileageMapState.Episode)) + "," + strconv.Itoa(int(player.MileageMapState.Point))
+	return nil
+}
+
+func (t *Toolbox) Debug_GetAllPlayerIDs(nothing bool, reply *ToolboxReply) error {
+	playerIDs := []string{}
+	dbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
+		playerIDs = append(playerIDs, string(k))
+		return nil
+	})
+	final := strings.Join(playerIDs, ",")
+	reply.Status = StatusOK
+	reply.Info = final
 	return nil
 }
 
