@@ -15,6 +15,7 @@ var Defaults = map[string]interface{}{
 	"DLogUnknownRequests": true,
 	"DLogAllRequests":     false,
 	"DDebug":              false,
+	"DDebugPrints":        false,
 	"DRPCPort":            "23432",
 }
 
@@ -26,6 +27,7 @@ type ConfigFile struct {
 	LogUnknownRequests bool   `json:"logUnknownRequests,omitempty"`
 	LogAllRequests     bool   `json:"logAllRequests,omitempty"`
 	Debug              bool   `json:"debug,omitempty"`
+	DebugPrints        bool   `json:"debugPrints,omitempty"`
 	RPCPort            string `json:"rpcPort,omitempty"`
 }
 
@@ -68,6 +70,7 @@ func Parse(filename string) error {
 		Defaults["DLogUnknownRequests"].(bool),
 		Defaults["DLogAllRequests"].(bool),
 		Defaults["DDebug"].(bool),
+		Defaults["DDebugPrints"].(bool),
 		Defaults["DRPCPort"].(string),
 	}
 	return ret

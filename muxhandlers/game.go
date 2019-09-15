@@ -244,7 +244,7 @@ func PostGameResults(helper *helper.Helper) {
 		mainC,
 		subC,
 	}
-	if config.CFile.Debug {
+	if config.CFile.DebugPrints {
 		helper.Out("Pre-function")
 		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
 		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
@@ -328,7 +328,7 @@ func PostGameResults(helper *helper.Helper) {
 		}
 	}
 
-	if config.CFile.Debug {
+	if config.CFile.DebugPrints {
 		helper.Out("AFTER")
 		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
 		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
