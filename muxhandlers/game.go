@@ -313,15 +313,24 @@ func PostGameResults(helper *helper.Helper) {
 
 		if goToNextChapter {
 			// Assumed this just means next episode...
-			player.MileageMapState.Episode++
-			_, episodeAvailable := consts.PointScores[player.MileageMapState.Episode]
+			// TODO: remove
+			/*
+				player.MileageMapState.Episode++
+				_, episodeAvailable := consts.PointScores[player.MileageMapState.Episode]
 
-			if episodeAvailable {
-				player.MileageMapState.Point = 0
-			} else {
-				player.MileageMapState.Chapter = 1
-				player.MileageMapState.Episode = 1
-				player.MileageMapState.Point = 0
+				if episodeAvailable {
+					player.MileageMapState.Point = 0
+				} else {
+					player.MileageMapState.Chapter = 1
+					player.MileageMapState.Episode = 1
+					player.MileageMapState.Point = 0
+				}
+			*/
+			player.MileageMapState.Episode++
+			player.MileageMapState.Point = 0
+			player.MileageMapState.StageMaxScore = 0
+			if config.CFile.DebugPrints {
+				helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
 			}
 		} else {
 			player.MileageMapState.Point = newPoint
