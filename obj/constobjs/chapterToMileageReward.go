@@ -7,22 +7,20 @@ import (
     "github.com/fluofoxxo/outrun/obj"
 )
 
-var AreaReward = map[string][]obj.MileageReward{
-    "1,1,1": invincibleItem(1),
-    "1,1,2": invincibleItem(2),
-    "1,1,3": invincibleItem(3),
-    "1,1,4": invincibleItem(4),
-    "1,1,5": invincibleItem(5),
+var AreaRewards = map[string][]obj.MileageReward{
+    "1,1": []obj.MileageReward{
+        invincibleItem(1),
+        invincibleItem(3),
+    },
 }
 
-func GetAreaReward(chapter, episode, point int64) []obj.MileageReward {
+func GetAreaReward(chapter, episode int64) []obj.MileageReward {
     chapS := strconv.Itoa(int(chapter))
     epS := strconv.Itoa(int(episode))
-    pointS := strconv.Itoa(int(point))
-    getS := chapS + "," + epS + "," + pointS
-    return AreaReward[getS]
+    getS := chapS + "," + epS
+    return AreaRewards[getS]
 }
 
-func invincibleItem(point int64) []obj.MileageReward {
-    return []obj.MileageReward{obj.NewMileageReward(enums.ItemIDInvincible, point)}
+func invincibleItem(point int64) obj.MileageReward {
+    return obj.NewMileageReward(enums.ItemIDInvincible, point)
 }

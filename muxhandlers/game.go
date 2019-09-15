@@ -377,13 +377,22 @@ func GetFreeItemList(helper *helper.Helper) {
 }
 
 func GetMileageReward(helper *helper.Helper) {
-	player, err := helper.GetCallingPlayer()
+	recv := helper.GetGameRequest()
+	var request requests.MileageRewardRequest
+	err := json.Unmarshal(recv, &request)
 	if err != nil {
-		helper.InternalErr("Error getting calling player", err)
+		helper.Err("Error unmarshalling", err)
 		return
 	}
+	/*
+		player, err := helper.GetCallingPlayer()
+		if err != nil {
+			helper.InternalErr("Error getting calling player", err)
+			return
+		}
+	*/
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultMileageReward(baseInfo, player)
+	response := responses.DefaultMileageReward(baseInfo, request.Chapter, request.Episode)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

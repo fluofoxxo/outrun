@@ -337,9 +337,9 @@ func MileageReward(base responseobjs.BaseInfo, mileageRewards []obj.MileageRewar
 	}
 }
 
-func DefaultMileageReward(base responseobjs.BaseInfo, player netobj.Player) MileageRewardResponse {
+func DefaultMileageReward(base responseobjs.BaseInfo, chapter, episode int64) MileageRewardResponse {
 	return MileageReward(
 		base,
-		constobjs.GetAreaReward(player.MileageMapState.Chapter, player.MileageMapState.Episode, player.MileageMapState.Point),
+		constobjs.GetAreaReward(chapter, episode),
 	)
 }
