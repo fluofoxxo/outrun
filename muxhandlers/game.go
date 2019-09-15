@@ -328,7 +328,7 @@ func PostGameResults(helper *helper.Helper) {
 			*/
 			player.MileageMapState.Episode++
 			player.MileageMapState.Point = 0
-			player.MileageMapState.StageMaxScore = 0
+			player.MileageMapState.StageTotalScore = 0
 			if config.CFile.DebugPrints {
 				helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
 			}
