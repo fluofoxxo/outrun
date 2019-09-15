@@ -304,6 +304,8 @@ func PostGameResults(helper *helper.Helper) {
 			subC,
 		}
 
+		player.MileageMapState.StageTotalScore += request.Score
+
 		goToNextChapter := request.ChapterClear == 1
 		//chaoEggs := request.GetChaoEgg
 		// TODO: Add chao eggs to player
