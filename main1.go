@@ -34,11 +34,11 @@ func OutputUnknownRequest(w http.ResponseWriter, r *http.Request) {
 	err := ioutil.WriteFile(path, recv, 0644)
 	if err != nil {
 		log.Println("[OUT] UNABLE TO WRITE UNKNOWN REQUEST: " + err.Error())
-		w.Write([]byte("O.U.R. ERR"))
+		w.Write([]byte(""))
 		return
 	}
 	log.Println("[OUT] !!!!!!!!!!!! Unknown request, output to " + path)
-	w.Write([]byte("O.U.R. COMPLETE"))
+	w.Write([]byte(""))
 }
 
 func removePrependingSlashes(next http.Handler) http.Handler {
@@ -110,7 +110,8 @@ func main() {
 	router.HandleFunc("/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
 
 	if config.CFile.LogUnknownRequests {
-		router.HandleFunc("/", OutputUnknownRequest)
+		//router.HandleFunc("/", OutputUnknownRequest)
+		router.PathPrefix("/").HandlerFunc(OutputUnknownRequest)
 	}
 
 	port := config.CFile.Port
