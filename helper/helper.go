@@ -88,7 +88,6 @@ func (r *Helper) Respond(out []byte) {
 	r.RespondRaw(out, "1", DEFAULT_IV)
 }
 func (r *Helper) RespondInsecure(out []byte) {
-	println(string(out))
 	r.RespondRaw(out, "0", "")
 }
 func (r *Helper) Out(msg string) {

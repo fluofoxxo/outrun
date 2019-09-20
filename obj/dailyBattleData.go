@@ -38,12 +38,14 @@ func DefaultDailyBattleData() DailyBattleData {
         3,
         4,
         5,
-        371,
+        //371,
+        1,
         1731731,
         enums.RankingLeagueB,
         time.Now().Unix() - 555, // a little less than 9 minutes prior
         0,
-        7,
+        //7,
+        1,
         enums.LanguageEnglish,
     }
 }

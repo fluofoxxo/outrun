@@ -18,7 +18,7 @@ func GetDailyBattleData(helper *helper.Helper) {
     */
     baseInfo := helper.BaseInfo(emess.OK, status.OK)
     response := responses.DefaultDailyBattleData(baseInfo)
-    err := helper.SendInsecureResponse(response)
+    err := helper.SendResponse(response)
     if err != nil {
         helper.InternalErr("error sending response", err)
     }
@@ -28,7 +28,7 @@ func UpdateDailyBattleStatus(helper *helper.Helper) {
     // TODO: what is this function meant to do? Why is it referred to as 'update?'
     baseInfo := helper.BaseInfo(emess.OK, status.OK)
     response := responses.DefaultDailyBattleStatus(baseInfo)
-    err := helper.SendInsecureResponse(response)
+    err := helper.SendResponse(response)
     if err != nil {
         helper.InternalErr("error sending reponse", err)
     }

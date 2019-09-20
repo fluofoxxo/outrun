@@ -10,47 +10,55 @@ import (
 type DailyBattleDataResponse struct {
     BaseResponse
     EndTime      int64               `json:"endTime"`
-    BattleStatus obj.DailyBattleData `json:"battleStatus"`
+    BattleStatus obj.DailyBattleData `json:"battleData"`
 }
 
-func DailyBattleData(base responseobjs.BaseInfo, endTime int64, battleStatus obj.DailyBattleData) DailyBattleDataResponse {
+func DailyBattleData(base responseobjs.BaseInfo, endTime int64, battleData obj.DailyBattleData) DailyBattleDataResponse {
     baseResponse := NewBaseResponse(base)
     return DailyBattleDataResponse{
         baseResponse,
         endTime,
-        battleStatus,
+        battleData,
     }
 }
 
 func DefaultDailyBattleData(base responseobjs.BaseInfo) DailyBattleDataResponse {
-    battleStatus := obj.DefaultDailyBattleData()
+    battleData := obj.DefaultDailyBattleData()
     return DailyBattleData(
         base,
         time.Now().Unix()+80000, // ~22 hours from now
-        battleStatus,
+        battleData,
     )
 }
 
 type DailyBattleStatusResponse struct {
-    DailyBattleDataResponse
-    RewardFlag              bool `json:"rewardFlag"`
-    obj.DailyBattleDataPair      // embedded in root
+    BaseResponse
+    EndTime                 int64                 `json:"endTime"`
+    BattleStatus            obj.DailyBattleStatus `json:"battleStatus"`
+    RewardFlag              bool                  `json:"rewardFlag"`
+    obj.DailyBattleDataPair                       // embedded in root. Can be missing if rewardFlag = 0
 }
 
-func DailyBattleStatus(dbdr DailyBattleDataResponse, rewardFlag bool, battlePair obj.DailyBattleDataPair) DailyBattleStatusResponse {
+func DailyBattleStatus(base responseobjs.BaseInfo, endTime int64, battleStatus obj.DailyBattleStatus, rewardFlag bool, battlePair obj.DailyBattleDataPair) DailyBattleStatusResponse {
+    baseResponse := NewBaseResponse(base)
     return DailyBattleStatusResponse{
-        dbdr,
+        baseResponse,
+        endTime,
+        battleStatus,
         rewardFlag,
         battlePair,
     }
 }
 
 func DefaultDailyBattleStatus(base responseobjs.BaseInfo) DailyBattleStatusResponse {
-    dbdr := DefaultDailyBattleData(base)
+    endTime := time.Now().Unix() + 700
+    battleStatus := obj.DefaultDailyBattleStatus()
     rewardFlag := false
     battlePair := obj.DefaultDailyBattleDataPair()
     return DailyBattleStatus(
-        dbdr,
+        base,
+        endTime,
+        battleStatus,
         rewardFlag,
         battlePair,
     )

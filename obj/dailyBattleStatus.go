@@ -11,11 +11,19 @@ type DailyBattleStatus struct {
 
 func DefaultDailyBattleStatus() DailyBattleStatus {
     return DailyBattleStatus{
-        54,
-        56,
-        57,
-        58,
-        59,
-        63,
+        /*
+           54,
+           56,
+           57,
+           58,
+           59,
+           63,
+        */
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
     }
 }
