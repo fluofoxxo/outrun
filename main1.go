@@ -108,6 +108,9 @@ func main() {
 	router.HandleFunc("/Chao/equipChao/", h(muxhandlers.EquipChao, LogExecutionTime))
 	// Shop
 	router.HandleFunc("/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
+	// Battle
+	router.HandleFunc("/Battle/getDailyBattleData/", h(muxhandlers.GetDailyBattleData, LogExecutionTime))
+	router.HandleFunc("/Battle/updateDailyBattleStatus/", h(muxhandlers.UpdateDailyBattleStatus, LogExecutionTime))
 
 	if config.CFile.LogUnknownRequests {
 		//router.HandleFunc("/", OutputUnknownRequest)
