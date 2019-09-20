@@ -22,12 +22,13 @@ func Handle(f func(*helper.Helper), logExecutionTime bool) func(w http.ResponseW
 		return func(w http.ResponseWriter, r *http.Request) {
 			startTime := time.Now()
 			help := helper.MakeHelper(funcname, w, r)
-			if config.CFile.Debug {
+			if config.CFile.LogAllRequests {
 				nano := time.Now().UnixNano()
 				nanoStr := strconv.Itoa(int(nano))
-				filename := help.Request.RequestURI + "--" + nanoStr + ".txt"
+				filepath := "logging/all_requests/"
+				filename := filepath + help.Request.RequestURI + "--" + nanoStr
 				filename = strings.ReplaceAll(filename, ".", "-")
-				filename = strings.ReplaceAll(filename, "/", "-")
+				filename = strings.ReplaceAll(filename, "/", "-") + ".txt"
 				help.Out("DEBUG: Saving request to " + filename)
 				err := ioutil.WriteFile(filename, help.GetGameRequest(), 0644)
 				if err != nil {

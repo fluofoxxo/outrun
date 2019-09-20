@@ -311,26 +311,27 @@ func PostGameResults(helper *helper.Helper) {
 		// TODO: Add chao eggs to player
 		newPoint := request.ReachPoint
 
+		goToNextEpisode := true
 		if goToNextChapter {
 			// Assumed this just means next episode...
-			// TODO: remove
-			/*
-				player.MileageMapState.Episode++
-				_, episodeAvailable := consts.PointScores[player.MileageMapState.Episode]
-
-				if episodeAvailable {
-					player.MileageMapState.Point = 0
-				} else {
-					player.MileageMapState.Chapter = 1
-					player.MileageMapState.Episode = 1
-					player.MileageMapState.Point = 0
+			maxChapters, episodeHasMultipleChapters := consts.EpisodeWithChapters[player.MileageMapState.Episode]
+			if episodeHasMultipleChapters {
+				goToNextEpisode = false
+				player.MileageMapState.Chapter++
+				player.MileageMapState.StageTotalScore = 0
+				if player.MileageMapState.Chapter > maxChapters {
+					// there's no more chapters for this episode!
+					goToNextEpisode = true
 				}
-			*/
-			player.MileageMapState.Episode++
-			player.MileageMapState.Point = 0
-			player.MileageMapState.StageTotalScore = 0
-			if config.CFile.DebugPrints {
-				helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
+			}
+			if goToNextEpisode {
+				player.MileageMapState.Episode++
+				player.MileageMapState.Chapter = 1
+				player.MileageMapState.Point = 0
+				player.MileageMapState.StageTotalScore = 0
+				if config.CFile.DebugPrints {
+					helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
+				}
 			}
 		} else {
 			player.MileageMapState.Point = newPoint

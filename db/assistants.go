@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db/dbaccess"
 	"github.com/fluofoxxo/outrun/netobj"
@@ -40,6 +41,12 @@ func NewAccountWithID(uid string) netobj.Player {
 	mileageMapState := netobj.DefaultMileageMapState()
 	mileageFriends := []netobj.MileageFriend{}
 	playerVarious := netobj.DefaultPlayerVarious()
+	if config.CFile.Debug {
+		// TODO: this should be removed as soon as possible. This is just for testing a multi-chapter episode.
+		mileageMapState.Episode = 6
+		mileageMapState.Chapter = 1
+		mileageMapState.Point = 0
+	}
 	return netobj.NewPlayer(
 		uid,
 		username,
