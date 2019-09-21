@@ -108,6 +108,8 @@ func main() {
 	router.HandleFunc("/Chao/equipChao/", h(muxhandlers.EquipChao, LogExecutionTime))
 	// Shop
 	router.HandleFunc("/Store/redstarExchange/", h(muxhandlers.RedStarExchange, LogExecutionTime))
+	// Friends (Required for iOS?)
+	router.HandleFunc("/Friend/getFacebookIncentive/", h(muxhandlers.GetFacebookIncentive, LogExecutionTime))
 
 	if config.CFile.LogUnknownRequests {
 		//router.HandleFunc("/", OutputUnknownRequest)
