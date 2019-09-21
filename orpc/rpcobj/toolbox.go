@@ -142,6 +142,25 @@ func (t *Toolbox) SetUsername(args ChangeValueArgs, reply *ToolboxReply) error {
 	return nil
 }
 
+func (t *Toolbox) ResetPlayerVarious(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	player.PlayerVarious = netobj.DefaultPlayerVarious()
+	err = db.SavePlayer(player)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to save player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
+
 func (t *Toolbox) Debug_GetCampaignStatus(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
 	if err != nil {
