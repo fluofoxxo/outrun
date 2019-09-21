@@ -10,11 +10,11 @@ type PlayerVarious struct {
 }
 
 func DefaultPlayerVarious() PlayerVarious {
-	cmSkipCount := int64(0)
-	energyRecoveryMax := int64(8675309)
+	cmSkipCount := int64(5)
+	energyRecoveryMax := int64(5)  //max lives should be five
 	energyRecoveryTime := int64(660) // eleven minutes
 	onePlayCmCount := int64(0)
-	onePlayContinueCount := int64(912)
+	onePlayContinueCount := int64(5)
 	isPurchased := int64(0)
 	return PlayerVarious{
 		cmSkipCount,
@@ -25,3 +25,4 @@ func DefaultPlayerVarious() PlayerVarious {
 		isPurchased,
 	}
 }
+
