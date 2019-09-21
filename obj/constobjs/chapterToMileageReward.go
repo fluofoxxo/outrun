@@ -10,7 +10,10 @@ import (
 var AreaRewards = map[string][]obj.MileageReward{
     "1,1": []obj.MileageReward{
         invincibleItem(1),
+        invincibleItem(2),
         invincibleItem(3),
+        invincibleItem(4),
+        invincibleItem(5),
     },
 }
 

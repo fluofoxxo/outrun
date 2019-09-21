@@ -1,5 +1,11 @@
 package obj
 
+import (
+    "strconv"
+
+    "github.com/fluofoxxo/outrun/enums"
+)
+
 type MileageIncentive struct {
     Type     int64  `json:"type"`
     ItemID   string `json:"itemId"`
@@ -11,10 +17,10 @@ type MileageIncentive struct {
 func DefaultMileageIncentive() MileageIncentive {
     // TODO: this is ONLY for debugging right now.
     return MileageIncentive{
-        0,
-        "110000",
+        enums.IncentiveTypePoint,
+        strconv.Itoa(int(enums.ItemIDInvincible)),
         "", // for battling?
-        1,
-        0, // ???
+        2,
+        2, // ???
     }
 }

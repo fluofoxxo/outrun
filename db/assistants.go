@@ -43,7 +43,7 @@ func NewAccountWithID(uid string) netobj.Player {
 	playerVarious := netobj.DefaultPlayerVarious()
 	if config.CFile.Debug {
 		// TODO: this should be removed as soon as possible. This is just for testing a multi-chapter episode.
-		mileageMapState.Episode = 6
+		mileageMapState.Episode = 11
 		mileageMapState.Chapter = 1
 		mileageMapState.Point = 0
 	}
