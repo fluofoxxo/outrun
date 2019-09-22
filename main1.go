@@ -112,6 +112,7 @@ func main() {
 	router.HandleFunc("/Friend/getFacebookIncentive/", h(muxhandlers.GetFacebookIncentive, LogExecutionTime))
 	// Roulette
 	router.HandleFunc("/RaidbossSpin/getItemStockNum/", h(muxhandlers.GetItemStockNum, LogExecutionTime))
+	router.HandleFunc("/Spin/commitWheelSpin/", h(muxhandlers.CommitWheelSpin, LogExecutionTime))
 
 	if config.CFile.LogUnknownRequests {
 		//router.HandleFunc("/", OutputUnknownRequest)

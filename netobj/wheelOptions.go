@@ -1,6 +1,8 @@
 package netobj
 
 import (
+    "strconv"
+
     "github.com/fluofoxxo/outrun/enums"
     "github.com/fluofoxxo/outrun/obj"
     "github.com/jinzhu/now"
@@ -23,10 +25,20 @@ type WheelOptions struct {
 func DefaultWheelOptions() WheelOptions {
     // TODO: Modifying this seems like a good way of figuring out what the game thinks each ID means in terms of items.
     // const the below
-    items := []string{"200000", "120000", "120001", "120002", "200000", "900000", "120003", "120004"}
+    //items := []string{"200000", "120000", "120001", "120002", "200000", "900000", "120003", "120004"}
+    items := []string{
+        strconv.Itoa(enums.IDTypeItemRouletteWin),
+        strconv.Itoa(enums.IDTypeItemRouletteWin),
+        strconv.Itoa(enums.IDTypeItemRouletteWin),
+        strconv.Itoa(enums.IDTypeItemRouletteWin),
+        strconv.Itoa(enums.IDTypeItemRouletteWin),
+        strconv.Itoa(enums.IDTypeItemRouletteWin),
+        strconv.Itoa(enums.IDTypeItemRouletteWin),
+        strconv.Itoa(int(enums.ItemIDInvincible)),
+    }
     item := []int64{1, 2, 2, 2, 1, 3, 2, 2}
     itemWeight := []int64{1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250}
-    itemWon := int64(5)
+    itemWon := int64(0)
     nextFreeSpin := now.EndOfDay().Unix() + 1 // midnight
     spinCost := int64(87)
     rouletteRank := int64(enums.WheelRankSuper)
