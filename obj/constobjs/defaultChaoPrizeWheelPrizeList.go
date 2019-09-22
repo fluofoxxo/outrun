@@ -5,6 +5,10 @@ import (
 )
 
 var DefaultChaoPrizeWheelPrizeList = []obj.ChaoPrize{
+    obj.NewChaoPrize("401000", 1),
+}
+
+var DefaultChaoPrizeWheelPrizeListOLD = []obj.ChaoPrize{
     obj.NewChaoPrize("300000", 100),
     obj.NewChaoPrize("300001", 100),
     obj.NewChaoPrize("300002", 100),
