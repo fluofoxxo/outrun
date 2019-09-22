@@ -5,7 +5,9 @@ import (
     "strconv"
 
     "github.com/fluofoxxo/outrun/config"
+    "github.com/fluofoxxo/outrun/db"
     "github.com/fluofoxxo/outrun/emess"
+    "github.com/fluofoxxo/outrun/enums"
     "github.com/fluofoxxo/outrun/helper"
     "github.com/fluofoxxo/outrun/netobj"
     "github.com/fluofoxxo/outrun/requests"
@@ -14,11 +16,15 @@ import (
 )
 
 func GetWheelOptions(helper *helper.Helper) {
-    // no player, as this is (but perhaps should not be) player agnostic
+    player, err := helper.GetCallingPlayer()
+    if err != nil {
+        helper.InternalErr("Error getting calling player", err)
+        return
+    }
     baseInfo := helper.BaseInfo(emess.OK, status.OK)
-    wheelOptions := netobj.DefaultWheelOptions()
-    response := responses.WheelOptions(baseInfo, wheelOptions)
-    err := helper.SendResponse(response)
+    //player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
+    response := responses.WheelOptions(baseInfo, player.LastWheelOptions)
+    err = helper.SendResponse(response)
     if err != nil {
         helper.InternalErr("Error sending response", err)
     }
@@ -41,8 +47,48 @@ func CommitWheelSpin(helper *helper.Helper) {
     if config.CFile.DebugPrints {
         helper.Out(strconv.Itoa(int(request.Count)))
     }
+
+    wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
+    itemExists := player.IndexOfItem(wonItem) != -1
+    if itemExists {
+        amountOfItemWon := player.LastWheelOptions.Item[player.LastWheelOptions.ItemWon]
+        if config.CFile.DebugPrints {
+            helper.Out(wonItem)
+            helper.Out(strconv.Itoa(int(amountOfItemWon)))
+        }
+        itemIndex := player.IndexOfItem(wonItem)
+        if config.CFile.DebugPrints {
+            helper.Out(strconv.Itoa(int(player.PlayerState.Items[itemIndex].Amount)))
+        }
+        player.PlayerState.Items[itemIndex].Amount += amountOfItemWon
+        if config.CFile.DebugPrints {
+            helper.Out(strconv.Itoa(int(player.PlayerState.Items[itemIndex].Amount)))
+        }
+    } else {
+        if wonItem == strconv.Itoa(enums.IDTypeItemRouletteWin) {
+            // Jackpot
+            player.PlayerState.NumRings += player.LastWheelOptions.NumJackpotRing
+        } else if wonItem == strconv.Itoa(enums.IDTypeRedRing) {
+            // Red rings
+            player.PlayerState.NumRedRings += player.LastWheelOptions.Item[player.LastWheelOptions.ItemWon]
+        } else {
+            helper.Warn("item '" + wonItem + "' not found")
+        }
+    }
+
+    // generate new wheel
+    player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState)
+    player.LastWheelOptions.NumRouletteToken = player.PlayerState.NumRouletteTicket
+
     baseInfo := helper.BaseInfo(emess.OK, status.OK)
-    response := responses.DefaultWheelSpin(baseInfo, player)
+    response := responses.WheelSpin(baseInfo, player.PlayerState, player.CharacterState, player.ChaoState, player.LastWheelOptions)
+
+    err = db.SavePlayer(player)
+    if err != nil {
+        helper.InternalErr("Error saving player", err)
+        return
+    }
+
     err = helper.SendResponse(response)
     if err != nil {
         helper.InternalErr("Error sending response", err)

@@ -1,5 +1,7 @@
 package enums
 
+import "strconv"
+
 const (
 	ItemIDNone = -1
 )
@@ -21,6 +23,21 @@ const (
 	ItemIDDistanceBonus
 	ItemIDAnimalBonus
 )
+
+var (
+	ItemIDStrInvincible    = strconv.Itoa(int(ItemIDInvincible))
+	ItemIDStrBarrier       = strconv.Itoa(int(ItemIDBarrier))
+	ItemIDStrMagnet        = strconv.Itoa(int(ItemIDMagnet))
+	ItemIDStrTrampoline    = strconv.Itoa(int(ItemIDTrampoline))
+	ItemIDStrCombo         = strconv.Itoa(int(ItemIDCombo))
+	ItemIDStrLaser         = strconv.Itoa(int(ItemIDLaser))
+	ItemIDStrDrill         = strconv.Itoa(int(ItemIDDrill))
+	ItemIDStrAsteroid      = strconv.Itoa(int(ItemIDAsteroid))
+	ItemIDStrRingBonus     = strconv.Itoa(int(ItemIDRingBonus))
+	ItemIDStrDistanceBonus = strconv.Itoa(int(ItemIDDistanceBonus))
+	ItemIDStrAnimalBonus   = strconv.Itoa(int(ItemIDAnimalBonus))
+)
+
 const (
 	ItemIDPackedInvincible0 = int64(iota) + 120100
 	ItemIDPackedBarrier0

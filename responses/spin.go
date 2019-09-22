@@ -39,10 +39,11 @@ func WheelSpin(base responseobjs.BaseInfo, playerState netobj.PlayerState, chara
 }
 
 func DefaultWheelSpin(base responseobjs.BaseInfo, player netobj.Player) WheelSpinResponse {
+    // TODO: remove me! I am no longer being used.
+    wheelOptions := netobj.DefaultWheelOptions(player.PlayerState)
     playerState := player.PlayerState
     characterState := player.CharacterState
     chaoState := player.ChaoState
-    wheelOptions := netobj.DefaultWheelOptions()
     return WheelSpin(
         base,
         playerState,

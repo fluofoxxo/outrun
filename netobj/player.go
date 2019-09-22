@@ -10,20 +10,21 @@ import (
 )
 
 type Player struct {
-	ID              string `json:"userID"`
-	Username        string `json:"username"`
-	Password        string `json:"password"`
-	Key             string `json:"key"`
-	LastLogin       int64
-	PlayerState     PlayerState     `json:"playerState"`
-	CharacterState  []Character     `json:"characterState"`
-	ChaoState       []Chao          `json:"chaoState"`
-	MileageMapState MileageMapState `json:"mileageMapState"`
-	MileageFriends  []MileageFriend `json:"mileageFriendList"`
-	PlayerVarious   PlayerVarious   `json:"playerVarious"`
+	ID               string `json:"userID"`
+	Username         string `json:"username"`
+	Password         string `json:"password"`
+	Key              string `json:"key"`
+	LastLogin        int64
+	PlayerState      PlayerState     `json:"playerState"`
+	CharacterState   []Character     `json:"characterState"`
+	ChaoState        []Chao          `json:"chaoState"`
+	MileageMapState  MileageMapState `json:"mileageMapState"`
+	MileageFriends   []MileageFriend `json:"mileageFriendList"`
+	PlayerVarious    PlayerVarious   `json:"playerVarious"`
+	LastWheelOptions WheelOptions    `json:"wheelOptions"`
 }
 
-func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious) Player {
+func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions) Player {
 	return Player{
 		id,
 		username,
@@ -36,6 +37,7 @@ func NewPlayer(id, username, password, key string, playerState PlayerState, char
 		mileageMapState,
 		mf,
 		playerVarious,
+		wheelOptions,
 	}
 }
 
@@ -108,6 +110,14 @@ func (p *Player) RemoveItemOf(iid string) bool {
 	}
 	ps.Items = newItems
 	return foundItem
+}
+func (p *Player) IndexOfItem(iid string) int {
+	for i, item := range p.PlayerState.Items {
+		if item.ID == iid {
+			return i
+		}
+	}
+	return -1
 }
 func (p *Player) RemoveAllItemsOf(iid string) {
 	for p.RemoveItemOf(iid) {
