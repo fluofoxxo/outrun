@@ -6,7 +6,7 @@ Outrun is a custom server for Sonic Runners, reverse engineered from the [Sonic 
 
 ### Goals
 
-  - Achieve 1:1 parity with the original server functionality
+  - Implement all non debug endpoints as fulfilled by the original server
   - Maintain speed throughout runtime
   - Consume little resources for conservative deployment
 
