@@ -2,9 +2,11 @@ package muxhandlers
 
 import (
     "encoding/json"
+    "fmt"
     "strconv"
 
     "github.com/fluofoxxo/outrun/config"
+    "github.com/fluofoxxo/outrun/consts"
     "github.com/fluofoxxo/outrun/db"
     "github.com/fluofoxxo/outrun/emess"
     "github.com/fluofoxxo/outrun/enums"
@@ -77,8 +79,25 @@ func CommitWheelSpin(helper *helper.Helper) {
     }
 
     // generate new wheel
-    player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState)
-    player.LastWheelOptions.NumRouletteToken = player.PlayerState.NumRouletteTicket
+    player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
+    if wonItem == strconv.Itoa(enums.IDTypeRedRing) {
+        if player.RouletteInfo.GotJackpotThisPeriod {
+            player.LastWheelOptions.NumJackpotRing = 1
+        } else {
+            player.RouletteInfo.GotJackpotThisPeriod = true
+        }
+    }
+    if !player.RouletteInfo.GotJackpotThisPeriod && wonItem == strconv.Itoa(enums.IDTypeRedRing) {
+        player.RouletteInfo.GotJackpotThisPeriod = true
+    }
+    player.RouletteInfo.RouletteCountInPeriod++
+    if player.RouletteInfo.RouletteCountInPeriod > consts.RouletteFreeSpins {
+        // we're out of free spins
+        player.PlayerState.NumRouletteTicket-- // consume ticket
+    }
+
+    fmt.Println(player.RouletteInfo)
+    fmt.Println(player.LastWheelOptions)
 
     baseInfo := helper.BaseInfo(emess.OK, status.OK)
     response := responses.WheelSpin(baseInfo, player.PlayerState, player.CharacterState, player.ChaoState, player.LastWheelOptions)

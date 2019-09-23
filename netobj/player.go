@@ -21,10 +21,11 @@ type Player struct {
 	MileageMapState  MileageMapState `json:"mileageMapState"`
 	MileageFriends   []MileageFriend `json:"mileageFriendList"`
 	PlayerVarious    PlayerVarious   `json:"playerVarious"`
-	LastWheelOptions WheelOptions    `json:"wheelOptions"`
+	LastWheelOptions WheelOptions    `json:"ORN_wheelOptions"`
+	RouletteInfo     RouletteInfo    `json:"ORN_rouletteInfo"`
 }
 
-func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions) Player {
+func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions, rouletteInfo RouletteInfo) Player {
 	return Player{
 		id,
 		username,
@@ -38,6 +39,7 @@ func NewPlayer(id, username, password, key string, playerState PlayerState, char
 		mf,
 		playerVarious,
 		wheelOptions,
+		rouletteInfo,
 	}
 }
 

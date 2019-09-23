@@ -26,7 +26,8 @@ var BlankPlayer = func() netobj.Player {
     mileageMapState := netobj.DefaultMileageMapState()
     mileageFriends := []netobj.MileageFriend{}
     playerVarious := netobj.DefaultPlayerVarious()
-    wheelOptions := netobj.DefaultWheelOptions(playerState)
+    wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, 0)
+    rouletteInfo := netobj.DefaultRouletteInfo()
     return netobj.NewPlayer(
         uid,
         username,
@@ -39,5 +40,6 @@ var BlankPlayer = func() netobj.Player {
         mileageFriends,
         playerVarious,
         wheelOptions,
+        rouletteInfo,
     )
 }() // copied from db.NewPlayer to avoid import loop

@@ -23,7 +23,7 @@ type WheelOptions struct {
     ItemList             []obj.Item `json:"itemList"`
 }
 
-func DefaultWheelOptions(playerState PlayerState) WheelOptions {
+func DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod int64) WheelOptions {
     // TODO: Modifying this seems like a good way of figuring out what the game thinks each ID means in terms of items.
     // const the below
     // NOTE: Free spins occur when numRemainingRoulette > numRouletteToken
@@ -40,13 +40,19 @@ func DefaultWheelOptions(playerState PlayerState) WheelOptions {
        item := []int64{1, 2, 2, 2, 1, 3, 2, 2}
     */
     itemWeight := []int64{1250, 1250, 1250, 1250, 1250, 1250, 1250, 1250}
-    itemWon := int64(0)
+    //itemWon := int64(0)
+    itemWon := int64(rand.Intn(len(items)))
     nextFreeSpin := now.EndOfDay().Unix() + 1 // midnight
     spinCost := int64(87)
-    rouletteRank := int64(enums.WheelRankSuper)
-    numRouletteToken := playerState.NumRouletteTicket
-    numJackpotRing := int64(45000)
-    numRemainingRoulette := playerState.NumRouletteTicket + 1 // TODO: always one free spin. Fix to make it in a given period?
+    rouletteRank := int64(enums.WheelRankSuper) // TODO: change this
+    //numRouletteToken := playerState.NumRouletteTicket
+    numRouletteToken := numRouletteTicket
+    numJackpotRing := int64(consts.RouletteJackpotRings)
+    // TODO: get rid of logic here!
+    numRemainingRoulette := numRouletteTicket + consts.RouletteFreeSpins - rouletteCountInPeriod
+    if numRemainingRoulette < numRouletteToken {
+        numRemainingRoulette = numRouletteToken
+    }
     itemList := []obj.Item{}
     out := WheelOptions{
         items,
