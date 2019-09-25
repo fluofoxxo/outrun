@@ -68,7 +68,7 @@ func DefaultPlayerState() PlayerState {
 	mumMessages := int64(0)
 	rankingLeague := int64(enums.RankingLeagueNone)
 	quickRankingLeague := int64(enums.RankingLeagueNone)
-	numRouletteTicket := int64(20)
+	numRouletteTicket := int64(3)
 	highScore := int64(0)
 	timedHighScore := int64(0)
 	totalDistance := int64(0)
