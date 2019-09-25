@@ -219,6 +219,18 @@ func (t *Toolbox) SetRank(args ChangeValueArgs, reply *ToolboxReply) error {
 	return nil
 }
 
+func (t *Toolbox) GetRouletteTickets(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = strconv.Itoa(int(player.PlayerState.NumRouletteTicket))
+	return nil
+}
+
 func (t *Toolbox) ResetPlayerVarious(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
 	if err != nil {
