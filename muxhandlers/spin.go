@@ -50,6 +50,8 @@ func CommitWheelSpin(helper *helper.Helper) {
 		helper.Out(strconv.Itoa(int(request.Count)))
 	}
 
+	fmt.Println("BEFORE:", player.PlayerState.NumRouletteTicket)
+
 	responseStatus := status.OK
 	if player.PlayerState.NumRouletteTicket > 0 { // if we have tickets left
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
@@ -80,18 +82,20 @@ func CommitWheelSpin(helper *helper.Helper) {
 			}
 		}
 
-		// generate new wheel
-		player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
+		// generate NEXT! wheel
+		player.RouletteInfo.RouletteCountInPeriod++ // we've spun an additional time
+		if player.RouletteInfo.RouletteCountInPeriod > consts.RouletteFreeSpins {
+			// we've run out of free spins for the period
+			player.PlayerState.NumRouletteTicket--
+		}
+		numRouletteTicket := player.PlayerState.NumRouletteTicket
+		rouletteCount := player.RouletteInfo.RouletteCountInPeriod                             // get amount of times we've spun the wheel today
+		player.LastWheelOptions = netobj.DefaultWheelOptions(numRouletteTicket, rouletteCount) // create wheel
 		if player.RouletteInfo.GotJackpotThisPeriod {
 			player.LastWheelOptions.NumJackpotRing = 1
 		}
 		if wonItem == strconv.Itoa(enums.IDTypeItemRouletteWin) {
 			player.RouletteInfo.GotJackpotThisPeriod = true
-		}
-		player.RouletteInfo.RouletteCountInPeriod++
-		if player.RouletteInfo.RouletteCountInPeriod > consts.RouletteFreeSpins {
-			// we're out of free spins
-			player.PlayerState.NumRouletteTicket-- // consume ticket
 		}
 	} else {
 		// do not modify the wheel, set error status
@@ -110,8 +114,14 @@ func CommitWheelSpin(helper *helper.Helper) {
 		return
 	}
 
+	fmt.Println("AFTER:", player.PlayerState.NumRouletteTicket)
+
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
 	}
 }
+
+//func wheelToNextWheel(wheel netobj.WheelOptions) netobj.WheelOptions {
+
+//}

@@ -293,7 +293,7 @@ func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pc
 	mms := player.MileageMapState
 	mil := []obj.MileageIncentive{obj.DefaultMileageIncentive()}
 	eil := []obj.Item{}
-	wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, 0)
+	wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
 	return PostGameResultsResponse{
 		qpgrr,
 		mms,

@@ -46,10 +46,10 @@ func DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod int64) WheelOp
 	spinCost := int64(87)
 	rouletteRank := int64(enums.WheelRankSuper) // TODO: change this
 	//numRouletteToken := playerState.NumRouletteTicket
-	numRouletteToken := numRouletteTicket - 1
+	numRouletteToken := numRouletteTicket // The game uses the _current_ value, not as if it was in the past (This is hard to explain, maybe TODO: explain this better?)
 	numJackpotRing := int64(consts.RouletteJackpotRings)
 	// TODO: get rid of logic here!
-	numRemainingRoulette := numRouletteTicket + consts.RouletteFreeSpins - (rouletteCountInPeriod + 1)
+	numRemainingRoulette := numRouletteToken + consts.RouletteFreeSpins - rouletteCountInPeriod // TODO: is this proper?
 	if numRemainingRoulette < numRouletteToken {
 		numRemainingRoulette = numRouletteToken
 	}

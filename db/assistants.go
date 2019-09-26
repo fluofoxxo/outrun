@@ -41,8 +41,8 @@ func NewAccountWithID(uid string) netobj.Player {
 	mileageMapState := netobj.DefaultMileageMapState()
 	mileageFriends := []netobj.MileageFriend{}
 	playerVarious := netobj.DefaultPlayerVarious()
-	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, 0)
 	rouletteInfo := netobj.DefaultRouletteInfo()
+	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, rouletteInfo.RouletteCountInPeriod)
 	if config.CFile.Debug {
 		// TODO: this should be removed as soon as possible. This is just for testing a multi-chapter episode.
 		mileageMapState.Episode = 11
