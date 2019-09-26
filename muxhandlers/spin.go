@@ -2,7 +2,6 @@ package muxhandlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/fluofoxxo/outrun/config"
@@ -108,8 +107,6 @@ func CommitWheelSpin(helper *helper.Helper) {
 		helper.InternalErr("Error saving player", err)
 		return
 	}
-
-	fmt.Println("AFTER:", player.PlayerState.NumRouletteTicket)
 
 	err = helper.SendResponse(response)
 	if err != nil {
