@@ -50,8 +50,6 @@ func CommitWheelSpin(helper *helper.Helper) {
 		helper.Out(strconv.Itoa(int(request.Count)))
 	}
 
-	fmt.Println("BEFORE:", player.PlayerState.NumRouletteTicket)
-
 	responseStatus := status.OK
 	if player.PlayerState.NumRouletteTicket > 0 { // if we have tickets left
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
@@ -101,9 +99,6 @@ func CommitWheelSpin(helper *helper.Helper) {
 		// do not modify the wheel, set error status
 		responseStatus = status.RouletteUseLimit
 	}
-
-	fmt.Println(player.RouletteInfo)
-	fmt.Println(player.LastWheelOptions)
 
 	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.WheelSpin(baseInfo, player.PlayerState, player.CharacterState, player.ChaoState, player.LastWheelOptions)
