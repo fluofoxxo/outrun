@@ -144,3 +144,13 @@ func LoginBonus(helper *helper.Helper) {
 		helper.InternalErr("Error sending response", err)
 	}
 }
+
+func GetCountry(helper *helper.Helper) {
+	// TODO: Should get correct country code!
+	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	response := responses.DefaultGetCountry(baseInfo)
+	err := helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+	}
+}

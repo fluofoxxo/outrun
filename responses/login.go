@@ -34,7 +34,7 @@ type LoginRegisterResponse struct {
 }
 
 func LoginRegister(base responseobjs.BaseInfo, uid, password, key string) LoginRegisterResponse {
-	// TODO: fetch correct country code and whatnot
+	// TODO: Fetch correct country code
 	baseResponse := NewBaseResponse(base)
 	out := LoginRegisterResponse{
 		baseResponse,
@@ -45,6 +45,29 @@ func LoginRegister(base responseobjs.BaseInfo, uid, password, key string) LoginR
 		"US",
 	}
 	return out
+}
+
+type GetCountryResponse struct {
+	BaseResponse
+	CountryID   int64  `json:"countryId,string"`
+	CountryCode string `json:"countryCode"`
+}
+
+func GetCountry(base responseobjs.BaseInfo, countryID int64, countryCode string) GetCountryResponse {
+	baseResponse := NewBaseResponse(base)
+	return GetCountryResponse{
+		baseResponse,
+		countryID,
+		countryCode,
+	}
+}
+
+func DefaultGetCountry(base responseobjs.BaseInfo) GetCountryResponse {
+	return GetCountry(
+		base,
+		1,
+		"US",
+	)
 }
 
 type LoginSuccessResponse struct {

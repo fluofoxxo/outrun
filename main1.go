@@ -91,6 +91,7 @@ func main() {
 	router.HandleFunc("/Player/setUserName/", h(muxhandlers.SetUsername, LogExecutionTime))
 	router.HandleFunc("/login/getTicker/", h(muxhandlers.GetTicker, LogExecutionTime))
 	router.HandleFunc("/Login/loginBonus/", h(muxhandlers.LoginBonus, LogExecutionTime))
+	router.HandleFunc("/Login/getCountry/", h(muxhandlers.GetCountry, LogExecutionTime))
 	// Timed mode
 	router.HandleFunc("/Game/quickActStart/", h(muxhandlers.QuickActStart, LogExecutionTime))
 	router.HandleFunc("/Game/quickPostGameResults/", h(muxhandlers.QuickPostGameResults, LogExecutionTime))
