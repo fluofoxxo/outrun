@@ -27,6 +27,15 @@ func (t *Toolbox) RegisterPlayerWithID(uid string, reply *ToolboxReply) error {
 	return nil
 }
 
+func (t *Toolbox) FetchPlayer(uid string, reply *netobj.Player) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		return err
+	}
+	*reply = player
+	return nil
+}
+
 func (t *Toolbox) ResetCampaign(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
 	if err != nil {
@@ -231,6 +240,25 @@ func (t *Toolbox) GetRouletteTickets(uid string, reply *ToolboxReply) error {
 	return nil
 }
 
+func (t *Toolbox) SetRouletteTickets(args ChangeValueArgs, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(args.UID)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	player.PlayerState.NumRouletteTicket = args.Value.(int64)
+	err = db.SavePlayer(player)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to save player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
+
 func (t *Toolbox) ResetPlayerVarious(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
 	if err != nil {
@@ -269,6 +297,44 @@ func (t *Toolbox) ResetMapInfo(uid string, reply *ToolboxReply) error {
 	return nil
 }
 
+func (t *Toolbox) ResetRouletteInfo(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	player.RouletteInfo = netobj.DefaultRouletteInfo()
+	err = db.SavePlayer(player)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to save player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
+
+func (t *Toolbox) ResetLastWheelOptions(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
+	err = db.SavePlayer(player)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to save player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
+
 func (t *Toolbox) Debug_GetCampaignStatus(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
 	if err != nil {
@@ -290,6 +356,13 @@ func (t *Toolbox) Debug_GetAllPlayerIDs(nothing bool, reply *ToolboxReply) error
 	final := strings.Join(playerIDs, ",")
 	reply.Status = StatusOK
 	reply.Info = final
+	return nil
+}
+
+func (t *Toolbox) Debug_ResetPlayer(uid string, reply *ToolboxReply) error {
+	_ = db.NewAccountWithID(uid)
+	reply.Status = StatusOK
+	reply.Info = "OK"
 	return nil
 }
 
