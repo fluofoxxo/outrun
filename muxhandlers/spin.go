@@ -3,6 +3,7 @@ package muxhandlers
 import (
 	"encoding/json"
 	"strconv"
+	"time"
 
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
@@ -24,6 +25,11 @@ func GetWheelOptions(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	//player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
+	endPeriod := player.RouletteInfo.RoulettePeriodEnd
+	if time.Now().Unix() < endPeriod {
+		player.RouletteInfo.RouletteCountInPeriod = 0
+		player.RouletteInfo.GotJackpotThisPeriod = false
+	}
 	response := responses.WheelOptions(baseInfo, player.LastWheelOptions)
 	err = helper.SendResponse(response)
 	if err != nil {
@@ -79,6 +85,12 @@ func CommitWheelSpin(helper *helper.Helper) {
 			}
 		}
 
+		endPeriod := player.RouletteInfo.RoulettePeriodEnd
+		if time.Now().Unix() < endPeriod {
+			player.RouletteInfo.RouletteCountInPeriod = 0
+			player.RouletteInfo.GotJackpotThisPeriod = false
+		}
+
 		// generate NEXT! wheel
 		player.RouletteInfo.RouletteCountInPeriod++ // we've spun an additional time
 		if player.RouletteInfo.RouletteCountInPeriod > consts.RouletteFreeSpins {
@@ -113,7 +125,3 @@ func CommitWheelSpin(helper *helper.Helper) {
 		helper.InternalErr("Error sending response", err)
 	}
 }
-
-//func wheelToNextWheel(wheel netobj.WheelOptions) netobj.WheelOptions {
-
-//}
