@@ -86,9 +86,8 @@ func CommitWheelSpin(helper *helper.Helper) {
 		}
 
 		endPeriod := player.RouletteInfo.RoulettePeriodEnd
-		if time.Now().Unix() < endPeriod {
-			player.RouletteInfo.RouletteCountInPeriod = 0
-			player.RouletteInfo.GotJackpotThisPeriod = false
+		if time.Now().Unix() > endPeriod {
+			player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
 		}
 
 		// generate NEXT! wheel
