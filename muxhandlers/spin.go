@@ -2,6 +2,7 @@ package muxhandlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -26,7 +27,7 @@ func GetWheelOptions(helper *helper.Helper) {
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	//player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
-	if time.Now().Unix() < endPeriod {
+	if time.Now().Unix() > endPeriod {
 		player.RouletteInfo.RouletteCountInPeriod = 0
 		player.RouletteInfo.GotJackpotThisPeriod = false
 	}
@@ -85,6 +86,10 @@ func CommitWheelSpin(helper *helper.Helper) {
 			}
 		}
 
+		if config.CFile.DebugPrints {
+			fmt.Println(time.Now().Unix())
+			fmt.Println(player.RouletteInfo.RoulettePeriodEnd)
+		}
 		endPeriod := player.RouletteInfo.RoulettePeriodEnd
 		if time.Now().Unix() > endPeriod {
 			player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
