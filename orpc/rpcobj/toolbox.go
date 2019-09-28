@@ -316,6 +316,25 @@ func (t *Toolbox) ResetRouletteInfo(uid string, reply *ToolboxReply) error {
 	return nil
 }
 
+func (t *Toolbox) SetRouletteInfoResetTime(args ChangeValueArgs, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(args.UID)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	player.RouletteInfo.RoulettePeriodEnd = args.Value.(int64)
+	err = db.SavePlayer(player)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to save player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
+
 func (t *Toolbox) ResetLastWheelOptions(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
 	if err != nil {
