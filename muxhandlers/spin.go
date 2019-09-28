@@ -26,10 +26,13 @@ func GetWheelOptions(helper *helper.Helper) {
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	//player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
+	if config.CFile.DebugPrints {
+		fmt.Println(time.Now().Unix())
+		fmt.Println(player.RouletteInfo.RoulettePeriodEnd)
+	}
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
 	if time.Now().Unix() > endPeriod {
-		player.RouletteInfo.RouletteCountInPeriod = 0
-		player.RouletteInfo.GotJackpotThisPeriod = false
+		player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
 	}
 	response := responses.WheelOptions(baseInfo, player.LastWheelOptions)
 	err = helper.SendResponse(response)

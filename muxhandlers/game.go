@@ -141,6 +141,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
+		player.PlayerState.NumRouletteTicket += request.RedRings // TODO: URGENT! Remove as soon as possible!
 		player.PlayerState.Animals += request.Animals
 		playerTimedHighScore := player.PlayerState.TimedHighScore
 		if request.Score > playerTimedHighScore {
@@ -255,6 +256,7 @@ func PostGameResults(helper *helper.Helper) {
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
+		player.PlayerState.NumRouletteTicket += request.RedRings // TODO: URGENT! Remove as soon as possible!
 		player.PlayerState.Animals += request.Animals
 		playerHighScore := player.PlayerState.HighScore
 		if request.Score > playerHighScore {
