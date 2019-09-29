@@ -17,6 +17,7 @@ var Defaults = map[string]interface{}{
 	"DDebug":              false,
 	"DDebugPrints":        false,
 	"DRPCPort":            "23432",
+	"DEnablePublicStats":  false,
 }
 
 var CFile ConfigFile
@@ -29,6 +30,7 @@ type ConfigFile struct {
 	Debug              bool   `json:"debug,omitempty"`
 	DebugPrints        bool   `json:"debugPrints,omitempty"`
 	RPCPort            string `json:"rpcPort,omitempty"`
+	EnablePublicStats  bool   `json:"enablePublicStats,omitempty"`
 }
 
 func Parse(filename string) error {
@@ -72,6 +74,7 @@ func Parse(filename string) error {
 		Defaults["DDebug"].(bool),
 		Defaults["DDebugPrints"].(bool),
 		Defaults["DRPCPort"].(string),
+		Defaults["DEnablePublicStats"].(bool),
 	}
 	return ret
 }

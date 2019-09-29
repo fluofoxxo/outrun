@@ -12,6 +12,7 @@ import (
 
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/cryption"
+	"github.com/fluofoxxo/outrun/inforeporters"
 	"github.com/fluofoxxo/outrun/muxhandlers"
 	"github.com/fluofoxxo/outrun/muxhandlers/muxobj"
 	"github.com/fluofoxxo/outrun/orpc"
@@ -114,6 +115,11 @@ func main() {
 	// Roulette
 	router.HandleFunc("/RaidbossSpin/getItemStockNum/", h(muxhandlers.GetItemStockNum, LogExecutionTime))
 	router.HandleFunc("/Spin/commitWheelSpin/", h(muxhandlers.CommitWheelSpin, LogExecutionTime))
+
+	// Server information
+	if config.CFile.EnablePublicStats {
+		router.HandleFunc("/outrunInfo/stats", inforeporters.Stats)
+	}
 
 	if config.CFile.LogUnknownRequests {
 		//router.HandleFunc("/", OutputUnknownRequest)
