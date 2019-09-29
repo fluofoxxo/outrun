@@ -12,6 +12,7 @@ import (
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/helper"
+	"github.com/fluofoxxo/outrun/logic"
 	"github.com/fluofoxxo/outrun/netobj"
 	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses"
@@ -25,15 +26,21 @@ func GetWheelOptions(helper *helper.Helper) {
 		return
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+
 	//player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
 	if config.CFile.DebugPrints {
 		fmt.Println(time.Now().Unix())
 		fmt.Println(player.RouletteInfo.RoulettePeriodEnd)
 	}
+	// check if we need to reset the end period
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
 	if time.Now().Unix() > endPeriod {
 		player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
 	}
+
+	// refresh wheel
+	player.LastWheelOptions = logic.WheelRefreshLogic(player, player.LastWheelOptions)
+
 	response := responses.WheelOptions(baseInfo, player.LastWheelOptions)
 	err = helper.SendResponse(response)
 	if err != nil {

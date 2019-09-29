@@ -3,6 +3,7 @@ package responses
 import (
 	"strconv"
 
+	"github.com/fluofoxxo/outrun/logic"
 	"github.com/fluofoxxo/outrun/netobj"
 	"github.com/fluofoxxo/outrun/obj"
 	"github.com/fluofoxxo/outrun/obj/constobjs"
@@ -293,7 +294,10 @@ func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pc
 	mms := player.MileageMapState
 	mil := []obj.MileageIncentive{obj.DefaultMileageIncentive()}
 	eil := []obj.Item{}
-	wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
+	//wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
+	// TODO: Remove logic from response!!
+	player.LastWheelOptions = logic.WheelRefreshLogic(player, player.LastWheelOptions)
+	wo := player.LastWheelOptions
 	return PostGameResultsResponse{
 		qpgrr,
 		mms,
