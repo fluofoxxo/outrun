@@ -67,7 +67,8 @@ func CommitWheelSpin(helper *helper.Helper) {
 	}
 
 	responseStatus := status.OK
-	if player.PlayerState.NumRouletteTicket > 0 { // if we have tickets left
+	//if player.PlayerState.NumRouletteTicket > 0 { // if we have tickets left
+	if player.LastWheelOptions.NumRemainingRoulette > 0 {
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
 		itemExists := player.IndexOfItem(wonItem) != -1
 		if itemExists {
