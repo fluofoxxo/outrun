@@ -2,7 +2,6 @@ package muxhandlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -29,8 +28,8 @@ func GetWheelOptions(helper *helper.Helper) {
 
 	//player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
 	if config.CFile.DebugPrints {
-		fmt.Println(time.Now().Unix())
-		fmt.Println(player.RouletteInfo.RoulettePeriodEnd)
+		helper.Out(strconv.Itoa(int(time.Now().Unix())))
+		helper.Out(strconv.Itoa(int(player.RouletteInfo.RoulettePeriodEnd)))
 	}
 	// check if we need to reset the end period
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
@@ -67,6 +66,12 @@ func CommitWheelSpin(helper *helper.Helper) {
 	}
 
 	responseStatus := status.OK
+	if config.CFile.DebugPrints {
+		helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket)))
+		helper.Out(strconv.Itoa(int(consts.RouletteFreeSpins)))
+		helper.Out(strconv.Itoa(int(player.RouletteInfo.RouletteCountInPeriod)))
+		helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket + consts.RouletteFreeSpins - player.RouletteInfo.RouletteCountInPeriod)))
+	}
 	if player.PlayerState.NumRouletteTicket+consts.RouletteFreeSpins-player.RouletteInfo.RouletteCountInPeriod > 0 { // if we have tickets left
 		//if player.LastWheelOptions.NumRemainingRoulette > 0 {
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
@@ -98,8 +103,8 @@ func CommitWheelSpin(helper *helper.Helper) {
 		}
 
 		if config.CFile.DebugPrints {
-			fmt.Println(time.Now().Unix())
-			fmt.Println(player.RouletteInfo.RoulettePeriodEnd)
+			helper.Out(strconv.Itoa(int(time.Now().Unix())))
+			helper.Out(strconv.Itoa(int(player.RouletteInfo.RoulettePeriodEnd)))
 		}
 		endPeriod := player.RouletteInfo.RoulettePeriodEnd
 		if time.Now().Unix() > endPeriod {
