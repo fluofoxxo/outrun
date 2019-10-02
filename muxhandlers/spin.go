@@ -66,13 +66,20 @@ func CommitWheelSpin(helper *helper.Helper) {
 	}
 
 	responseStatus := status.OK
+	hasTickets := player.PlayerState.NumRouletteTicket > 0
+	hasFreeSpins := player.RouletteInfo.RouletteCountInPeriod < consts.RouletteFreeSpins
 	if config.CFile.DebugPrints {
-		helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket)))
-		helper.Out(strconv.Itoa(int(consts.RouletteFreeSpins)))
-		helper.Out(strconv.Itoa(int(player.RouletteInfo.RouletteCountInPeriod)))
-		helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket + consts.RouletteFreeSpins - player.RouletteInfo.RouletteCountInPeriod)))
+		helper.Out("Has tickets: " + strconv.FormatBool(hasTickets))
+		helper.Out("Number of tickets: " + strconv.Itoa(int(player.PlayerState.NumRouletteTicket)))
+		helper.Out("Has free spins: " + strconv.FormatBool(hasFreeSpins))
+		/*
+			helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket)))
+			helper.Out(strconv.Itoa(int(consts.RouletteFreeSpins)))
+			helper.Out(strconv.Itoa(int(player.RouletteInfo.RouletteCountInPeriod)))
+			helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket + consts.RouletteFreeSpins - player.RouletteInfo.RouletteCountInPeriod)))
+		*/
 	}
-	if player.PlayerState.NumRouletteTicket+consts.RouletteFreeSpins-player.RouletteInfo.RouletteCountInPeriod > 0 { // if we have tickets left
+	if hasTickets || hasFreeSpins {
 		//if player.LastWheelOptions.NumRemainingRoulette > 0 {
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
 		itemExists := player.IndexOfItem(wonItem) != -1
