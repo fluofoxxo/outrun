@@ -152,6 +152,18 @@ func (t *Toolbox) SetUsername(args ChangeValueArgs, reply *ToolboxReply) error {
 	return nil
 }
 
+func (t *Toolbox) GetUsername(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = player.Username
+	return nil
+}
+
 func (t *Toolbox) SetCampaignEpisode(args ChangeValueArgs, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(args.UID)
 	if err != nil {
