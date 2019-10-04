@@ -259,6 +259,18 @@ func (t *Toolbox) SetRouletteTickets(args ChangeValueArgs, reply *ToolboxReply) 
 	return nil
 }
 
+func (t *Toolbox) GetLastLogin(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = strconv.Itoa(int(player.LastLogin))
+	return nil
+}
+
 func (t *Toolbox) ResetPlayerVarious(uid string, reply *ToolboxReply) error {
 	player, err := db.GetPlayer(uid)
 	if err != nil {
