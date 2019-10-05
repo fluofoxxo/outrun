@@ -1,6 +1,7 @@
 package rpcobj
 
 import (
+	"encoding/json"
 	"strconv"
 	"strings"
 
@@ -406,6 +407,25 @@ func (t *Toolbox) Debug_ResetPlayer(uid string, reply *ToolboxReply) error {
 	_ = db.NewAccountWithID(uid)
 	reply.Status = StatusOK
 	reply.Info = "OK"
+	return nil
+}
+
+func (t *Toolbox) Debug_GetRouletteInfo(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	rouletteInfo := player.RouletteInfo
+	jri, err := json.Marshal(rouletteInfo)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to marshal RouletteInfo: " + err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = string(jri)
 	return nil
 }
 
