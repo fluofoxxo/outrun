@@ -17,7 +17,7 @@ func GetAllNetChao() map[string]netobj.Chao {
 	chaos := make(map[string]netobj.Chao)
 	for _, chaoID := range ChaoIDs {
 		id := chaoID
-		rarity, _ := strconv.Atoi(string(id[2])) // numerical rarity (second digit)
+		rarity, _ := strconv.Atoi(string(id[2])) // numerical rarity (third digit)
 		hidden := int64(0)                       // TODO: discover what this is used for (see obj/chao.go)
 		chao := obj.NewChao(
 			id,
