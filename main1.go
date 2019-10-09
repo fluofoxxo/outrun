@@ -115,6 +115,7 @@ func main() {
 	// Roulette
 	router.HandleFunc("/RaidbossSpin/getItemStockNum/", h(muxhandlers.GetItemStockNum, LogExecutionTime))
 	router.HandleFunc("/Spin/commitWheelSpin/", h(muxhandlers.CommitWheelSpin, LogExecutionTime))
+	router.HandleFunc("/Chao/commitChaoWheelSpin/", h(muxhandlers.CommitChaoWheelSpin, LogExecutionTime))
 
 	// Server information
 	if config.CFile.EnablePublicStats {

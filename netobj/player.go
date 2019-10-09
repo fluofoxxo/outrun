@@ -10,22 +10,23 @@ import (
 )
 
 type Player struct {
-	ID               string `json:"userID"`
-	Username         string `json:"username"`
-	Password         string `json:"password"`
-	Key              string `json:"key"`
-	LastLogin        int64
-	PlayerState      PlayerState     `json:"playerState"`
-	CharacterState   []Character     `json:"characterState"`
-	ChaoState        []Chao          `json:"chaoState"`
-	MileageMapState  MileageMapState `json:"mileageMapState"`
-	MileageFriends   []MileageFriend `json:"mileageFriendList"`
-	PlayerVarious    PlayerVarious   `json:"playerVarious"`
-	LastWheelOptions WheelOptions    `json:"ORN_wheelOptions"`
-	RouletteInfo     RouletteInfo    `json:"ORN_rouletteInfo"`
+	ID                   string `json:"userID"`
+	Username             string `json:"username"`
+	Password             string `json:"password"`
+	Key                  string `json:"key"`
+	LastLogin            int64
+	PlayerState          PlayerState      `json:"playerState"`
+	CharacterState       []Character      `json:"characterState"`
+	ChaoState            []Chao           `json:"chaoState"`
+	MileageMapState      MileageMapState  `json:"mileageMapState"`
+	MileageFriends       []MileageFriend  `json:"mileageFriendList"`
+	PlayerVarious        PlayerVarious    `json:"playerVarious"`
+	LastWheelOptions     WheelOptions     `json:"ORN_wheelOptions"`
+	RouletteInfo         RouletteInfo     `json:"ORN_rouletteInfo"`
+	LastChaoWheelOptions ChaoWheelOptions `json:"ORN_chaoWheelOptions"`
 }
 
-func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions, rouletteInfo RouletteInfo) Player {
+func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions, rouletteInfo RouletteInfo, chaoWheelOptions ChaoWheelOptions) Player {
 	return Player{
 		id,
 		username,
@@ -40,6 +41,7 @@ func NewPlayer(id, username, password, key string, playerState PlayerState, char
 		playerVarious,
 		wheelOptions,
 		rouletteInfo,
+		chaoWheelOptions,
 	}
 }
 

@@ -32,13 +32,15 @@ type PlayerState struct {
 	RankingLeague          int64      `json:"rankingLeague,string"`      // 'league index'
 	QuickRankingLeague     int64      `json:"quickRankingLeague,string"` // same as above, but for timed mode
 	NumRouletteTicket      int64      `json:"numRouletteTicket,string"`
+	NumChaoRouletteTicket  int64      `json:"numChaoRouletteTicket"` // This isn't a requirement from the game for PlayerState, but is useful to have here
+	ChaoEggs               int64      `json:"chaoEggs"`              // Same as above
 	HighScore              int64      `json:"totalHighScore,string"`
 	TimedHighScore         int64      `json:"quickTotalHighScore,string"`
 	TotalDistance          int64      `json:"totalDistance,string"`
 	HighDistance           int64      `json:"maximumDistance,string"` // high distance in one go?
 	DailyMissionID         int64      `json:"dailyMissionId,string"`
 	DailyMissionEndTime    int64      `json:"dailyMissionEndTime"` // 11:59 pm of current day
-	DailyChallengeValue    int64      `json:"dailyChallengeValue"` // internally listed as ProgressStatus...
+	DailyChallengeValue    int64      `json:"dailyChallengeValue"` // internally listed as ProgressStatus... Current day of the challenge?
 	DailyChallengeComplete int64      `json:"dailyChallengeComplete"`
 	NumDailyChallenge      int64      `json:"numDailyChalCont"`
 	NumPlaying             int64      `json:"numPlaying,string"` // ?
@@ -69,6 +71,8 @@ func DefaultPlayerState() PlayerState {
 	rankingLeague := int64(enums.RankingLeagueNone)
 	quickRankingLeague := int64(enums.RankingLeagueNone)
 	numRouletteTicket := int64(3)
+	numChaoRouletteTicket := int64(7)
+	chaoEggs := int64(11)
 	highScore := int64(0)
 	timedHighScore := int64(0)
 	totalDistance := int64(0)
@@ -99,6 +103,8 @@ func DefaultPlayerState() PlayerState {
 		rankingLeague,
 		quickRankingLeague,
 		numRouletteTicket,
+		numChaoRouletteTicket,
+		chaoEggs,
 		highScore,
 		timedHighScore,
 		totalDistance,
