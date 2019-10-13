@@ -3,6 +3,7 @@ package roulette
 import (
 	"errors"
 	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 
@@ -79,6 +80,7 @@ func GetRandomChaoRouletteItems(rarities []int64, exclusions []string) ([]string
 				return []string{}, err
 			}
 			for isExcluded(chao[0]) { // keep getting chao until we have one that is not max level
+				log.Println("[DEBUG] Rarity 1 Chao Search")
 				chao, err = GetRandomChaoWheelChao(1, 1)
 				if err != nil {
 					return []string{}, err
@@ -86,11 +88,13 @@ func GetRandomChaoRouletteItems(rarities []int64, exclusions []string) ([]string
 			}
 			items = append(items, chao[0])
 		} else if rarity == 2 { // Rarity 2 Chao
+			log.Println("[DEBUG] Rarity 2 Chao Search")
 			chao, err := GetRandomChaoWheelChao(1, 2)
 			if err != nil {
 				return []string{}, err
 			}
 			for isExcluded(chao[0]) { // keep getting chao until we have one that is not max level
+				log.Println("[DEBUG] Character Search")
 				chao, err = GetRandomChaoWheelChao(1, 2)
 				if err != nil {
 					return []string{}, err
