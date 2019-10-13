@@ -16,7 +16,7 @@ var BlankPlayer = func() netobj.Player {
 		}
 		return string(final)
 	}
-	uid := strconv.Itoa(rand.Intn(9999999999-1000000000) + 1000000000)
+	uid := strconv.Itoa(rand.Intn(9999999999-1000000000) + 1000000000) // WARN: This large of an int blocks Outrun from being compiled for 32 bit archs. May be useful to solve.
 	username := ""
 	password := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
 	key := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
@@ -28,6 +28,7 @@ var BlankPlayer = func() netobj.Player {
 	playerVarious := netobj.DefaultPlayerVarious()
 	rouletteInfo := netobj.DefaultRouletteInfo()
 	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, rouletteInfo.RouletteCountInPeriod)
+	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, []string{}) // TODO: fix having no exceptions. This can be problematic if characterState or chaoState is disturbed!
 	return netobj.NewPlayer(
 		uid,
 		username,
@@ -41,5 +42,6 @@ var BlankPlayer = func() netobj.Player {
 		playerVarious,
 		wheelOptions,
 		rouletteInfo,
+		chaoRouletteGroup,
 	)
-}() // copied from db.NewPlayer to avoid import loop
+}() // TODO: Solve duplication requirement with db/assistants.go

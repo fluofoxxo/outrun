@@ -10,23 +10,23 @@ import (
 )
 
 type Player struct {
-	ID                   string `json:"userID"`
-	Username             string `json:"username"`
-	Password             string `json:"password"`
-	Key                  string `json:"key"`
-	LastLogin            int64
-	PlayerState          PlayerState      `json:"playerState"`
-	CharacterState       []Character      `json:"characterState"`
-	ChaoState            []Chao           `json:"chaoState"`
-	MileageMapState      MileageMapState  `json:"mileageMapState"`
-	MileageFriends       []MileageFriend  `json:"mileageFriendList"`
-	PlayerVarious        PlayerVarious    `json:"playerVarious"`
-	LastWheelOptions     WheelOptions     `json:"ORN_wheelOptions"`
-	RouletteInfo         RouletteInfo     `json:"ORN_rouletteInfo"`
-	LastChaoWheelOptions ChaoWheelOptions `json:"ORN_chaoWheelOptions"`
+	ID                string `json:"userID"`
+	Username          string `json:"username"`
+	Password          string `json:"password"`
+	Key               string `json:"key"`
+	LastLogin         int64
+	PlayerState       PlayerState       `json:"playerState"`
+	CharacterState    []Character       `json:"characterState"`
+	ChaoState         []Chao            `json:"chaoState"`
+	MileageMapState   MileageMapState   `json:"mileageMapState"`
+	MileageFriends    []MileageFriend   `json:"mileageFriendList"`
+	PlayerVarious     PlayerVarious     `json:"playerVarious"`
+	LastWheelOptions  WheelOptions      `json:"ORN_wheelOptions"` // TODO: Make RouletteGroup to hold LastWheelOptions and RouletteInfo?
+	RouletteInfo      RouletteInfo      `json:"ORN_rouletteInfo"`
+	ChaoRouletteGroup ChaoRouletteGroup `json:"ORN_chaoRouletteGroup"`
 }
 
-func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions, rouletteInfo RouletteInfo, chaoWheelOptions ChaoWheelOptions) Player {
+func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions, rouletteInfo RouletteInfo, chaoRouletteGroup ChaoRouletteGroup) Player {
 	return Player{
 		id,
 		username,
@@ -41,7 +41,7 @@ func NewPlayer(id, username, password, key string, playerState PlayerState, char
 		playerVarious,
 		wheelOptions,
 		rouletteInfo,
-		chaoWheelOptions,
+		chaoRouletteGroup,
 	}
 }
 
@@ -226,6 +226,14 @@ func (p *Player) GetChao(chid string) (Chao, error) {
 	}
 	return chao, nil
 }
+func (p *Player) IndexOfChao(chid string) int {
+	for i, chao := range p.ChaoState {
+		if chao.ID == chid {
+			return i
+		}
+	}
+	return -1
+}
 func (p *Player) GetMainChara() (Character, error) {
 	ps := p.PlayerState
 	cid := ps.MainCharaID
@@ -249,4 +257,67 @@ func (p *Player) GetSubChao() (Chao, error) {
 	chid := ps.SubChaoID
 	chao, err := p.GetChao(chid)
 	return chao, err
+}
+func (p *Player) GetMaxLevelChao() []Chao {
+	mxlvl := []Chao{}
+	for _, c := range p.ChaoState {
+		if c.Level >= 10 { // if max level (or above)
+			mxlvl = append(mxlvl, c)
+		}
+	}
+	return mxlvl
+}
+func (p *Player) GetMaxLevelChaoIDs() []string {
+	chao := p.GetMaxLevelChao()
+	ids := []string{}
+	for _, c := range chao {
+		if c.Level >= 10 { // if max level (or above)
+			ids = append(ids, c.ID)
+		}
+	}
+	return ids
+}
+func (p *Player) GetMaxLevelCharacters() []Character {
+	mxlvl := []Character{}
+	for _, ch := range p.CharacterState {
+		if ch.Star >= 10 { // if max stars (or above)
+			mxlvl = append(mxlvl, ch)
+		}
+	}
+	return mxlvl
+}
+func (p *Player) GetMaxLevelCharacterIDs() []string {
+	chars := p.GetMaxLevelCharacters()
+	ids := []string{}
+	for _, ch := range chars {
+		//if ch.Level >= 100 { // if max level (or above)
+		if ch.Star >= 10 {
+			ids = append(ids, ch.ID)
+		}
+	}
+	return ids
+}
+func (p *Player) GetAllMaxLevelIDs() []string {
+	chars := p.GetMaxLevelCharacterIDs()
+	chao := p.GetMaxLevelChaoIDs()
+	combined := []string{}
+	combined = append(combined, chars...)
+	combined = append(combined, chao...)
+	return combined
+}
+func (p *Player) AllChaoMaxLevel() bool {
+	for _, c := range p.ChaoState {
+		if c.Level < 10 {
+			return false
+		}
+	}
+	return true
+}
+func (p *Player) AllCharactersMaxLevel() bool {
+	for _, ch := range p.CharacterState {
+		if ch.Star < 10 {
+			return false
+		}
+	}
+	return true
 }

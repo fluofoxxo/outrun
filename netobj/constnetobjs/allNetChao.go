@@ -27,7 +27,7 @@ func GetAllNetChao() map[string]netobj.Chao {
 		netchao := netobj.NewNetChao(
 			chao,
 			enums.ChaoStatusOwned,
-			0,
+			1,
 			enums.ChaoDealingNone,
 			1,
 		)

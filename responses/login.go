@@ -161,22 +161,22 @@ func DefaultTicker(base responseobjs.BaseInfo, player netobj.Player) TickerRespo
 		obj.NewTicker(
 			2,
 			time.Now().UTC().Unix()+7200,
-			"ID: [ffff00]"+player.ID,
+			"ID: [0000ff]"+player.ID,
 		),
 		obj.NewTicker(
 			3,
 			time.Now().UTC().Unix()+7200, // two hours later
-			"High score (Timed Mode): [ffff00]"+strconv.Itoa(int(player.PlayerState.TimedHighScore)),
+			"High score (Timed Mode): [0000ff]"+strconv.Itoa(int(player.PlayerState.TimedHighScore)),
 		),
 		obj.NewTicker(
 			4,
 			time.Now().UTC().Unix()+7200, // two hours later
-			"High score (Story Mode): [ffff00]"+strconv.Itoa(int(player.PlayerState.HighScore)),
+			"High score (Story Mode): [0000ff]"+strconv.Itoa(int(player.PlayerState.HighScore)),
 		),
 		obj.NewTicker(
 			5,
 			time.Now().UTC().Unix()+7200, // two hours later
-			"Total distance ran (Story Mode): [ffff00]"+strconv.Itoa(int(player.PlayerState.TotalDistance)),
+			"Total distance ran (Story Mode): [0000ff]"+strconv.Itoa(int(player.PlayerState.TotalDistance)),
 		),
 	}
 	return Ticker(

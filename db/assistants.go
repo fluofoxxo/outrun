@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db/dbaccess"
 	"github.com/fluofoxxo/outrun/netobj"
@@ -43,12 +42,7 @@ func NewAccountWithID(uid string) netobj.Player {
 	playerVarious := netobj.DefaultPlayerVarious()
 	rouletteInfo := netobj.DefaultRouletteInfo()
 	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, rouletteInfo.RouletteCountInPeriod)
-	if config.CFile.Debug {
-		// TODO: this should be removed as soon as possible. This is just for testing a multi-chapter episode.
-		mileageMapState.Episode = 11
-		mileageMapState.Chapter = 1
-		mileageMapState.Point = 0
-	}
+	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, []string{}) // TODO: fix having no exceptions. This can be problematic if characterState or chaoState is disturbed!
 	return netobj.NewPlayer(
 		uid,
 		username,
@@ -62,6 +56,7 @@ func NewAccountWithID(uid string) netobj.Player {
 		playerVarious,
 		wheelOptions,
 		rouletteInfo,
+		chaoRouletteGroup,
 	)
 }
 

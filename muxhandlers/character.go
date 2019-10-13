@@ -90,7 +90,7 @@ func UpgradeCharacter(helper *helper.Helper) {
 			// check if character is valid here
 			levelIncrease, ok := consts.UpgradeIncreases[charaID]
 			if !ok {
-				helper.InternalErr("Error getting level increase", fmt.Errorf("key '%s' not found in consts.UpgradeIncreases", charaID))
+				helper.InternalErr("Error getting level increase", fmt.Errorf("key '%v' not found in consts.UpgradeIncreases", charaID))
 				return
 			}
 			player.CharacterState[index].AbilityLevel[abilityIndex]++

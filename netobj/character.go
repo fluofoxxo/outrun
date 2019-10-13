@@ -33,8 +33,8 @@ func DefaultCharacter(char obj.Character) Character {
 	status := int64(enums.CharacterStatusUnlocked)
 	level := int64(0)
 	exp := int64(0)
-	star := int64(0)       // Limit breaks
-	starMax := int64(1331) // Max number of limit breaks?
+	star := int64(0)     // Limit breaks
+	starMax := int64(10) // Max number of limit breaks?
 	lockCondition := int64(enums.LockConditionOpen)
 	campaignList := []obj.Campaign{}
 	abilityLevel := []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} // 11 abilities?
@@ -58,7 +58,7 @@ func DefaultCharacter(char obj.Character) Character {
 }
 
 func DefaultCharacterState() []Character { // every character
-	// TODO: It looks like the game only wants 300000-300020, otherwise and index error is created. Investigate this in game!
+	// TODO: It looks like the game only wants 300000-300020, otherwise an index error is created. Investigate this in game!
 	return []Character{
 		DefaultCharacter(constobjs.CharacterSonic),
 		DefaultCharacter(constobjs.CharacterTails),

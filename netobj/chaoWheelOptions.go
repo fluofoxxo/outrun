@@ -1,6 +1,7 @@
 package netobj
 
 import (
+	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/obj"
 	"github.com/jinzhu/now"
@@ -36,15 +37,19 @@ func NewChaoWheelOptions(rarity, itemWeight []int64, campaignList []obj.Campaign
 	}
 }
 
-func DefaultChaoWheelOptions() ChaoWheelOptions {
+func DefaultChaoWheelOptions(playerState PlayerState) ChaoWheelOptions {
 	rarity := []int64{2, 1, 100, 1, 2, 1, 100, 1}      // l2 Chao, l1 Chao, character...
-	itemWeight := []int64{6, 17, 5, 17, 16, 17, 5, 17} // Faux weights?
+	itemWeight := []int64{6, 17, 5, 17, 16, 17, 5, 17} // Could possibly fake these, but the logic shouldn't allow it to happen
 	campaignList := []obj.Campaign{}
-	spinCost := int64(1)
 	chaoRouletteType := enums.ChaoWheelTypeNormal
-	numSpecialEgg := int64(183) // TODO: replace with player's NumSpecialEgg
+	numSpecialEgg := playerState.ChaoEggs
 	rouletteAvailable := int64(1)
-	numChaoRouletteToken := int64(47)
+	numChaoRouletteToken := playerState.NumChaoRouletteTicket
+	spinCost := consts.ChaoRouletteTicketCost
+	if numChaoRouletteToken <= 0 { // if out of chao roulette tickets
+		// use higher value for the red rings
+		spinCost = consts.ChaoRouletteRedRingCost
+	}
 	numChaoRoulette := int64(1)
 	startTime := now.BeginningOfDay().UTC().Unix() + 32400 // 12 AM + 9 hours = 9 AM
 	endTime := startTime + 86399                           // 23:59:59 later

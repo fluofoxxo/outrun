@@ -22,9 +22,9 @@ func ChaoWheelOptions(base responseobjs.BaseInfo, chaoWheelOptions netobj.ChaoWh
 	return out
 }
 
-func DefaultChaoWheelOptions(base responseobjs.BaseInfo) ChaoWheelOptionsResponse {
+func DefaultChaoWheelOptions(base responseobjs.BaseInfo, player netobj.Player) ChaoWheelOptionsResponse {
 	// TODO: Assess if needed
-	chaoWheelOptions := netobj.DefaultChaoWheelOptions() // TODO: !!! Change this to the player's LastChaoWheelOptions
+	chaoWheelOptions := player.ChaoRouletteGroup.ChaoWheelOptions
 	return ChaoWheelOptions(
 		base,
 		chaoWheelOptions,
@@ -93,7 +93,7 @@ func DefaultChaoWheelSpin(base responseobjs.BaseInfo, player netobj.Player) Chao
 		player.PlayerState,
 		player.CharacterState,
 		player.ChaoState,
-		netobj.DefaultChaoWheelOptions(),
+		player.ChaoRouletteGroup.ChaoWheelOptions,
 		[]netobj.ChaoSpinResult{chaoSpinResults},
 	)
 }

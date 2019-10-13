@@ -1,6 +1,9 @@
 package netobj
 
-import "strconv"
+import (
+    "fmt"
+    "strconv"
+)
 
 type ChaoSpinPrize struct {
     ID     string `json:"chaoId"`
@@ -53,5 +56,18 @@ func CharacterIDToChaoSpinPrize(cid string) ChaoSpinPrize {
         id,
         level,
         rarity,
+    }
+}
+
+func GenericIDToChaoSpinPrize(id string) ChaoSpinPrize {
+    idStarter := string(id[0])
+    if idStarter == "3" { // Character ID
+        return CharacterIDToChaoSpinPrize(id)
+    } else if idStarter == "4" { // Chao ID
+        return ChaoIDToChaoSpinPrize(id)
+    } else {
+        // TODO: Gracefully handle error
+        err := fmt.Errorf("invalid ID '%v'", id)
+        panic(err)
     }
 }
