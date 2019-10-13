@@ -175,6 +175,18 @@ func QuickPostGameResults(helper *helper.Helper) {
 				mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
 			}
 		}
+		// TODO: Add limit breaking
+		/*
+			player.CharacterState[charIndex].Level = 0
+			player.CharacterState[charIndex].AbilityLevel = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			player.CharacterState[charIndex].AbilityNumRings = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			player.CharacterState[charIndex].AbilityLevelUpExp = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+			player.CharacterState[charIndex].Star++
+			if player.CharacterState[charIndex].Star >= player.CharacterState[charIndex].StarMax { // if exceeded max amount of stars
+				// TODO: then what?
+				player.CharacterState[charIndex].Star = player.CharacterState[charIndex].StarMax
+			}
+		*/
 		if subC.Level < 100 {
 			subC.Exp += expIncrease
 			for subC.Exp >= subC.Cost {

@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"strconv"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 )
 
@@ -63,15 +64,16 @@ func GetRandomChaoWheelChao(rarity int64, count int) ([]string, error) {
 	return pollChoices, nil
 }
 
-func GetRandomChaoRouletteItems(rarities []int64, exclusions []string) ([]string, error) { // TODO: Possibly rename to GetRandomChaoWheelItems?
-	isExcluded := func(x string) bool {
-		for _, s := range exclusions {
+func GetRandomChaoRouletteItems(rarities []int64, allowed []string) ([]string, error) { // TODO: Possibly rename to GetRandomChaoWheelItems?
+	isAllowed := func(x string) bool {
+		for _, s := range allowed {
 			if s == x {
 				return true
 			}
 		}
 		return false
 	}
+
 	items := []string{}
 	for _, rarity := range rarities {
 		if rarity == 1 { // Rarity 1 Chao
@@ -79,8 +81,10 @@ func GetRandomChaoRouletteItems(rarities []int64, exclusions []string) ([]string
 			if err != nil {
 				return []string{}, err
 			}
-			for isExcluded(chao[0]) { // keep getting chao until we have one that is not max level
-				log.Println("[DEBUG] Rarity 1 Chao Search")
+			for !isAllowed(chao[0]) { // keep getting chao until we have one that is not max level
+				if config.CFile.DebugPrints {
+					log.Println("[DEBUG] Rarity 1 Chao Search")
+				}
 				chao, err = GetRandomChaoWheelChao(1, 1)
 				if err != nil {
 					return []string{}, err
@@ -88,13 +92,14 @@ func GetRandomChaoRouletteItems(rarities []int64, exclusions []string) ([]string
 			}
 			items = append(items, chao[0])
 		} else if rarity == 2 { // Rarity 2 Chao
-			log.Println("[DEBUG] Rarity 2 Chao Search")
 			chao, err := GetRandomChaoWheelChao(1, 2)
 			if err != nil {
 				return []string{}, err
 			}
-			for isExcluded(chao[0]) { // keep getting chao until we have one that is not max level
-				log.Println("[DEBUG] Character Search")
+			for !isAllowed(chao[0]) { // keep getting chao until we have one that is not max level
+				if config.CFile.DebugPrints {
+					log.Println("[DEBUG] Rarity 2 Chao Search")
+				}
 				chao, err = GetRandomChaoWheelChao(1, 2)
 				if err != nil {
 					return []string{}, err
@@ -102,7 +107,14 @@ func GetRandomChaoRouletteItems(rarities []int64, exclusions []string) ([]string
 			}
 			items = append(items, chao[0])
 		} else if rarity == 100 { // Character
-			items = append(items, GetRandomChaoWheelCharacter(1)[0])
+			char := GetRandomChaoWheelCharacter(1)[0]
+			for !isAllowed(char) { // keep getting character until we have one that is not max level
+				if config.CFile.DebugPrints {
+					log.Println("[DEBUG] Character Search")
+				}
+				char = GetRandomChaoWheelCharacter(1)[0]
+			}
+			items = append(items, char)
 		} else { // Should never happen!
 			return []string{}, fmt.Errorf("invalid rarity '%v'", rarity)
 		}

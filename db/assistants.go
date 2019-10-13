@@ -42,7 +42,19 @@ func NewAccountWithID(uid string) netobj.Player {
 	playerVarious := netobj.DefaultPlayerVarious()
 	rouletteInfo := netobj.DefaultRouletteInfo()
 	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, rouletteInfo.RouletteCountInPeriod)
-	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, []string{}) // TODO: fix having no exceptions. This can be problematic if characterState or chaoState is disturbed!
+	// TODO: get rid of logic here?
+	chaoRouletteAllowed := []string{}
+	for _, chao := range chaoState {
+		if chao.Level < 10 { // not max level
+			chaoRouletteAllowed = append(chaoRouletteAllowed, chao.ID)
+		}
+	}
+	for _, character := range characterState {
+		if character.Star < 10 { // not max star
+			chaoRouletteAllowed = append(chaoRouletteAllowed, character.ID)
+		}
+	}
+	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, chaoRouletteAllowed)
 	return netobj.NewPlayer(
 		uid,
 		username,
