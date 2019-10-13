@@ -132,6 +132,6 @@ var RandomChaoWheelChaoPrizes = map[string]float64{
 	enums.ChaoIDStrRCBlockFace:          1.0,
 	enums.ChaoIDStrChristmasYeti:        1.0, // Event (Christmas)
 	enums.ChaoIDStrChristmasNiGHTS:      1.0, // Event (Christmas NiGHTS)
-	enums.ChaoIDStrDFekt:                1.0,
-	enums.ChaoIDStrDarkChaoWalker:       1.0,
+	//enums.ChaoIDStrDFekt:                1.0,
+	enums.ChaoIDStrDarkChaoWalker: 1.0,
 }
