@@ -8,10 +8,10 @@ type Event struct {
     CloseTime int64 `json:"eventCloseTime"` // UTC time
 }
 
-func NewEvent(id, startTime, endTime, closeTime int64) Event {
+func NewEvent(id int64, eventType uint, startTime, endTime, closeTime int64) Event {
     return Event{
         id,
-        0,
+        int64(eventType),
         startTime,
         endTime,
         closeTime,

@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"strconv"
+	"time"
 
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
@@ -83,6 +84,8 @@ func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao
 		return false
 	}
 
+	debugStartTime := time.Now().Unix()
+
 	items := []string{}
 	if len(allowedCharacters) == 0 { // cannot get any more characters
 		allowedCharacters = append(allowedCharacters, enums.CTStrSonic) // just add Sonic
@@ -97,6 +100,9 @@ func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao
 				return []string{}, err
 			}
 			for !isAllowedChao(chao[0]) { // keep getting chao until we have one that is not max level
+				if time.Now().Unix() > debugStartTime+3 { // TODO: Debug code, remove ASAP
+					return []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}, nil // return defaults
+				}
 				if config.CFile.DebugPrints {
 					log.Println("[DEBUG] Rarity 1 Chao Search")
 				}
@@ -112,6 +118,9 @@ func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao
 				return []string{}, err
 			}
 			for !isAllowedChao(chao[0]) { // keep getting chao until we have one that is not max level
+				if time.Now().Unix() > debugStartTime+3 { // TODO: Debug code, remove ASAP
+					return []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}, nil // return defaults
+				}
 				if config.CFile.DebugPrints {
 					log.Println("[DEBUG] Rarity 2 Chao Search")
 				}
@@ -124,6 +133,9 @@ func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao
 		} else if rarity == 100 { // Character
 			char := GetRandomChaoWheelCharacter(1)[0]
 			for !isAllowedCharacter(char) { // keep getting character until we have one that is not max level
+				if time.Now().Unix() > debugStartTime+3 { // TODO: Debug code, remove ASAP
+					return []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}, nil // return defaults
+				}
 				if config.CFile.DebugPrints {
 					log.Println("[DEBUG] Character Search")
 				}
