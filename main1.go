@@ -62,7 +62,9 @@ func main() {
 		log.Println("[INFO] Config file (config.json) loaded")
 	}
 
-	orpc.Start()
+	if config.CFile.EnableRPC {
+		orpc.Start()
+	}
 
 	h := muxobj.Handle
 	router := mux.NewRouter()
