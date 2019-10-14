@@ -43,18 +43,19 @@ func NewAccountWithID(uid string) netobj.Player {
 	rouletteInfo := netobj.DefaultRouletteInfo()
 	wheelOptions := netobj.DefaultWheelOptions(playerState.NumRouletteTicket, rouletteInfo.RouletteCountInPeriod)
 	// TODO: get rid of logic here?
-	chaoRouletteAllowed := []string{}
+	allowedCharacters := []string{}
+	allowedChao := []string{}
 	for _, chao := range chaoState {
 		if chao.Level < 10 { // not max level
-			chaoRouletteAllowed = append(chaoRouletteAllowed, chao.ID)
+			allowedChao = append(allowedChao, chao.ID)
 		}
 	}
 	for _, character := range characterState {
 		if character.Star < 10 { // not max star
-			chaoRouletteAllowed = append(chaoRouletteAllowed, character.ID)
+			allowedCharacters = append(allowedCharacters, character.ID)
 		}
 	}
-	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, chaoRouletteAllowed)
+	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, allowedCharacters, allowedChao)
 	return netobj.NewPlayer(
 		uid,
 		username,

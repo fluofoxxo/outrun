@@ -69,7 +69,7 @@ func (t *Toolbox) Debug_ResetChaoRouletteGroup(uid string, reply *ToolboxReply) 
         reply.Info = "unable to get player: " + err.Error()
         return err
     }
-    chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(player.PlayerState, player.GetAllMaxLevelIDs())
+    chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(player.PlayerState, player.GetAllNonMaxedCharacters(), player.GetAllNonMaxedChao())
     player.ChaoRouletteGroup = chaoRouletteGroup
     err = db.SavePlayer(player)
     if err != nil {

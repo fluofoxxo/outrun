@@ -10,10 +10,10 @@ type ChaoRouletteGroup struct {
     ChaoRouletteInfo RouletteInfo     `json:"ORN_chaoRouletteInfo"`     // may not be needed
 }
 
-func DefaultChaoRouletteGroup(playerState PlayerState, allowed []string) ChaoRouletteGroup {
+func DefaultChaoRouletteGroup(playerState PlayerState, allowedCharacters, allowedChao []string) ChaoRouletteGroup {
     chaoWheelOptions := DefaultChaoWheelOptions(playerState)
     //wheelChao, err := roulette.GetRandomChaoRouletteItems(chaoWheelOptions.Rarity, exclusions) // populate based on given rarities
-    wheelChao, err := roulette.GetRandomChaoRouletteItems(chaoWheelOptions.Rarity, allowed) // populate based on given rarities
+    wheelChao, err := roulette.GetRandomChaoRouletteItems(chaoWheelOptions.Rarity, allowedCharacters, allowedChao) // populate based on given rarities
     if err != nil {
         panic(err) // TODO: Find a better way to handle error. Hard to manage since the player creators don't already output errors
     }

@@ -321,13 +321,21 @@ func (p *Player) AllCharactersMaxLevel() bool {
 	}
 	return true
 }
-func (p *Player) GetAllNonMaxedChaoAndCharacters() []string { // TODO: split up
+func (p *Player) GetAllNonMaxedChaoAndCharacters() []string {
+	result := append(p.GetAllNonMaxedChao(), p.GetAllNonMaxedCharacters()...) // combine two
+	return result
+}
+func (p *Player) GetAllNonMaxedChao() []string {
 	result := []string{}
 	for _, chao := range p.ChaoState {
 		if chao.Level < 10 { // not max level
 			result = append(result, chao.ID)
 		}
 	}
+	return result
+}
+func (p *Player) GetAllNonMaxedCharacters() []string {
+	result := []string{}
 	for _, character := range p.CharacterState {
 		if character.Star < 10 { // not max star
 			result = append(result, character.ID)
