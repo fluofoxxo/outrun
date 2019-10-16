@@ -158,6 +158,13 @@ func (t *Toolbox) Debug_MigrateUser(uidToUID string, reply *ToolboxReply) error 
 	currentPlayer.ChaoRouletteGroup = oldPlayer.ChaoRouletteGroup
 	currentPlayer.RouletteInfo = oldPlayer.RouletteInfo
 
+	err = db.SavePlayer(currentPlayer)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = err.Error()
+		return err
+	}
+
 	reply.Status = StatusOK
 	reply.Info = "OK"
 	return nil
