@@ -134,31 +134,29 @@ func (t *Toolbox) Debug_MigrateUser(uidToUID string, reply *ToolboxReply) error 
 
 	fromUID := uidSrc[0]
 	toUID := uidSrc[1]
-	playerSrc, err := dbaccess.Get(consts.DBBucketPlayers, fromUID)
+	oldPlayer, err := db.GetPlayer(fromUID)
 	if err != nil {
 		reply.Status = StatusOtherError
 		reply.Info = err.Error()
 		return err
 	}
-	err = dbaccess.Set(consts.DBBucketPlayers, toUID, playerSrc)
+	currentPlayer, err := db.GetPlayer(toUID)
 	if err != nil {
 		reply.Status = StatusOtherError
 		reply.Info = err.Error()
 		return err
 	}
-	newPlayer, err := db.GetPlayer(toUID)
-	if err != nil {
-		reply.Status = StatusOtherError
-		reply.Info = err.Error()
-		return err
-	}
-	newPlayer.ID = toUID
-	err = db.SavePlayer(newPlayer)
-	if err != nil {
-		reply.Status = StatusOtherError
-		reply.Info = err.Error()
-		return err
-	}
+	currentPlayer.PlayerState = oldPlayer.PlayerState
+	currentPlayer.Username = oldPlayer.Username
+	currentPlayer.LastLogin = oldPlayer.LastLogin
+	currentPlayer.CharacterState = oldPlayer.CharacterState
+	currentPlayer.ChaoState = oldPlayer.ChaoState
+	currentPlayer.MileageMapState = oldPlayer.MileageMapState
+	currentPlayer.MileageFriends = oldPlayer.MileageFriends
+	currentPlayer.PlayerVarious = oldPlayer.PlayerVarious
+	currentPlayer.LastWheelOptions = oldPlayer.LastWheelOptions
+	currentPlayer.ChaoRouletteGroup = oldPlayer.ChaoRouletteGroup
+	currentPlayer.RouletteInfo = oldPlayer.RouletteInfo
 
 	reply.Status = StatusOK
 	reply.Info = "OK"
