@@ -272,12 +272,16 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 		}
 		//newItems, err := roulette.GetRandomChaoRouletteItems(player.ChaoRouletteGroup.ChaoWheelOptions.Rarity, player.GetAllMaxLevelIDs()) // create new wheel items
 		//newItems, err := roulette.GetRandomChaoRouletteItems(player.ChaoRouletteGroup.ChaoWheelOptions.Rarity, player.GetAllNonMaxedChaoAndCharacters()) // create new wheel items
-		newItems, err := roulette.GetRandomChaoRouletteItems(player.ChaoRouletteGroup.ChaoWheelOptions.Rarity, player.GetAllNonMaxedCharacters(), player.GetAllNonMaxedChao())
+		newItems, newRarities, err := roulette.GetRandomChaoRouletteItems(player.ChaoRouletteGroup.ChaoWheelOptions.Rarity, player.GetAllNonMaxedCharacters(), player.GetAllNonMaxedChao())
 		if err != nil {
 			helper.InternalErr("Error getting new items", err)
 			return
 		}
 		player.ChaoRouletteGroup.WheelChao = newItems
+		player.ChaoRouletteGroup.ChaoWheelOptions.Rarity = newRarities
+		if config.CFile.DebugPrints {
+			helper.Out(fmt.Sprintf("%v", newRarities))
+		}
 		if config.CFile.Debug {
 			player.ChaoRouletteGroup.WheelChao = []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}
 		}

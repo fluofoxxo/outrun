@@ -2,7 +2,6 @@ package roulette
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"math/rand"
 	"strconv"
@@ -12,6 +11,16 @@ import (
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/enums"
 )
+
+type LogicChao struct { // TODO: Find a better way to replace this!
+	ID       string `json:"chaoId"`
+	Rarity   int64  `json:"rarity"`
+	Hidden   int64  `json:"hidden"` // this value is required, but is never really used in game... Best to keep at "1"
+	Status   int64  `json:"status"` // enums.ChaoStatus*
+	Level    int64  `json:"level"`
+	Dealing  int64  `json:"setStatus"` // enums.ChaoDealing*
+	Acquired int64  `json:"acquired"`  // flag
+}
 
 func GetRandomChaoWheelCharacter(count int) []string {
 	// Make weighted random pull of a character using an... Unconventional method!
@@ -66,87 +75,128 @@ func GetRandomChaoWheelChao(rarity int64, count int) ([]string, error) {
 	return pollChoices, nil
 }
 
-func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao []string) ([]string, error) { // TODO: Possibly rename to GetRandomChaoWheelItems?
-	isAllowedCharacter := func(x string) bool {
-		for _, s := range allowedCharacters {
-			if s == x {
+func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao []string) ([]string, []int64, error) { // TODO: Possibly rename to GetRandomChaoWheelItems?
+	failsafeTimeout := int64(3) // seconds, used to break in case of infinite loop
+	debugOriginalTime := time.Now().Unix()
+
+	dprint := func(a ...interface{}) {
+		if config.CFile.DebugPrints {
+			log.Println(a...)
+		}
+	}
+	allowedRarity := func(x int) bool {
+		if x == 100 { // character
+			return len(allowedCharacters) != 0 // if any characters allowed, return true
+		}
+		searchingForRarity := strconv.Itoa(x)[0] // get byte
+		for _, chao := range allowedChao {
+			if chao[2] == searchingForRarity {
 				return true
 			}
 		}
 		return false
 	}
-	isAllowedChao := func(x string) bool {
-		for _, s := range allowedChao {
-			if s == x {
+	chaoAllowed := func(chid string) bool {
+		// Checks if chid is in allowedChao
+		for _, chao := range allowedChao {
+			if chao == chid {
+				return true
+			}
+		}
+		return false
+	}
+	characterAllowed := func(cid string) bool {
+		// Checks if cid is in allowedCharacters
+		for _, char := range allowedCharacters {
+			if char == cid {
 				return true
 			}
 		}
 		return false
 	}
 
-	debugStartTime := time.Now().Unix()
+	getUnusedChao := func(rarity int64) (string, error) {
+		// Implies that there is a Chao of the given rarity allowed! Check with allowedRarity.
+		chao, err := GetRandomChaoWheelChao(rarity, 1)
+		if err != nil {
+			return "", err
+		}
+		for !chaoAllowed(chao[0]) { // get allowed Chao
+			if time.Now().Unix()-failsafeTimeout > debugOriginalTime { // break out of long loop (debug)
+				return enums.ChaoIDStrHeroChao, nil
+			}
+			dprint("searching for allowed chao ", chao[0])
+			chao, err = GetRandomChaoWheelChao(rarity, 1)
+			if err != nil {
+				return "", err
+			}
+		}
+		return chao[0], nil
+	}
+	getUnusedCharacter := func() string {
+		// Implies that there are characters available! Check with len(allowedCharacters) != 0 or allowedRarity.
+		char := GetRandomChaoWheelCharacter(1)[0]
+		for !characterAllowed(char) {
+			if time.Now().Unix()-failsafeTimeout > debugOriginalTime { // break out of long loop (debug)
+				return enums.CTStrTails
+			}
+			dprint("searching for allowed character ", char)
+			char = GetRandomChaoWheelCharacter(1)[0]
+		}
+		return char
+	}
 
+	newRarities := rarities
 	items := []string{}
-	if len(allowedCharacters) == 0 { // cannot get any more characters
-		allowedCharacters = append(allowedCharacters, enums.CTStrSonic) // just add Sonic
-	}
-	if len(allowedChao) == 0 { // cannot get any more Chao
-		allowedChao = append(allowedChao, enums.ChaoIDStrBoo) // just add Boo
-	}
-	for _, rarity := range rarities {
-		if rarity == 1 { // Rarity 1 Chao
-			chao, err := GetRandomChaoWheelChao(1, 1)
-			if err != nil {
-				return []string{}, err
+	for i, rarity := range rarities {
+		if rarity == 100 { // Character
+			if !allowedRarity(100) { // if character not possible
+				rarity = 2 // degrade to rarity 2 Chao
+			} else {
+				char := getUnusedCharacter()
+				items = append(items, char)
 			}
-			for !isAllowedChao(chao[0]) { // keep getting chao until we have one that is not max level
-				if time.Now().Unix() > debugStartTime+3 { // TODO: Debug code, remove ASAP
-					return []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}, nil // return defaults
-				}
-				if config.CFile.DebugPrints {
-					log.Println("[DEBUG] Rarity 1 Chao Search")
-				}
-				chao, err = GetRandomChaoWheelChao(1, 1)
-				if err != nil {
-					return []string{}, err
-				}
-			}
-			items = append(items, chao[0])
-		} else if rarity == 2 { // Rarity 2 Chao
-			chao, err := GetRandomChaoWheelChao(1, 2)
-			if err != nil {
-				return []string{}, err
-			}
-			for !isAllowedChao(chao[0]) { // keep getting chao until we have one that is not max level
-				if time.Now().Unix() > debugStartTime+3 { // TODO: Debug code, remove ASAP
-					return []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}, nil // return defaults
-				}
-				if config.CFile.DebugPrints {
-					log.Println("[DEBUG] Rarity 2 Chao Search")
-				}
-				chao, err = GetRandomChaoWheelChao(1, 2)
-				if err != nil {
-					return []string{}, err
-				}
-			}
-			items = append(items, chao[0])
-		} else if rarity == 100 { // Character
-			char := GetRandomChaoWheelCharacter(1)[0]
-			for !isAllowedCharacter(char) { // keep getting character until we have one that is not max level
-				if time.Now().Unix() > debugStartTime+3 { // TODO: Debug code, remove ASAP
-					return []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}, nil // return defaults
-				}
-				if config.CFile.DebugPrints {
-					log.Println("[DEBUG] Character Search")
-				}
-				char = GetRandomChaoWheelCharacter(1)[0]
-			}
-			items = append(items, char)
-		} else { // Should never happen!
-			return []string{}, fmt.Errorf("invalid rarity '%v'", rarity)
 		}
+		/*
+			if rarity == 3 { // Rarity 3 Chao
+				if !allowedRarity(3) { // if impossible
+					rarity = 2 // degrade
+				} else {
+					chao, err := getUnusedChao(3)
+					if err != nil {
+						return []string{}, []int64{}, err
+					}
+					items = append(items, chao)
+				}
+			}
+		*/
+		if rarity == 2 { // Rarity 2 Chao
+			if !allowedRarity(2) { // if impossible
+				rarity = 1 // degrade
+			} else {
+				chao, err := getUnusedChao(2)
+				if err != nil {
+					return []string{}, []int64{}, err
+				}
+				items = append(items, chao)
+			}
+		}
+		if rarity == 1 { // Rarity 1 Chao
+			if !allowedRarity(1) { // if impossible
+				// TODO: what do we do now?
+				items = append(items, enums.ChaoIDStrHeroChao)
+			} else {
+				chao, err := getUnusedChao(1)
+				if err != nil {
+					return []string{}, []int64{}, err
+				}
+				items = append(items, chao)
+			}
+		}
+		newRarities[i] = rarity
 	}
-	return items, nil
+
+	return items, newRarities, nil
 }
 
 func ChooseChaoRouletteItem(items []string, weights []int64) (string, error) {
