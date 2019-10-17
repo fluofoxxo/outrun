@@ -124,3 +124,27 @@ func (t *Toolbox) Debug_ResetChao(uid string, reply *ToolboxReply) error {
     reply.Info = "OK"
     return nil
 }
+
+func (t *Toolbox) Debug_UsernameSearch(username string, reply *ToolboxReply) error {
+    playerIDs := []string{}
+    dbaccess.ForEachKey(consts.DBBucketPlayers, func(k, v []byte) error {
+        playerIDs = append(playerIDs, string(k))
+        return nil
+    })
+    for _, uid := range playerIDs {
+        player, err := db.GetPlayer(uid)
+        if err != nil {
+            reply.Status = StatusOtherError
+            reply.Info = "error getting ID " + uid + ": " + err.Error()
+            return err
+        }
+        if player.Username == username {
+            reply.Status = StatusOK
+            reply.Info = player.ID
+            return nil
+        }
+    }
+    reply.Status = StatusOtherError
+    reply.Info = "unable to find ID for username " + username
+    return nil
+}
