@@ -16,7 +16,15 @@ var BlankPlayer = func() netobj.Player {
 		}
 		return string(final)
 	}
-	uid := strconv.Itoa(rand.Intn(9999999999-1000000000) + 1000000000) // WARN: This large of an int blocks Outrun from being compiled for 32 bit archs. May be useful to solve.
+	// create ID
+	uid := ""
+	for i := range make([]byte, 10) {
+		if i == 0 { // if first character
+			uid += strconv.Itoa(rand.Intn(9) + 1)
+		} else {
+			uid += strconv.Itoa(rand.Intn(10))
+		}
+	}
 	username := ""
 	password := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)
 	key := randChar("abcdefghijklmnopqrstuvwxyz1234567890", 10)

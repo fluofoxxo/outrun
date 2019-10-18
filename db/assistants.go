@@ -74,8 +74,16 @@ func NewAccountWithID(uid string) netobj.Player {
 }
 
 func NewAccount() netobj.Player {
-	uid := strconv.Itoa(rand.Intn(9999999999-1000000000) + 1000000000)
-	return NewAccountWithID(uid)
+	// create ID
+	newID := ""
+	for i := range make([]byte, 10) {
+		if i == 0 { // if first character
+			newID += strconv.Itoa(rand.Intn(9) + 1)
+		} else {
+			newID += strconv.Itoa(rand.Intn(10))
+		}
+	}
+	return NewAccountWithID(newID)
 }
 
 func SavePlayer(player netobj.Player) error {
