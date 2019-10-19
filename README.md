@@ -32,7 +32,7 @@ Functional:
 
 ### Building
 
-1. [Download and install Go 1.12](https://golang.org/dl/) (project tested on Go 1.12.4)
+1. [Download and install Go 1.13](https://golang.org/dl/) (Project tested on Go 1.13.3)
 2. [Download and install Git](https://git-scm.com/downloads) (for `go get`)
 3. Set your [GOPATH](https://github.com/golang/go/wiki/SettingGOPATH) environment variable
 4. Open a terminal/command prompt
