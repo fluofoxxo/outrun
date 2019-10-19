@@ -205,7 +205,7 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 					}
 				*/
 				spinResult.WonPrize.Level = player.CharacterState[charIndex].Level // set level of prize to character level
-			} else if prize.Rarity == 2 || prize.Rarity == 1 { // Chao
+			} else if prize.Rarity == 2 || prize.Rarity == 1 || prize.Rarity == 0 { // Chao
 				chaoIndex := player.IndexOfChao(prize.ID)
 				if chaoIndex == -1 { // chao index not found, should never happen
 					helper.InternalErr("cannot get index of chao '"+strconv.Itoa(chaoIndex)+"'", err)
@@ -241,10 +241,11 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 			}
 			if config.CFile.Debug {
 				player.PlayerState.NumRedRings += 150
-				return []int64{100, 100, 100, 100, 100, 100, 100, 100}, true
+				//return []int64{100, 100, 100, 100, 100, 100, 100, 100}, true
+				return []int64{0, 0, 0, 0, 0, 0, 0, 0}, true
 			}
 			for _, r := range rarities {
-				if r == 1 || r == 2 { // Chao
+				if r == 0 || r == 1 || r == 2 { // Chao
 					if chaoCanBeLevelled {
 						newRarities = append(newRarities, r)
 					} else {
@@ -254,7 +255,7 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 					if charactersCanBeLevelled {
 						newRarities = append(newRarities, r)
 					} else {
-						newRarities = append(newRarities, int64(rand.Intn(2)+1)) // append random rarity Chao
+						newRarities = append(newRarities, int64(rand.Intn(3))) // append random rarity Chao
 					}
 				} else { // should never happen
 					panic(fmt.Errorf("invalid rarity '" + strconv.Itoa(int(r)) + "'")) // TODO: use better way to handle
