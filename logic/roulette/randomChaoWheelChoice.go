@@ -22,57 +22,66 @@ type LogicChao struct { // TODO: Find a better way to replace this!
 	Acquired int64  `json:"acquired"`  // flag
 }
 
-func GetRandomChaoWheelCharacter(count int) []string {
-	// Make weighted random pull of a character using an... Unconventional method!
-	polls := [1000]string{} // TODO: parameterize
-	pollIndex := 0
-	for pollIndex < 1000 {
-		for cid, load := range consts.RandomChaoWheelCharacterPrizes {
-			rint := rand.Intn(1000000 + 1) // + 1 to make inclusive; high number for precision
-			chosen := (float64(rint) / 10000) <= load
-			if chosen {
-				polls[pollIndex] = cid
-				pollIndex++
-				if pollIndex >= 1000 { // breached bounds
-					break
-				}
-			}
-		}
+func GetRandomChaoWheelCharacter(count int) ([]string, error) {
+	// Reference: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
+	totalWeights := []float64{}
+	charList := []string{}
+	runningTotal := float64(0)
+	for cid, weight := range consts.RandomChaoWheelCharacterPrizes {
+		charList = append(charList, cid)
+		runningTotal += weight
+		totalWeights = append(totalWeights, runningTotal)
 	}
-	pollChoices := []string{}
+
+	finalCharList := []string{}
 	for count > 0 {
 		count--
-		pollChoices = append(pollChoices, polls[rand.Intn(len(polls))])
+		gotChar := false
+		rnd := rand.Float64() * runningTotal
+		for i, total := range totalWeights {
+			if rnd < total {
+				finalCharList = append(finalCharList, charList[i])
+				gotChar = true
+				break
+			}
+		}
+		if !gotChar {
+			return []string{}, errors.New("should not have gotten here")
+		}
 	}
-	return pollChoices
+	return finalCharList, nil
 }
 
 func GetRandomChaoWheelChao(rarity int64, count int) ([]string, error) {
-	polls := [1000]string{} // TODO: parameterize
-	pollIndex := 0
-	for pollIndex < 1000 {
-		for chid, load := range consts.RandomChaoWheelChaoPrizes {
-			rint := rand.Intn(1000000 + 1)                   // + 1 to make inclusive; high number for precision
-			chaoRarity, err := strconv.Atoi(string(chid[2])) // third digit is rarity
-			if err != nil {
-				return []string{}, err
-			}
-			chosen := (float64(rint)/10000) <= load && int64(chaoRarity) == rarity
-			if chosen {
-				polls[pollIndex] = chid
-				pollIndex++
-				if pollIndex >= 1000 { // breached bounds
-					break
-				}
-			}
+	// Reference: https://eli.thegreenplace.net/2010/01/22/weighted-random-generation-in-python/
+	totalWeights := []float64{}
+	chaoList := []string{}
+	runningTotal := float64(0)
+	for chid, weight := range consts.RandomChaoWheelChaoPrizes {
+		if string(chid[2]) == strconv.Itoa(int(rarity)) {
+			chaoList = append(chaoList, chid)
+			runningTotal += weight
+			totalWeights = append(totalWeights, runningTotal)
 		}
 	}
-	pollChoices := []string{}
+
+	finalChaoList := []string{}
 	for count > 0 {
 		count--
-		pollChoices = append(pollChoices, polls[rand.Intn(len(polls))])
+		gotChao := false
+		rnd := rand.Float64() * runningTotal
+		for i, total := range totalWeights {
+			if rnd < total {
+				finalChaoList = append(finalChaoList, chaoList[i])
+				gotChao = true
+				break
+			}
+		}
+		if !gotChao {
+			return []string{}, errors.New("should not have gotten here")
+		}
 	}
-	return pollChoices, nil
+	return finalChaoList, nil
 }
 
 func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao []string) ([]string, []int64, error) { // TODO: Possibly rename to GetRandomChaoWheelItems?
@@ -133,17 +142,23 @@ func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao
 		}
 		return chao[0], nil
 	}
-	getUnusedCharacter := func() string {
+	getUnusedCharacter := func() (string, error) {
 		// Implies that there are characters available! Check with len(allowedCharacters) != 0 or allowedRarity.
-		char := GetRandomChaoWheelCharacter(1)[0]
-		for !characterAllowed(char) {
+		char, err := GetRandomChaoWheelCharacter(1)
+		if err != nil {
+			return "", err
+		}
+		for !characterAllowed(char[0]) {
 			if time.Now().Unix()-failsafeTimeout > debugOriginalTime { // break out of long loop (debug)
-				return enums.CTStrTails
+				return enums.CTStrTails, nil
 			}
 			dprint("searching for allowed character ", char)
-			char = GetRandomChaoWheelCharacter(1)[0]
+			char, err = GetRandomChaoWheelCharacter(1)
+			if err != nil {
+				return "", err
+			}
 		}
-		return char
+		return char[0], nil
 	}
 
 	newRarities := rarities
@@ -153,7 +168,10 @@ func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao
 			if !allowedRarity(100) { // if character not possible
 				rarity = 2 // degrade to rarity 2 Chao
 			} else {
-				char := getUnusedCharacter()
+				char, err := getUnusedCharacter()
+				if err != nil {
+					return []string{}, []int64{}, err
+				}
 				items = append(items, char)
 			}
 		}
