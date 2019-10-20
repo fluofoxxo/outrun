@@ -201,10 +201,21 @@ func GetRandomChaoRouletteItems(rarities []int64, allowedCharacters, allowedChao
 		}
 		if rarity == 1 { // Rarity 1 Chao
 			if !allowedRarity(1) { // if impossible
+				rarity = 0
+			} else {
+				chao, err := getUnusedChao(1)
+				if err != nil {
+					return []string{}, []int64{}, err
+				}
+				items = append(items, chao)
+			}
+		}
+		if rarity == 0 { // Rarity 1 Chao
+			if !allowedRarity(0) { // if impossible
 				// TODO: what do we do now?
 				items = append(items, enums.ChaoIDStrHeroChao)
 			} else {
-				chao, err := getUnusedChao(1)
+				chao, err := getUnusedChao(0)
 				if err != nil {
 					return []string{}, []int64{}, err
 				}

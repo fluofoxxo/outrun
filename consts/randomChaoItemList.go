@@ -9,6 +9,8 @@ type PrizeInfo struct {
 
 // A 'load' as depicted below is the chance for the server to pick
 // the associated item, where chosen is if randFloat(0, 100) < load.
+// IMPORTANT: This load is exclusive to the rarity of the Chao that
+// is being chosen by the server.
 
 var RandomChaoWheelCharacterPrizes = map[string]float64{
 	// characterID: load
