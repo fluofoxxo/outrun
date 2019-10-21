@@ -176,6 +176,7 @@ func (t *Toolbox) Debug_UsernameSearch(username string, reply *ToolboxReply) err
 		playerIDs = append(playerIDs, string(k))
 		return nil
 	})
+	sameUsernames := []string{}
 	for _, uid := range playerIDs {
 		player, err := db.GetPlayer(uid)
 		if err != nil {
@@ -184,13 +185,16 @@ func (t *Toolbox) Debug_UsernameSearch(username string, reply *ToolboxReply) err
 			return err
 		}
 		if player.Username == username {
-			reply.Status = StatusOK
-			reply.Info = player.ID
-			return nil
+			sameUsernames = append(sameUsernames, player.ID)
 		}
 	}
-	reply.Status = StatusOtherError
-	reply.Info = "unable to find ID for username " + username
+	if len(sameUsernames) == 0 {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to find ID for username " + username
+		return nil
+	}
+	reply.Status = StatusOK
+	reply.Info = strings.Join(sameUsernames, ",")
 	return nil
 }
 
