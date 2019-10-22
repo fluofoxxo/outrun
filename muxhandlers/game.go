@@ -198,10 +198,10 @@ func QuickPostGameResults(helper *helper.Helper) {
 			}
 		}
 
-		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
+		/*playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
 			mainC,
 			subC,
-		}
+		}*/
 		//err = db.SavePlayer(player)
 	}
 
@@ -313,10 +313,10 @@ func PostGameResults(helper *helper.Helper) {
 			}
 		}
 
-		playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
+		/*playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
 			mainC,
 			subC,
-		}
+		}*/
 
 		player.MileageMapState.StageTotalScore += request.Score
 
