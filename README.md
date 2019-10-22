@@ -52,7 +52,7 @@ Binary releases may be provided in more mature stages of the repository.
 5. Navigate to assets/bin/Data/Managed and extract all the DLL files to their own folder
 6. Open Assembly-CSharp.dll in dnSpy
 7. Open the class `NetBaseUtil`, and find the variable `mActionServerUrlTable `
-8. Edit every string in the `mActionServerUrlTable` array to `http://<IP>:<PORT>/` where <IP> is replaced by the IP for your instance and <PORT> is replaced by the port for your instance (Default: 9001)
+8. Edit every string in the `mActionServerUrlTable` array to `http://<IP>:<PORT>/` where `<IP>` is replaced by the IP for your instance and `<PORT>` is replaced by the port for your instance (Default: 9001)
 9. Repeat step 7 for `mSecureActionServerUrlTable`
 10. If you have an assets server, use its IP and port to replace the values in `mAssetURLTable` and `mInformationURLTable` to `http://<IP>:<PORT>/assets/` and `http://<IP>:<PORT>/information/` respectively
 11. Click File -> Save Module... and save the DLL file
