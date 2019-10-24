@@ -120,6 +120,9 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 		helper.Out("Chao Roulette tickets (ChaoWheelOptions): " + spf(player.ChaoRouletteGroup.ChaoWheelOptions.NumChaoRouletteToken))
 		helper.Out("Chao Roulette spin cost: " + spf(player.ChaoRouletteGroup.ChaoWheelOptions.SpinCost))
 		helper.Out("Tails stars: " + spf(player.CharacterState[1].Star)) // TODO: volatile, remove
+		helper.Out("Red Rings: " + spf(player.PlayerState.NumRedRings))
+		helper.Out("Bought red rings: " + spf(player.PlayerState.NumBuyRedRings))
+		helper.Out("Spin count: " + spf(request.Count))
 		helper.Out("---------------------------------------")
 	}
 

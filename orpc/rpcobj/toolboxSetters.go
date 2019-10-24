@@ -40,6 +40,44 @@ func (t *Toolbox) SetRedRings(args ChangeValueArgs, reply *ToolboxReply) error {
     return nil
 }
 
+func (t *Toolbox) SetBuyRings(args ChangeValueArgs, reply *ToolboxReply) error {
+    player, err := db.GetPlayer(args.UID)
+    if err != nil {
+        reply.Status = StatusOtherError
+        reply.Info = "unable to get player: " + err.Error()
+        return err
+    }
+    newRings := args.Value.(int64)
+    player.PlayerState.NumBuyRings = newRings
+    err = db.SavePlayer(player)
+    if err != nil {
+        reply.Status = StatusOtherError
+        reply.Info = "unable to save player: " + err.Error()
+    }
+    reply.Status = StatusOK
+    reply.Info = "OK"
+    return nil
+}
+
+func (t *Toolbox) SetBuyRedRings(args ChangeValueArgs, reply *ToolboxReply) error {
+    player, err := db.GetPlayer(args.UID)
+    if err != nil {
+        reply.Status = StatusOtherError
+        reply.Info = "unable to get player: " + err.Error()
+        return err
+    }
+    newRedRings := args.Value.(int64)
+    player.PlayerState.NumBuyRedRings = newRedRings
+    err = db.SavePlayer(player)
+    if err != nil {
+        reply.Status = StatusOtherError
+        reply.Info = "unable to save player: " + err.Error()
+    }
+    reply.Status = StatusOK
+    reply.Info = "OK"
+    return nil
+}
+
 func (t *Toolbox) SetMainCharacter(args ChangeValueArgs, reply *ToolboxReply) error {
     player, err := db.GetPlayer(args.UID)
     if err != nil {
