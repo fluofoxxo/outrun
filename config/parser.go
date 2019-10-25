@@ -19,6 +19,7 @@ var Defaults = map[string]interface{}{
 	"DEnableRPC":          false,
 	"DRPCPort":            "23432",
 	"DEnablePublicStats":  false,
+	"DEndpointPrefix":     "",
 }
 
 var CFile ConfigFile
@@ -33,6 +34,7 @@ type ConfigFile struct {
 	EnableRPC          bool   `json:"enableRPC,omitempty"`
 	RPCPort            string `json:"rpcPort,omitempty"`
 	EnablePublicStats  bool   `json:"enablePublicStats,omitempty"`
+	EndpointPrefix     string `json:"endpointPrefix"`
 }
 
 func Parse(filename string) error {
@@ -78,6 +80,7 @@ func Parse(filename string) error {
 		Defaults["DEnableRPC"].(bool),
 		Defaults["DRPCPort"].(string),
 		Defaults["DEnablePublicStats"].(bool),
+		Defaults["DEndpointPrefix"].(string),
 	}
 	return ret
 }
