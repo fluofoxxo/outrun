@@ -2,7 +2,9 @@ package muxhandlers
 
 import (
 	"encoding/json"
+	"strconv"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/helper"
@@ -28,8 +30,29 @@ func GetCharacterState(helper *helper.Helper) {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
+	src := helper.GetGameRequest()
+	var request requests.Base
+	err = json.Unmarshal(src, &request)
+	if err != nil {
+		helper.Err("Error unmarshalling", err)
+		return
+	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.CharacterState(baseInfo, player.CharacterState)
+	cState := player.CharacterState
+	if request.Version == "1.1.4" { // must send fewer characters
+		// only get first 21 characters
+		// TODO: enforce order 300000 to 300020?
+		//cState = cState[:len(cState)-(len(cState)-10)]
+		cState = cState[:16]
+		if config.CFile.DebugPrints {
+			helper.Out("cState length: " + strconv.Itoa(len(cState)))
+			helper.Out("Sent character IDs: ")
+			for _, char := range cState {
+				helper.Out(char.ID)
+			}
+		}
+	}
+	response := responses.CharacterState(baseInfo, cState)
 	helper.SendResponse(response)
 }
 

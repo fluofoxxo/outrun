@@ -57,4 +57,11 @@ const (
 	CTStrTikal        = "300018"
 	CTStrMephiles     = "300019"
 	CTStrPSISilver    = "300020"
+	// The following were extracted from 1.1.4's CharacterDataNameInfo.unity3d. This may
+	// have changed between 1.1.4 and 2.0.3.
+	CTStrAmitieAmy       = "301000"
+	CTStrGothicAmy       = "301001"
+	CTStrHalloweenShadow = "301002"
+	CTStrHalloweenRouge  = "301003"
+	CTStrHalloweenOmega  = "301004"
 )

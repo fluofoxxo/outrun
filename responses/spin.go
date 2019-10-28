@@ -52,3 +52,23 @@ func DefaultWheelSpin(base responseobjs.BaseInfo, player netobj.Player) WheelSpi
 		wheelOptions,
 	)
 }
+
+type WheelSpinInfoResponse struct {
+	BaseResponse
+	InfoList []netobj.WheelSpinInfo `json:"infoList"`
+}
+
+func WheelSpinInfo(base responseobjs.BaseInfo, infoList []netobj.WheelSpinInfo) WheelSpinInfoResponse {
+	baseResponse := NewBaseResponse(base)
+	return WheelSpinInfoResponse{
+		baseResponse,
+		infoList,
+	}
+}
+
+func DefaultWheelSpinInfo(base responseobjs.BaseInfo) WheelSpinInfoResponse {
+	return WheelSpinInfo(
+		base,
+		netobj.DefaultWheelSpinInfoList(),
+	)
+}

@@ -15,12 +15,19 @@ var AreaRewards = map[string][]obj.MileageReward{
         invincibleItem(4),
         invincibleItem(5),
     },
+    "2,1": []obj.MileageReward{
+        invincibleItem(1),
+        invincibleItem(2),
+        invincibleItem(3),
+        invincibleItem(4),
+        invincibleItem(5),
+    },
 }
 
 func GetAreaReward(chapter, episode int64) []obj.MileageReward {
     chapS := strconv.Itoa(int(chapter))
     epS := strconv.Itoa(int(episode))
-    getS := chapS + "," + epS
+    getS := epS + "," + chapS
     return AreaRewards[getS]
 }
 

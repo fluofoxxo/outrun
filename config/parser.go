@@ -34,7 +34,7 @@ type ConfigFile struct {
 	EnableRPC          bool   `json:"enableRPC,omitempty"`
 	RPCPort            string `json:"rpcPort,omitempty"`
 	EnablePublicStats  bool   `json:"enablePublicStats,omitempty"`
-	EndpointPrefix     string `json:"endpointPrefix"`
+	EndpointPrefix     string `json:"endpointPrefix,omitempty"`
 }
 
 func Parse(filename string) error {

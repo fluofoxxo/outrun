@@ -1,10 +1,17 @@
 package helper
 
 import (
+	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"regexp"
+	"strconv"
+	"strings"
+	"time"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/netobj"
@@ -43,6 +50,41 @@ func MakeHelper(callerName string, r http.ResponseWriter, request *http.Request)
 	}
 }
 
+func (r *Helper) LogTraffic(response []byte) {
+	formatJSON := func(b []byte) ([]byte, error) {
+		var o bytes.Buffer
+		re := regexp.MustCompile("[^\u0020-\u007f]+")
+		t := re.ReplaceAllLiteralString(string(b), "")
+		sb := []byte(t)
+		err := json.Indent(&o, sb, "", "    ")
+		return o.Bytes(), err
+	}
+	nano := time.Now().UnixNano()
+	nanoStr := strconv.Itoa(int(nano))
+	filename := nanoStr + "--" + r.Request.RequestURI
+	filename = strings.ReplaceAll(filename, ".", "-")
+	filename = strings.ReplaceAll(filename, "/", "-") + ".txt"
+	filepath := "logging/all_requests/" + filename
+	r.Out("DEBUG: Saving request to " + filename)
+	origRequest := r.GetGameRequest()
+	formattedRequest, err := formatJSON(origRequest)
+	if err != nil {
+		r.Out("DEBUG ERROR: Unable to format request: " + err.Error())
+		return
+	}
+	//fmt.Println(string(response))
+	formattedResponse, err := formatJSON(response)
+	if err != nil {
+		r.Out("DEBUG ERROR: Unable to format response: " + err.Error())
+		return
+	}
+	finalFile := append(append(formattedRequest, []byte("\n")...), formattedResponse...)
+	err = ioutil.WriteFile(filepath, finalFile, 0644)
+	if err != nil {
+		r.Out("DEBUG ERROR: Unable to write file '" + filepath + "': " + err.Error())
+		return
+	}
+}
 func (r *Helper) GetGameRequest() []byte {
 	recv := cryption.GetReceivedMessage(r.Request)
 	return recv
@@ -64,6 +106,9 @@ func (r *Helper) SendInsecureResponse(i interface{}) error {
 	return nil
 }
 func (r *Helper) RespondRaw(out []byte, secureFlag, iv string) {
+	if config.CFile.LogAllRequests {
+		r.LogTraffic(out)
+	}
 	response := map[string]string{}
 	if secureFlag != "0" && secureFlag != "1" {
 		r.Warn("Improper secureFlag in call to RespondRaw!")
@@ -101,27 +146,42 @@ func (r *Helper) Uncatchable(msg string) {
 }
 func (r *Helper) InternalErr(msg string, err error) {
 	log.Printf(LOGERR_BASE, PREFIX_ERR, r.CallerName, msg, err.Error())
+	if config.CFile.LogAllRequests {
+		r.LogTraffic([]byte{})
+	}
 	r.RespW.WriteHeader(http.StatusBadRequest)
 	r.RespW.Write([]byte(BAD_REQUEST))
 }
 func (r *Helper) Err(msg string, err error) {
 	log.Printf(LOGERR_BASE, PREFIX_ERR, r.CallerName, msg, err.Error())
+	if config.CFile.LogAllRequests {
+		r.LogTraffic([]byte{})
+	}
 	r.RespW.WriteHeader(http.StatusBadRequest)
 	r.RespW.Write([]byte(BAD_REQUEST))
 }
 func (r *Helper) ErrRespond(msg string, err error, response string) {
 	// TODO: remove if never used in stable builds
 	log.Printf(LOGERR_BASE, PREFIX_ERR, r.CallerName, msg, err.Error())
+	if config.CFile.LogAllRequests {
+		r.LogTraffic([]byte{})
+	}
 	r.RespW.WriteHeader(http.StatusInternalServerError) // ideally include an option for this, but for now it's inconsequential
 	r.RespW.Write([]byte(response))
 }
 func (r *Helper) InternalFatal(msg string, err error) {
 	log.Fatalf(LOGERR_BASE, PREFIX_ERR, r.CallerName, msg, err.Error())
+	if config.CFile.LogAllRequests {
+		r.LogTraffic([]byte{})
+	}
 	r.RespW.WriteHeader(http.StatusBadRequest)
 	r.RespW.Write([]byte(BAD_REQUEST))
 }
 func (r *Helper) Fatal(msg string, err error) {
 	log.Fatalf(LOGERR_BASE, PREFIX_ERR, r.CallerName, msg, err.Error())
+	if config.CFile.LogAllRequests {
+		r.LogTraffic([]byte{})
+	}
 	r.RespW.WriteHeader(http.StatusBadRequest)
 	r.RespW.Write([]byte(BAD_REQUEST))
 }
@@ -129,6 +189,9 @@ func (r *Helper) BaseInfo(em string, statusCode int64) responseobjs.BaseInfo {
 	return responseobjs.NewBaseInfo(em, statusCode)
 }
 func (r *Helper) InvalidRequest() {
+	if config.CFile.LogAllRequests {
+		r.LogTraffic([]byte{})
+	}
 	r.RespW.WriteHeader(http.StatusBadRequest)
 	r.RespW.Write([]byte(BAD_REQUEST))
 }

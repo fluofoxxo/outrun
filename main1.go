@@ -71,6 +71,7 @@ func main() {
 	router.StrictSlash(true)
 	LogExecutionTime = config.CFile.DoTimeLogging
 	prefix := config.CFile.EndpointPrefix
+	// 2.0.3
 	// Login
 	router.HandleFunc(prefix+"/Login/login/", h(muxhandlers.Login, LogExecutionTime))
 	router.HandleFunc(prefix+"/Sgn/sendApollo/", h(muxhandlers.SendApollo, LogExecutionTime))
@@ -119,6 +120,9 @@ func main() {
 	router.HandleFunc(prefix+"/RaidbossSpin/getItemStockNum/", h(muxhandlers.GetItemStockNum, LogExecutionTime))
 	router.HandleFunc(prefix+"/Spin/commitWheelSpin/", h(muxhandlers.CommitWheelSpin, LogExecutionTime))
 	router.HandleFunc(prefix+"/Chao/commitChaoWheelSpin/", h(muxhandlers.CommitChaoWheelSpin, LogExecutionTime))
+
+	// 1.1.4
+	router.HandleFunc(prefix+"/Spin/getWheelSpinInfo/", h(muxhandlers.GetWheelSpinInfo, LogExecutionTime))
 
 	// Server information
 	if config.CFile.EnablePublicStats {

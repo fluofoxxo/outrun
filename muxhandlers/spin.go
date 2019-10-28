@@ -174,3 +174,13 @@ func CommitWheelSpin(helper *helper.Helper) {
         helper.InternalErr("Error sending response", err)
     }
 }
+
+// 1.1.4 support
+func GetWheelSpinInfo(helper *helper.Helper) {
+    baseInfo := helper.BaseInfo(emess.OK, status.OK)
+    response := responses.DefaultWheelSpinInfo(baseInfo)
+    err := helper.SendResponse(response)
+    if err != nil {
+        helper.InternalErr("Error sending response", err)
+    }
+}
