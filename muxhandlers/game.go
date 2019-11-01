@@ -12,6 +12,7 @@ import (
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/helper"
 	"github.com/fluofoxxo/outrun/netobj"
+	"github.com/fluofoxxo/outrun/obj/constobjs"
 	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses"
 	"github.com/fluofoxxo/outrun/status"
@@ -265,6 +266,9 @@ func PostGameResults(helper *helper.Helper) {
 		helper.Out(strconv.Itoa(int(player.MileageMapState.Point)))
 		helper.Out(strconv.Itoa(int(request.Score)))
 	}
+
+	incentives := constobjs.GetMileageIncentives(player.MileageMapState.Episode, player.MileageMapState.Chapter) // Game wants incentives in _current_ episode-chapter
+
 	if request.Closed == 0 { // If the game wasn't exited out of
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
@@ -365,7 +369,7 @@ func PostGameResults(helper *helper.Helper) {
 	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters)
+	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters, incentives)
 	// apply the save after the response so that we don't break the leveling
 	player.CharacterState[mainCIndex] = mainC
 	player.CharacterState[subCIndex] = subC

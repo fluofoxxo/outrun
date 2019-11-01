@@ -2,6 +2,7 @@ package obj
 
 import (
     "strconv"
+    "time"
 
     "github.com/fluofoxxo/outrun/enums"
 )
@@ -24,13 +25,13 @@ func DefaultMileageReward(point int64) MileageReward {
     }
 }
 
-func NewMileageReward(itemID int64, point int64) MileageReward {
+func NewMileageReward(itype, itemID, numItem, point int64) MileageReward {
     // TODO: Should not be used for legitimate purposes, only rapid development!
     return MileageReward{
-        enums.IncentiveTypePoint,
+        itype, // should be enums.IncentiveType*
         strconv.Itoa(int(itemID)),
-        5,
+        numItem,
         point,
-        690, // 11 minutes, 30 seconds
+        time.Now().UTC().Unix() + 690, // 11 minutes, 30 seconds
     }
 }

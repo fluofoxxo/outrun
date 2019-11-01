@@ -289,10 +289,10 @@ func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj
 	}
 }
 
-func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pcs []netobj.Character) PostGameResultsResponse {
+func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pcs []netobj.Character, incentives []obj.MileageIncentive) PostGameResultsResponse {
 	qpgrr := DefaultQuickPostGameResults(base, player, pcs)
 	mms := player.MileageMapState
-	mil := []obj.MileageIncentive{obj.DefaultMileageIncentive()}
+	//mil := []obj.MileageIncentive{}
 	eil := []obj.Item{}
 	//wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
 	// TODO: Remove logic from response!!
@@ -301,7 +301,7 @@ func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pc
 	return PostGameResultsResponse{
 		qpgrr,
 		mms,
-		mil,
+		incentives,
 		eil,
 		wo,
 	}

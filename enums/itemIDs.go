@@ -64,3 +64,19 @@ const (
 	ItemIDPackedDistanceBonus1
 	ItemIDPackedAnimalBonus1
 )
+
+const ( // Mileage rewards
+	ItemIDRedRing  = 900000
+	ItemIDRedRing0 = 900010
+	ItemIDRedRing1 = 900030
+	ItemIDRedRing2 = 900060
+	ItemIDRedRing3 = 900210
+	ItemIDRedRing4 = 900380
+	ItemIDRing     = 910000
+	ItemIDRing0    = 910021
+	ItemIDRing1    = 910045
+	ItemIDRing2    = 910094
+	ItemIDRing3    = 910147
+	ItemIDRing4    = 910204
+	ItemIDRing5    = 910265
+)
