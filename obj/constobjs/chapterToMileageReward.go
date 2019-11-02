@@ -150,6 +150,12 @@ var AreaRewards = map[string][]obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDTrampoline, 10, 4),
 	},
+	"23,2": []obj.MileageReward{
+		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
+		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 6000, 2),
+		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
+		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 6000, 4),
+	},
 	"25,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 6000, 2),
