@@ -78,6 +78,6 @@ Much thanks to:
 
 #### Additional assistance
   - Story Mode items
-    - lukaafx (Kalu04#3243)
+    - lukaafx (Discord @Kalu04#3243)
     - [TemmieFlakes](https://twitter.com/pictochat3)
     - SuperSonic893YT
