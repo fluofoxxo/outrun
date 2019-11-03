@@ -75,3 +75,9 @@ Much thanks to:
   - **YPwn**, whose closest point of online social contact I do not know, for creating and running the Sonic Runners Revival server upon which this project bases much of its code upon.
   - **[@Sazpaimon](https://github.com/Sazpaimon)** for finding the encryption key I so desparately looked for but could not on my own.
   - **nacabaro** (nacabaro#2138 on Discord) for traffic logging and the discovery of **[DaGuAr](https://www.youtube.com/user/Gorila5)**'s asset archive.
+
+#### Additional assistance
+  - Story Mode items
+    - lukaafx (Kalu04#3243)
+    - [TemmieFlakes](https://twitter.com/pictochat3)
+    - SuperSonic893YT
