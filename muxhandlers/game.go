@@ -359,7 +359,7 @@ func PostGameResults(helper *helper.Helper) {
 					helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
 				}
 			}
-			if player.MileageMapState.Episode >= 50 { // if beat game, reset to 50-1
+			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
 				player.MileageMapState.Episode = 50
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
