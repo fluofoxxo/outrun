@@ -12,13 +12,13 @@ import (
 /*
 Observances:
   - When at the final point expecting to go to the next episode-chapter, the rewards earned at the end of the episode-chapter should _actually_ be whatever the current
-    episode-chapter's incentive's are. Weird.
+    episode-chapter's incentives are. Weird.
 */
 
 var AreaRewards = map[string][]obj.MileageReward{
 	"1,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDCombo, 1, 5),
-		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing1, 8000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 8000, 5),
 		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 10, 5),
 	},
 	"2,1": []obj.MileageReward{
@@ -269,6 +269,18 @@ var AreaRewards = map[string][]obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRedRing, 35, 4),
+	},
+	"36,1": []obj.MileageReward{
+		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
+		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 35, 2),
+		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
+		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDAsteroid, 35, 4),
+	},
+	"36,2": []obj.MileageReward{
+		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
+		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDDrill, 35, 2),
+		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
+		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 4),
 	},
 	"40,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
