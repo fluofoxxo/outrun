@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/fluofoxxo/outrun/analytics"
+	"github.com/fluofoxxo/outrun/analytics/factors"
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
@@ -64,9 +66,17 @@ func EquipChao(helper *helper.Helper) {
 	subChaoID := request.SubChaoID
 	if mainChaoID != "-1" {
 		player.PlayerState.MainChaoID = mainChaoID
+		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeMainChao)
+		if err != nil {
+			helper.WarnErr("Error storing analytics (AnalyticTypeChangeMainChao)", err)
+		}
 	}
 	if subChaoID != "-1" {
 		player.PlayerState.SubChaoID = subChaoID
+		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeSubChao)
+		if err != nil {
+			helper.WarnErr("Error storing analytics (AnalyticTypeChangeSubChao)", err)
+		}
 	}
 	if config.CFile.DebugPrints {
 		helper.Out("Main Chao: " + mainChaoID)
@@ -329,5 +339,10 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeSpinChaoRoulette)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeSpinChaoRoulette)", err)
 	}
 }

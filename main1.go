@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fluofoxxo/outrun/bgtasks"
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/inforeporters"
@@ -129,6 +130,8 @@ func main() {
 		//router.HandleFunc("/", OutputUnknownRequest)
 		router.PathPrefix("/").HandlerFunc(OutputUnknownRequest)
 	}
+
+	go bgtasks.TouchAnalyticsDB()
 
 	port := config.CFile.Port
 	log.Printf("Starting server on port %s\n", port)

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/fluofoxxo/outrun/analytics"
+	"github.com/fluofoxxo/outrun/analytics/factors"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
@@ -33,9 +35,17 @@ func ChangeCharacter(helper *helper.Helper) {
 	subCharaID := request.SubCharaID
 	if mainCharaID != "-1" {
 		player.PlayerState.MainCharaID = mainCharaID
+		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeMainCharacter)
+		if err != nil {
+			helper.WarnErr("Error storing analytics (AnalyticTypeChangeMainCharacter)", err)
+		}
 	}
 	if subCharaID != "-1" {
 		player.PlayerState.SubCharaID = subCharaID
+		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeSubCharacter)
+		if err != nil {
+			helper.WarnErr("Error storing analytics (AnalyticTypeChangeSubCharacter)", err)
+		}
 	}
 	db.SavePlayer(player)
 

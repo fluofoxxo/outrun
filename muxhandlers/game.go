@@ -6,6 +6,8 @@ import (
 	"math/rand"
 	"strconv"
 
+	"github.com/fluofoxxo/outrun/analytics"
+	"github.com/fluofoxxo/outrun/analytics/factors"
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
@@ -74,6 +76,11 @@ func QuickActStart(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeTimedStarts)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeTimedStarts)", err)
 	}
 }
 
@@ -88,6 +95,11 @@ func ActStart(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeStoryStarts)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeStoryStarts)", err)
 	}
 }
 
@@ -108,6 +120,11 @@ func ActRetry(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeRevives)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeRevives)", err)
 	}
 }
 
@@ -229,6 +246,11 @@ func QuickPostGameResults(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeTimedEnds)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeTimedEnds)", err)
 	}
 }
 
@@ -433,6 +455,11 @@ func PostGameResults(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeStoryEnds)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeStoryEnds)", err)
 	}
 }
 

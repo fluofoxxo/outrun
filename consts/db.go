@@ -5,6 +5,7 @@ const (
 
 	DBBucketSessionIDs = "sessionIDs"
 	DBBucketPlayers    = "players"
+	DBBucketAnalytics  = "analytics"
 
 	DBSessionExpiryTime = 3600
 )

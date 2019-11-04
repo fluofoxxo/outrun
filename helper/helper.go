@@ -96,6 +96,9 @@ func (r *Helper) Out(msg string) {
 func (r *Helper) Warn(msg string) {
 	log.Printf(LOGOUT_BASE, PREFIX_WARN, r.CallerName, msg)
 }
+func (r *Helper) WarnErr(msg string, err error) {
+	log.Printf(LOGERR_BASE, PREFIX_WARN, r.CallerName, msg, err.Error())
+}
 func (r *Helper) Uncatchable(msg string) {
 	log.Printf(LOGOUT_BASE, PREFIX_OUT, r.CallerName, msg)
 }

@@ -3,6 +3,8 @@ package muxhandlers
 import (
 	"encoding/json"
 
+	"github.com/fluofoxxo/outrun/analytics"
+	"github.com/fluofoxxo/outrun/analytics/factors"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/helper"
@@ -93,6 +95,7 @@ func Login(helper *helper.Helper) {
 			helper.InternalErr("Error sending response", err)
 			return
 		}
+		analytics.Store(player.ID, factors.AnalyticTypeLogins)
 		return
 	}
 }
