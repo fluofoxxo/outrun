@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/netobj"
@@ -147,6 +148,9 @@ func (r *Helper) GetCallingPlayer() (netobj.Player, error) {
 	player, err := db.GetPlayerBySessionID(sid)
 	if err != nil {
 		return constnetobjs.BlankPlayer, err
+	}
+	if config.CFile.PrintPlayerNames {
+		r.Out("Player '" + player.Username + "' (" + player.ID + ")")
 	}
 	return player, nil
 }

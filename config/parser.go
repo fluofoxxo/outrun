@@ -21,6 +21,7 @@ var Defaults = map[string]interface{}{
 	"DEnablePublicStats":  false,
 	"DEndpointPrefix":     "",
 	"DEnableAnalytics":    false,
+	"DPrintPlayerNames":   false,
 }
 
 var CFile ConfigFile
@@ -37,6 +38,7 @@ type ConfigFile struct {
 	EnablePublicStats  bool   `json:"enablePublicStats,omitempty"`
 	EndpointPrefix     string `json:"endpointPrefix,omitempty"`
 	EnableAnalytics    bool   `json:"enableAnalytics,omitempty"`
+	PrintPlayerNames   bool   `json:"printPlayerNames,omitempty"`
 }
 
 func Parse(filename string) error {
@@ -84,6 +86,7 @@ func Parse(filename string) error {
 		Defaults["DEnablePublicStats"].(bool),
 		Defaults["DEndpointPrefix"].(string),
 		Defaults["DEnableAnalytics"].(bool),
+		Defaults["DPrintPlayerNames"].(bool),
 	}
 	return ret
 }
