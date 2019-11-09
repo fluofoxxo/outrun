@@ -10,6 +10,7 @@ import (
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
+	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/helper"
 	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses"
@@ -108,6 +109,9 @@ func UpgradeCharacter(helper *helper.Helper) {
 			player.CharacterState[index].Exp = 0 // reset exp
 			player.CharacterState[index].Cost += levelIncrease
 			player.PlayerState.NumRings -= amountNeedToBePaid
+			if player.CharacterState[index].Level >= 100 {
+				player.CharacterState[index].Status = enums.CharacterStatusMaxLevel
+			}
 			db.SavePlayer(player)
 		} else {
 			sendStatus = status.CharacterLevelLimit
