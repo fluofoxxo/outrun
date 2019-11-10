@@ -10,70 +10,42 @@ import (
 // defaults
 // default variable names MUST be "D" + (nameOfVariable)
 var Defaults = map[string]interface{}{
-	"DPort":               "9001",
-	"DDoTimeLogging":      true,
-	"DLogUnknownRequests": true,
-	"DLogAllRequests":     false,
-	"DDebug":              false,
-	"DDebugPrints":        false,
-	"DEnableRPC":          false,
-	"DRPCPort":            "23432",
-	"DEnablePublicStats":  false,
-	"DEndpointPrefix":     "",
-	"DEnableAnalytics":    false,
-	"DPrintPlayerNames":   false,
+	"DPort":                     "9001",
+	"DDoTimeLogging":            true,
+	"DLogUnknownRequests":       true,
+	"DLogAllRequests":           false,
+	"DDebug":                    false,
+	"DDebugPrints":              false,
+	"DEnableRPC":                false,
+	"DRPCPort":                  "23432",
+	"DEnablePublicStats":        false,
+	"DEndpointPrefix":           "",
+	"DEnableAnalytics":          false,
+	"DPrintPlayerNames":         false,
+	"DEventConfigFilename":      "event_config.json",
+	"DSilenceEventConfigErrors": true,
 }
 
 var CFile ConfigFile
 
 type ConfigFile struct {
-	Port               string `json:"port,omitempty"`
-	DoTimeLogging      bool   `json:"doTimeLogging,omitempty"`
-	LogUnknownRequests bool   `json:"logUnknownRequests,omitempty"`
-	LogAllRequests     bool   `json:"logAllRequests,omitempty"`
-	Debug              bool   `json:"debug,omitempty"`
-	DebugPrints        bool   `json:"debugPrints,omitempty"`
-	EnableRPC          bool   `json:"enableRPC,omitempty"`
-	RPCPort            string `json:"rpcPort,omitempty"`
-	EnablePublicStats  bool   `json:"enablePublicStats,omitempty"`
-	EndpointPrefix     string `json:"endpointPrefix,omitempty"`
-	EnableAnalytics    bool   `json:"enableAnalytics,omitempty"`
-	PrintPlayerNames   bool   `json:"printPlayerNames,omitempty"`
+	Port                     string `json:"port,omitempty"`
+	DoTimeLogging            bool   `json:"doTimeLogging,omitempty"`
+	LogUnknownRequests       bool   `json:"logUnknownRequests,omitempty"`
+	LogAllRequests           bool   `json:"logAllRequests,omitempty"`
+	Debug                    bool   `json:"debug,omitempty"`
+	DebugPrints              bool   `json:"debugPrints,omitempty"`
+	EnableRPC                bool   `json:"enableRPC,omitempty"`
+	RPCPort                  string `json:"rpcPort,omitempty"`
+	EnablePublicStats        bool   `json:"enablePublicStats,omitempty"`
+	EndpointPrefix           string `json:"endpointPrefix,omitempty"`
+	EnableAnalytics          bool   `json:"enableAnalytics,omitempty"`
+	PrintPlayerNames         bool   `json:"printPlayerNames,omitempty"`
+	EventConfigFilename      string `json:"eventConfigFilename,omitempty"`
+	SilenceEventConfigErrors bool   `json:"silenceEventConfigErrors,omitempty"`
 }
 
 func Parse(filename string) error {
-	var ret error
-	file, err := loadFile(filename)
-	if err == nil {
-		var cf ConfigFile
-		err := json.Unmarshal(file, &cf)
-		if err == nil {
-			vo := reflect.ValueOf(cf)
-			rtype := vo.Type()
-			for i := 0; i < vo.NumField(); i++ {
-				fieldname := rtype.Field(i).Name
-				fieldVal := vo.Field(i).Interface()
-				defaultName := "D" + fieldname
-				defaultVal := Defaults[defaultName]
-				isZero, err := isZeroVal(fieldVal)
-				if err != nil {
-					ret = fmt.Errorf("error getting zero value: %s", err)
-					return ret
-				}
-				if isZero {
-					reflect.ValueOf(&cf).Elem().Field(i).Set(reflect.ValueOf(defaultVal)) // assign the variable with its default
-				}
-			}
-
-			CFile = cf
-			return ret
-		} else {
-			ret = err
-		}
-	} else {
-		ret = err
-	}
-
 	CFile = ConfigFile{
 		Defaults["DPort"].(string),
 		Defaults["DDoTimeLogging"].(bool),
@@ -87,8 +59,18 @@ func Parse(filename string) error {
 		Defaults["DEndpointPrefix"].(string),
 		Defaults["DEnableAnalytics"].(bool),
 		Defaults["DPrintPlayerNames"].(bool),
+		Defaults["DEventConfigFilename"].(string),
+		Defaults["DSilenceEventConfigErrors"].(bool),
 	}
-	return ret
+	file, err := loadFile(filename)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(file, &CFile)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func loadFile(filename string) ([]byte, error) {

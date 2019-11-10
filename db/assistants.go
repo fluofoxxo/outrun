@@ -14,6 +14,7 @@ import (
 	"github.com/fluofoxxo/outrun/db/dbaccess"
 	"github.com/fluofoxxo/outrun/netobj"
 	"github.com/fluofoxxo/outrun/netobj/constnetobjs"
+	"github.com/fluofoxxo/outrun/obj"
 
 	bolt "go.etcd.io/bbolt"
 )
@@ -60,6 +61,7 @@ func NewAccountWithID(uid string) netobj.Player {
 		mileageMapState.Episode = 15
 	}
 	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, allowedCharacters, allowedChao)
+	personalEvents := []obj.Event{}
 	return netobj.NewPlayer(
 		uid,
 		username,
@@ -74,6 +76,7 @@ func NewAccountWithID(uid string) netobj.Player {
 		wheelOptions,
 		rouletteInfo,
 		chaoRouletteGroup,
+		personalEvents,
 	)
 }
 

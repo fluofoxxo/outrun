@@ -10,11 +10,11 @@ import (
 )
 
 type Player struct {
-	ID                string `json:"userID"`
-	Username          string `json:"username"`
-	Password          string `json:"password"`
-	Key               string `json:"key"`
-	LastLogin         int64
+	ID                string            `json:"userID"`
+	Username          string            `json:"username"`
+	Password          string            `json:"password"`
+	Key               string            `json:"key"`
+	LastLogin         int64             // TODO: use `json:"lastLogin"`
 	PlayerState       PlayerState       `json:"playerState"`
 	CharacterState    []Character       `json:"characterState"`
 	ChaoState         []Chao            `json:"chaoState"`
@@ -24,9 +24,10 @@ type Player struct {
 	LastWheelOptions  WheelOptions      `json:"ORN_wheelOptions"` // TODO: Make RouletteGroup to hold LastWheelOptions and RouletteInfo?
 	RouletteInfo      RouletteInfo      `json:"ORN_rouletteInfo"`
 	ChaoRouletteGroup ChaoRouletteGroup `json:"ORN_chaoRouletteGroup"`
+	PersonalEvents    []obj.Event       `json:"ORN_personalEvents"`
 }
 
-func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions, rouletteInfo RouletteInfo, chaoRouletteGroup ChaoRouletteGroup) Player {
+func NewPlayer(id, username, password, key string, playerState PlayerState, characterState []Character, chaoState []Chao, mileageMapState MileageMapState, mf []MileageFriend, playerVarious PlayerVarious, wheelOptions WheelOptions, rouletteInfo RouletteInfo, chaoRouletteGroup ChaoRouletteGroup, personalEvents []obj.Event) Player {
 	return Player{
 		id,
 		username,
@@ -42,6 +43,7 @@ func NewPlayer(id, username, password, key string, playerState PlayerState, char
 		wheelOptions,
 		rouletteInfo,
 		chaoRouletteGroup,
+		personalEvents,
 	}
 }
 

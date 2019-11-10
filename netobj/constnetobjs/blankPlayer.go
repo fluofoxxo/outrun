@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/fluofoxxo/outrun/netobj"
+	"github.com/fluofoxxo/outrun/obj"
 )
 
 var BlankPlayer = func() netobj.Player {
@@ -50,6 +51,7 @@ var BlankPlayer = func() netobj.Player {
 		}
 	}
 	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, allowedCharacters, allowedChao)
+	personalEvents := []obj.Event{}
 	return netobj.NewPlayer(
 		uid,
 		username,
@@ -64,5 +66,6 @@ var BlankPlayer = func() netobj.Player {
 		wheelOptions,
 		rouletteInfo,
 		chaoRouletteGroup,
+		personalEvents,
 	)
 }() // TODO: Solve duplication requirement with db/assistants.go
