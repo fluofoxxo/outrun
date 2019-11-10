@@ -380,6 +380,9 @@ func PostGameResults(helper *helper.Helper) {
 				if config.CFile.DebugPrints {
 					helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
 				}
+				if config.CFile.Debug {
+					player.MileageMapState.Episode = 15
+				}
 			}
 			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
 				player.MileageMapState.Episode = 50
@@ -403,6 +406,10 @@ func PostGameResults(helper *helper.Helper) {
 		newRewardPoint = player.MileageMapState.Point
 		// add rewards to PlayerState
 		wonRewards := campaign.GetWonRewards(oldRewardEpisode, oldRewardChapter, oldRewardPoint, newRewardEpisode, newRewardChapter, newRewardPoint)
+		if config.CFile.DebugPrints {
+			helper.Out("wonRewards length: " + strconv.Itoa(len(wonRewards)))
+			helper.Out("Previous rings: " + strconv.Itoa(int(player.PlayerState.NumRings)))
+		}
 		newItems := player.PlayerState.Items
 		for _, reward := range wonRewards { // TODO: This is O(n^2). Maybe alleviate this?
 			if config.CFile.DebugPrints {
@@ -425,6 +432,9 @@ func PostGameResults(helper *helper.Helper) {
 				helper.Out("Unknown reward '" + reward.ItemID + "', ignoring")
 			}
 			// TODO: allow for characters to join the cast, like Tails on 11-1.1
+		}
+		if config.CFile.DebugPrints {
+			helper.Out("Current rings: " + strconv.Itoa(int(player.PlayerState.NumRings)))
 		}
 		player.PlayerState.Items = newItems
 	}

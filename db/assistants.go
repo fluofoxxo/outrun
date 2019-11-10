@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db/dbaccess"
 	"github.com/fluofoxxo/outrun/netobj"
@@ -54,6 +55,9 @@ func NewAccountWithID(uid string) netobj.Player {
 		if character.Star < 10 { // not max star
 			allowedCharacters = append(allowedCharacters, character.ID)
 		}
+	}
+	if config.CFile.Debug {
+		mileageMapState.Episode = 15
 	}
 	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, allowedCharacters, allowedChao)
 	return netobj.NewPlayer(
