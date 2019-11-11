@@ -2,10 +2,8 @@ package eventconf
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
-	"reflect"
 
 	"github.com/fluofoxxo/outrun/enums"
 )
@@ -78,11 +76,15 @@ func Parse(filename string) error {
 	if err != nil {
 		return err
 	}
+	newEvents := []ConfiguredEvent{}
 	for i, ce := range CFile.CurrentEvents {
 		if !ce.HasValidType() {
 			log.Printf("[WARN] Invalid event type %s at index %v, ignoring\n", ce.Type, i)
+			continue
 		}
+		newEvents = append(newEvents, ce)
 	}
+	CFile.CurrentEvents = newEvents
 	return nil
 }
 
@@ -92,12 +94,4 @@ func loadFile(filename string) ([]byte, error) {
 		return []byte{}, err
 	}
 	return b, err
-}
-
-func isZeroVal(val interface{}) (bool, error) {
-	vartype := reflect.TypeOf(val)
-	if !vartype.Comparable() {
-		return false, fmt.Errorf("error comparing type %v", vartype)
-	}
-	return reflect.Zero(vartype).Interface() == val, nil
 }

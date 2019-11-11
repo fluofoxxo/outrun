@@ -13,6 +13,7 @@ import (
 	"github.com/fluofoxxo/outrun/bgtasks"
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/config/eventconf"
+	"github.com/fluofoxxo/outrun/config/infoconf"
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/inforeporters"
 	"github.com/fluofoxxo/outrun/muxhandlers"
@@ -71,6 +72,15 @@ func main() {
 		}
 	} else {
 		log.Printf("[INFO] Event config file (%s) loaded\n", config.CFile.EventConfigFilename)
+	}
+
+	err = infoconf.Parse(config.CFile.InfoConfigFilename)
+	if err != nil {
+		if !config.CFile.SilenceInfoConfigErrors {
+			log.Printf("[INFO] Failure loading event config file %s (%s), using defaults\n", config.CFile.InfoConfigFilename, err)
+		}
+	} else {
+		log.Printf("[INFO] Event config file (%s) loaded\n", config.CFile.InfoConfigFilename)
 	}
 
 	if config.CFile.EnableRPC {

@@ -2,9 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"reflect"
 )
 
 // defaults
@@ -24,6 +22,8 @@ var Defaults = map[string]interface{}{
 	"DPrintPlayerNames":         false,
 	"DEventConfigFilename":      "event_config.json",
 	"DSilenceEventConfigErrors": true,
+	"DInfoConfigFilename":       "info_config.json",
+	"DSilenceInfoConfigErrors":  true,
 }
 
 var CFile ConfigFile
@@ -43,6 +43,8 @@ type ConfigFile struct {
 	PrintPlayerNames         bool   `json:"printPlayerNames,omitempty"`
 	EventConfigFilename      string `json:"eventConfigFilename,omitempty"`
 	SilenceEventConfigErrors bool   `json:"silenceEventConfigErrors,omitempty"`
+	InfoConfigFilename       string `json:"infoConfigFilename,omitempty"`
+	SilenceInfoConfigErrors  bool   `json:"silenceInfoConfigErrors,omitempty"`
 }
 
 func Parse(filename string) error {
@@ -61,6 +63,8 @@ func Parse(filename string) error {
 		Defaults["DPrintPlayerNames"].(bool),
 		Defaults["DEventConfigFilename"].(string),
 		Defaults["DSilenceEventConfigErrors"].(bool),
+		Defaults["DInfoConfigFilename"].(string),
+		Defaults["DSilenceInfoConfigErrors"].(bool),
 	}
 	file, err := loadFile(filename)
 	if err != nil {
@@ -79,12 +83,4 @@ func loadFile(filename string) ([]byte, error) {
 		return []byte{}, err
 	}
 	return b, err
-}
-
-func isZeroVal(val interface{}) (bool, error) {
-	vartype := reflect.TypeOf(val)
-	if !vartype.Comparable() {
-		return false, fmt.Errorf("error comparing type %v", vartype)
-	}
-	return reflect.Zero(vartype).Interface() == val, nil
 }
