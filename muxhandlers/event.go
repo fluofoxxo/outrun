@@ -45,7 +45,8 @@ func GetEventList(helper *helper.Helper) {
 					endTime = time.Now().Add(24 * time.Hour).Unix()
 				}
 				newEvent := obj.Event{
-					confEvent.ID + confEvent.RealType(), // make a real event ID
+					// Ex. ID: 712340000
+					(confEvent.ID * 10000) + confEvent.RealType(), // make a real event ID
 					confEvent.RealType(),
 					startTime,
 					endTime,
