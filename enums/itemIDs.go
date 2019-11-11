@@ -25,6 +25,12 @@ const (
 )
 
 var (
+	ItemIDStrBoostScore      = strconv.Itoa(int(ItemIDBoostScore))
+	ItemIDStrBoostTrampoline = strconv.Itoa(int(ItemIDBoostTrampoline))
+	ItemIDStrBoostSubChara   = strconv.Itoa(int(ItemIDBoostSubChara))
+)
+
+var (
 	ItemIDStrInvincible    = strconv.Itoa(int(ItemIDInvincible))
 	ItemIDStrBarrier       = strconv.Itoa(int(ItemIDBarrier))
 	ItemIDStrMagnet        = strconv.Itoa(int(ItemIDMagnet))

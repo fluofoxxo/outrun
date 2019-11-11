@@ -91,7 +91,7 @@ func (c ConfiguredInfo) ConstructParam() string {
 	if displayType == SkipValue {
 		return param
 	}
-	param += "_" + displayType
+	param += displayType
 	if message == SkipValue {
 		return param
 	}

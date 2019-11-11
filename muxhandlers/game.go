@@ -474,9 +474,10 @@ func PostGameResults(helper *helper.Helper) {
 }
 
 func GetFreeItemList(helper *helper.Helper) {
-	// Probably agnostic...
+	// TODO: allow free items to be set via config
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultFreeItemList(baseInfo)
+	//response := responses.FreeItemList(baseInfo, []obj.Item{}) // No free items
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
