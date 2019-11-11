@@ -59,6 +59,8 @@ func NewAccountWithID(uid string) netobj.Player {
 	}
 	if config.CFile.Debug {
 		mileageMapState.Episode = 15
+		// testCharacter := netobj.DefaultCharacter(constobjs.CharacterXMasSonic)
+		// characterState = append(characterState, testCharacter)
 	}
 	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, allowedCharacters, allowedChao)
 	personalEvents := []eventconf.ConfiguredEvent{}
