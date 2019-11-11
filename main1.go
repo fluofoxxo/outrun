@@ -77,10 +77,10 @@ func main() {
 	err = infoconf.Parse(config.CFile.InfoConfigFilename)
 	if err != nil {
 		if !config.CFile.SilenceInfoConfigErrors {
-			log.Printf("[INFO] Failure loading event config file %s (%s), using defaults\n", config.CFile.InfoConfigFilename, err)
+			log.Printf("[INFO] Failure loading info config file %s (%s), using defaults\n", config.CFile.InfoConfigFilename, err)
 		}
 	} else {
-		log.Printf("[INFO] Event config file (%s) loaded\n", config.CFile.InfoConfigFilename)
+		log.Printf("[INFO] Info config file (%s) loaded\n", config.CFile.InfoConfigFilename)
 	}
 
 	if config.CFile.EnableRPC {
