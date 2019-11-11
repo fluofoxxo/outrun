@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/fluofoxxo/outrun/config"
+	"github.com/fluofoxxo/outrun/config/eventconf"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db/dbaccess"
 	"github.com/fluofoxxo/outrun/netobj"
 	"github.com/fluofoxxo/outrun/netobj/constnetobjs"
-	"github.com/fluofoxxo/outrun/obj"
 
 	bolt "go.etcd.io/bbolt"
 )
@@ -61,7 +61,7 @@ func NewAccountWithID(uid string) netobj.Player {
 		mileageMapState.Episode = 15
 	}
 	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, allowedCharacters, allowedChao)
-	personalEvents := []obj.Event{}
+	personalEvents := []eventconf.ConfiguredEvent{}
 	return netobj.NewPlayer(
 		uid,
 		username,

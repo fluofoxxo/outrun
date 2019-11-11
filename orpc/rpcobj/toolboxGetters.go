@@ -41,3 +41,15 @@ func (t *Toolbox) GetLastLogin(uid string, reply *ToolboxReply) error {
     reply.Info = strconv.Itoa(int(player.LastLogin))
     return nil
 }
+
+func (t *Toolbox) GetPersonalEvents(args ChangeValueArgs, reply *ToolboxValueReply) error {
+    player, err := db.GetPlayer(args.UID)
+    if err != nil {
+        reply.Status = StatusOtherError
+        reply.Result = "unable to get player: " + err.Error()
+        return err
+    }
+    reply.Status = StatusOK
+    reply.Result = player.PersonalEvents
+    return nil
+}

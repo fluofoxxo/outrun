@@ -4,8 +4,8 @@ import (
 	"math/rand"
 	"strconv"
 
+	"github.com/fluofoxxo/outrun/config/eventconf"
 	"github.com/fluofoxxo/outrun/netobj"
-	"github.com/fluofoxxo/outrun/obj"
 )
 
 var BlankPlayer = func() netobj.Player {
@@ -51,7 +51,7 @@ var BlankPlayer = func() netobj.Player {
 		}
 	}
 	chaoRouletteGroup := netobj.DefaultChaoRouletteGroup(playerState, allowedCharacters, allowedChao)
-	personalEvents := []obj.Event{}
+	personalEvents := []eventconf.ConfiguredEvent{}
 	return netobj.NewPlayer(
 		uid,
 		username,
