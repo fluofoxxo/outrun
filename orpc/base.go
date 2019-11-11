@@ -12,6 +12,7 @@ import (
 
 func Start() {
 	rpc.Register(new(rpcobj.Toolbox))
+	rpc.Register(new(rpcobj.Config))
 	rpc.HandleHTTP()
 	listener, err := net.Listen("tcp", ":"+config.CFile.RPCPort)
 	if err != nil {
