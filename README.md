@@ -30,7 +30,7 @@ Functional:
   - Ticker notices
   - Small database size and memory footprint
   - Low CPU usage
-  - Descriptive error reporting and handling
+  - Analytics support
 
 ### Building
 
