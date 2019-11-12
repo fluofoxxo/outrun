@@ -26,7 +26,7 @@ Functional:
   - Android and iOS support
   - High score keeping
   - In game notices
-  - Handy configuration file support for general, events, and notifices
+  - Handy configuration file support for general, events, and notices
   - Ticker notices
   - Small database size and memory footprint
   - Low CPU usage
