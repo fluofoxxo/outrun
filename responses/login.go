@@ -1,6 +1,7 @@
 package responses
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/fluofoxxo/outrun/config/infoconf"
@@ -184,12 +185,35 @@ func DefaultTicker(base responseobjs.BaseInfo, player netobj.Player) TickerRespo
 	*/
 	tickerList := []obj.Ticker{}
 	if infoconf.CFile.EnableTickers {
+		di := 0
 		if !infoconf.CFile.HideWatermarkTicker {
-			tickerList = []obj.Ticker{obj.NewTicker(
-				0,
-				time.Now().UTC().Unix()+3600, // one hour later
-				"This server is powered by [ff0000]Outrun!",
-			)}
+			tickerList = []obj.Ticker{
+				obj.NewTicker(
+					1,
+					time.Now().UTC().Unix()+3600, // one hour later
+					"This server is powered by [ff0000]Outrun!",
+				),
+				obj.NewTicker(
+					2,
+					time.Now().UTC().Unix()+7200,
+					"ID: [0000ff]"+player.ID,
+				),
+				obj.NewTicker(
+					3,
+					time.Now().UTC().Unix()+7200, // two hours later
+					"High score (Timed Mode): [0000ff]"+strconv.Itoa(int(player.PlayerState.TimedHighScore)),
+				),
+				obj.NewTicker(
+					4,
+					time.Now().UTC().Unix()+7200, // two hours later
+					"High score (Story Mode): [0000ff]"+strconv.Itoa(int(player.PlayerState.HighScore)),
+				),
+				obj.NewTicker(
+					5,
+					time.Now().UTC().Unix()+7200, // two hours later
+					"Total distance ran (Story Mode): [0000ff]"+strconv.Itoa(int(player.PlayerState.TotalDistance)),
+				)}
+			di = 5
 		}
 		for i, ct := range infoconf.CFile.Tickers {
 			newTicker := conversion.ConfiguredTickerToTicker(int64(i+1), ct)
