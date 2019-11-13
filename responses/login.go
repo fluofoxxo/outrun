@@ -216,7 +216,7 @@ func DefaultTicker(base responseobjs.BaseInfo, player netobj.Player) TickerRespo
 			di = 5
 		}
 		for i, ct := range infoconf.CFile.Tickers {
-			newTicker := conversion.ConfiguredTickerToTicker(int64(i+1), ct)
+			newTicker := conversion.ConfiguredTickerToTicker(int64(di+i+1), ct)
 			tickerList = append(tickerList, newTicker)
 		}
 	}
