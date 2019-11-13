@@ -12,8 +12,11 @@ const (
 
 // defaults
 var Defaults = map[string]interface{}{
-	"DEnableInfos": false,
-	"DInfos":       []ConfiguredInfo{},
+	"DEnableInfos":         false,
+	"DInfos":               []ConfiguredInfo{},
+	"DEnableTickers":       false,
+	"DTickers":             []ConfiguredTicker{},
+	"DHideWatermarkTicker": false,
 }
 
 /*
@@ -58,6 +61,12 @@ type InfoData struct {
 	ImageID     string `json:"imageID,omitempty"`     // if left out of param game uses "-1". if used with text, this is the image that appears in the info list (ad_<id>_<regionCode>.jpg)
 	InfoType    string `json:"infoType,omitempty"`    // if left out of param, game uses Text
 	Extra       string `json:"extra,omitempty"`       // desired region code if DisplayType == countryText or countryImage; web address otherwise
+}
+
+type ConfiguredTicker struct {
+	Message   string `json:"message"`
+	StartTime int64  `json:"startTime"`
+	EndTime   int64  `json:"endTime"`
 }
 
 type ConfiguredInfo struct {
@@ -123,14 +132,20 @@ func (c ConfiguredInfo) HasValidInfoType() bool {
 var CFile ConfigFile
 
 type ConfigFile struct {
-	EnableInfos bool             `json:"enableInformation"`
-	Infos       []ConfiguredInfo `json:"infos"`
+	EnableInfos         bool               `json:"enableInformation"`
+	Infos               []ConfiguredInfo   `json:"infos"`
+	EnableTickers       bool               `json:"enableTickers"`
+	Tickers             []ConfiguredTicker `json:"tickers"`
+	HideWatermarkTicker bool               `json:"hideWatermarkTicker"`
 }
 
 func Parse(filename string) error {
 	CFile = ConfigFile{
 		Defaults["DEnableInfos"].(bool),
 		Defaults["DInfos"].([]ConfiguredInfo),
+		Defaults["DEnableTickers"].(bool),
+		Defaults["DTickers"].([]ConfiguredTicker),
+		Defaults["DHideWatermarkTicker"].(bool),
 	}
 	file, err := loadFile(filename)
 	if err != nil {
