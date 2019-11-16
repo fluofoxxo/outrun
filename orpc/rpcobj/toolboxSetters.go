@@ -285,7 +285,7 @@ func (t *Toolbox) SetPersonalEventsJSON(args ChangeValueArgs, reply *ToolboxRepl
     }
 
     var events []eventconf.ConfiguredEvent
-    err = json.Unmarshal(args.Value.([]byte), events)
+    err = json.Unmarshal(args.Value.([]byte), &events)
     if err != nil {
         reply.Status = StatusOtherError
         reply.Info = "unable to unmarshal value: " + err.Error()
