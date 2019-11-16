@@ -95,7 +95,9 @@ func (r *Helper) Out(msg string) {
 	log.Printf(LogOutBase, PrefixOut, r.CallerName, msg)
 }
 func (r *Helper) DebugOut(msg string) {
-	log.Printf(LogOutBase, PrefixDebugOut, r.CallerName, msg)
+	if config.CFile.DebugPrints {
+		log.Printf(LogOutBase, PrefixDebugOut, r.CallerName, msg)
+	}
 }
 func (r *Helper) Warn(msg string) {
 	log.Printf(LogOutBase, PrefixWarn, r.CallerName, msg)
