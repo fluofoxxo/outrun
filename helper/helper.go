@@ -92,7 +92,8 @@ func (r *Helper) Respond(out []byte) {
 func (r *Helper) RespondInsecure(out []byte) {
 	r.RespondRaw(out, "0", "")
 }
-func (r *Helper) Out(msg string) {
+func (r *Helper) Out(s string, a ...interface{}) {
+	msg := fmt.Sprintf(s, a...)
 	log.Printf(LogOutBase, PrefixOut, r.CallerName, msg)
 }
 func (r *Helper) DebugOut(s string, a ...interface{}) {
