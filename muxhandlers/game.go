@@ -282,14 +282,12 @@ func PostGameResults(helper *helper.Helper) {
 		mainC,
 		subC,
 	}
-	if config.CFile.DebugPrints {
-		helper.Out("Pre-function")
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.StageTotalScore)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Point)))
-		helper.Out(strconv.Itoa(int(request.Score)))
-	}
+	helper.DebugOut("Pre-function")
+	helper.DebugOut("Chapter: %s", player.MileageMapState.Chapter)
+	helper.DebugOut("Episode: %s", player.MileageMapState.Episode)
+	helper.DebugOut("StageTotalScore: %s", player.MileageMapState.StageTotalScore)
+	helper.DebugOut("Point: %s", player.MileageMapState.Point)
+	helper.DebugOut("request.Score: %s", request.Score)
 
 	incentives := constobjs.GetMileageIncentives(player.MileageMapState.Episode, player.MileageMapState.Chapter) // Game wants incentives in _current_ episode-chapter
 	var oldRewardEpisode, newRewardEpisode int64
@@ -377,9 +375,7 @@ func PostGameResults(helper *helper.Helper) {
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
-				if config.CFile.DebugPrints {
-					helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
-				}
+				helper.DebugOut("goToNextEpisode -> Episode: %s", player.MileageMapState.Episode)
 				if config.CFile.Debug {
 					player.MileageMapState.Episode = 15
 				}
@@ -389,9 +385,7 @@ func PostGameResults(helper *helper.Helper) {
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
-				if config.CFile.DebugPrints {
-					helper.Out("Player (" + player.ID + ") beat the game!")
-				}
+				helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
 			}
 		} else {
 			player.MileageMapState.Point = newPoint
@@ -406,16 +400,12 @@ func PostGameResults(helper *helper.Helper) {
 		newRewardPoint = player.MileageMapState.Point
 		// add rewards to PlayerState
 		wonRewards := campaign.GetWonRewards(oldRewardEpisode, oldRewardChapter, oldRewardPoint, newRewardEpisode, newRewardChapter, newRewardPoint)
-		if config.CFile.DebugPrints {
-			helper.Out("wonRewards length: " + strconv.Itoa(len(wonRewards)))
-			helper.Out("Previous rings: " + strconv.Itoa(int(player.PlayerState.NumRings)))
-		}
+		helper.DebugOut("wonRewards length: %s", wonRewards)
+		helper.DebugOut("Previous rings: %s", player.PlayerState.NumRings)
 		newItems := player.PlayerState.Items
 		for _, reward := range wonRewards { // TODO: This is O(n^2). Maybe alleviate this?
-			if config.CFile.DebugPrints {
-				helper.Out("Reward: " + reward.ItemID)
-				helper.Out("Reward amount: " + strconv.Itoa(int(reward.NumItem)))
-			}
+			helper.DebugOut("Reward: %s", reward.ItemID)
+			helper.DebugOut("Reward amount: %s", reward.NumItem)
 			if reward.ItemID[2:] == "12" { // ID is an item
 				// check if the item is already in the player's inventory
 				for _, item := range player.PlayerState.Items {
@@ -433,20 +423,15 @@ func PostGameResults(helper *helper.Helper) {
 			}
 			// TODO: allow for characters to join the cast, like Tails on 11-1.1
 		}
-		if config.CFile.DebugPrints {
-			helper.Out("Current rings: " + strconv.Itoa(int(player.PlayerState.NumRings)))
-		}
+		helper.DebugOut("Current rings: %s", player.PlayerState.NumRings)
 		player.PlayerState.Items = newItems
 	}
 
-	if config.CFile.DebugPrints {
-		helper.Out("AFTER")
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.StageTotalScore)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Point)))
-		helper.Out(strconv.Itoa(int(request.Score)))
-	}
+	helper.DebugOut("Chapter: %s", player.MileageMapState.Chapter)
+	helper.DebugOut("Episode: %s", player.MileageMapState.Episode)
+	helper.DebugOut("StageTotalScore: %s", player.MileageMapState.StageTotalScore)
+	helper.DebugOut("Point: %s", player.MileageMapState.Point)
+	helper.DebugOut("request.Score: %s", request.Score)
 
 	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
 	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1

@@ -2,6 +2,7 @@ package helper
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -94,8 +95,9 @@ func (r *Helper) RespondInsecure(out []byte) {
 func (r *Helper) Out(msg string) {
 	log.Printf(LogOutBase, PrefixOut, r.CallerName, msg)
 }
-func (r *Helper) DebugOut(msg string) {
+func (r *Helper) DebugOut(s string, a ...interface{}) {
 	if config.CFile.DebugPrints {
+		msg := fmt.Sprintf(s, a...)
 		log.Printf(LogOutBase, PrefixDebugOut, r.CallerName, msg)
 	}
 }

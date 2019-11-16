@@ -7,7 +7,6 @@ import (
 
 	"github.com/fluofoxxo/outrun/analytics"
 	"github.com/fluofoxxo/outrun/analytics/factors"
-	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
@@ -142,11 +141,6 @@ func UnlockedCharacter(helper *helper.Helper) {
 		return
 	}
 
-	dprint := func(s string) {
-		if config.CFile.DebugPrints {
-			helper.Out(s)
-		}
-	}
 	sp := fmt.Sprintf
 
 	responseStatus := status.OK
@@ -162,17 +156,17 @@ func UnlockedCharacter(helper *helper.Helper) {
 		the characters.
 		Looking back on it, this makes sense...
 	*/
-	dprint("Pre:")
+	helper.DebugOut("Pre:")
 	if buyWith == enums.ItemIDStrRing { // is buying with rings
 		ringCost := chara.Price
 		if ringCost > player.PlayerState.NumRings { // cannot buy
-			dprint(sp("Player can't pay with rings  (Has %v)", player.PlayerState.NumRings))
+			helper.DebugOut(sp("Player can't pay with rings  (Has %v)", player.PlayerState.NumRings))
 			responseStatus = status.NotEnoughRings
 		} else { // can buy with rings
-			dprint(sp("NumRings: %v", player.PlayerState.NumRings))
-			//dprint(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
-			dprint(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
-			dprint(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
+			helper.DebugOut(sp("NumRings: %v", player.PlayerState.NumRings))
+			//helper.DebugOut(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
+			helper.DebugOut(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
+			helper.DebugOut(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
 			player.PlayerState.NumRings -= ringCost
 			//player.CharacterState[charaIndex].Level = 0
 			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked { // character already owned, so just limit break
@@ -185,13 +179,13 @@ func UnlockedCharacter(helper *helper.Helper) {
 	} else if buyWith == enums.ItemIDStrRedRing { // is buying with red rings
 		redRingCost := chara.PriceRedRings
 		if redRingCost > player.PlayerState.NumRedRings { // cannot buy with red rings
-			dprint(sp("Player can't pay with red rings (Has %v)", player.PlayerState.NumRedRings))
+			helper.DebugOut(sp("Player can't pay with red rings (Has %v)", player.PlayerState.NumRedRings))
 			responseStatus = status.NotEnoughRedRings
 		} else { // can buy with red rings
-			dprint(sp("NumRedRings: %v", player.PlayerState.NumRedRings))
-			//dprint(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
-			dprint(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
-			dprint(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
+			helper.DebugOut(sp("NumRedRings: %v", player.PlayerState.NumRedRings))
+			//helper.DebugOut(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
+			helper.DebugOut(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
+			helper.DebugOut(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
 			player.PlayerState.NumRedRings -= redRingCost
 			//player.CharacterState[charaIndex].Level = 0
 			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked { // character already owned, so just limit break
@@ -205,12 +199,12 @@ func UnlockedCharacter(helper *helper.Helper) {
 		helper.Warn(fmt.Sprintf("Player '%s' (%v) tried to purchase a character without Rings or Red Rings!", player.Username, player.ID))
 		responseStatus = status.InternalServerError
 	}
-	dprint("Post:")
-	dprint(sp("NumRings: %v", player.PlayerState.NumRings))
-	dprint(sp("NumRedRings: %v", player.PlayerState.NumRedRings))
-	dprint(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
-	dprint(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
-	dprint(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
+	helper.DebugOut("Post:")
+	helper.DebugOut(sp("NumRings: %v", player.PlayerState.NumRings))
+	helper.DebugOut(sp("NumRedRings: %v", player.PlayerState.NumRedRings))
+	helper.DebugOut(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
+	helper.DebugOut(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
+	helper.DebugOut(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
 
 	baseInfo := helper.BaseInfo(emess.OK, int64(responseStatus))
 	response := responses.DefaultUpgradeCharacter(baseInfo, player)

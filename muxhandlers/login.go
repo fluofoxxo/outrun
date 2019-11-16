@@ -5,7 +5,6 @@ import (
 
 	"github.com/fluofoxxo/outrun/analytics"
 	"github.com/fluofoxxo/outrun/analytics/factors"
-	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/config/infoconf"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
@@ -126,9 +125,7 @@ func GetInformation(helper *helper.Helper) {
 		for _, ci := range infoconf.CFile.Infos {
 			newInfo := conversion.ConfiguredInfoToInformation(ci)
 			infos = append(infos, newInfo)
-			if config.CFile.DebugPrints {
-				helper.Out(newInfo.Param)
-			}
+			helper.DebugOut(newInfo.Param)
 		}
 	}
 	operatorInfos := []obj.OperatorInformation{}

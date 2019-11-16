@@ -7,7 +7,6 @@ import (
 
 	"github.com/fluofoxxo/outrun/analytics"
 	"github.com/fluofoxxo/outrun/analytics/factors"
-	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
@@ -29,10 +28,8 @@ func GetWheelOptions(helper *helper.Helper) {
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 
 	//player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
-	if config.CFile.DebugPrints {
-		helper.Out(strconv.Itoa(int(time.Now().Unix())))
-		helper.Out(strconv.Itoa(int(player.RouletteInfo.RoulettePeriodEnd)))
-	}
+	helper.DebugOut("Time now: %s", time.Now().Unix())
+	helper.DebugOut("RoulettePeriodEnd: %s", player.RouletteInfo.RoulettePeriodEnd)
 	// check if we need to reset the end period
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
 	if time.Now().Unix() > endPeriod {
@@ -50,7 +47,6 @@ func GetWheelOptions(helper *helper.Helper) {
 }
 
 func CommitWheelSpin(helper *helper.Helper) {
-	// TODO: Should this be player agnostic? Make executive decision another time
 	recv := helper.GetGameRequest()
 	var request requests.CommitWheelSpinRequest
 	err := json.Unmarshal(recv, &request)
@@ -63,56 +59,36 @@ func CommitWheelSpin(helper *helper.Helper) {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
-	if config.CFile.DebugPrints {
-		helper.Out(strconv.Itoa(int(request.Count)))
-	}
+	helper.DebugOut("request.Count: %s", request.Count)
 
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
-	if config.CFile.DebugPrints {
-		helper.Out("Time now: " + strconv.Itoa(int(time.Now().Unix())))
-		helper.Out("End period: " + strconv.Itoa(int(endPeriod)))
-	}
+	helper.DebugOut("Time now: %s", time.Now().Unix())
+	helper.DebugOut("End period: %s", endPeriod)
 	if time.Now().Unix() > endPeriod {
 		player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
-		if config.CFile.DebugPrints {
-			helper.Out("New roulette period")
-			helper.Out(strconv.Itoa(int(player.RouletteInfo.RouletteCountInPeriod)))
-		}
+		helper.DebugOut("New roulette period")
+		helper.DebugOut("RouletteCountInPeriod: %s", player.RouletteInfo.RouletteCountInPeriod)
 	}
 
 	responseStatus := status.OK
 	hasTickets := player.PlayerState.NumRouletteTicket > 0
 	hasFreeSpins := player.RouletteInfo.RouletteCountInPeriod < consts.RouletteFreeSpins
-	if config.CFile.DebugPrints {
-		helper.Out("Has tickets: " + strconv.FormatBool(hasTickets))
-		helper.Out("Number of tickets: " + strconv.Itoa(int(player.PlayerState.NumRouletteTicket)))
-		helper.Out("Has free spins: " + strconv.FormatBool(hasFreeSpins))
-		helper.Out("Roulette count: " + strconv.Itoa(int(player.RouletteInfo.RouletteCountInPeriod)))
-		/*
-		   helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket)))
-		   helper.Out(strconv.Itoa(int(consts.RouletteFreeSpins)))
-		   helper.Out(strconv.Itoa(int(player.RouletteInfo.RouletteCountInPeriod)))
-		   helper.Out(strconv.Itoa(int(player.PlayerState.NumRouletteTicket + consts.RouletteFreeSpins - player.RouletteInfo.RouletteCountInPeriod)))
-		*/
-	}
+	helper.DebugOut("Has tickets: %s", hasTickets)
+	helper.DebugOut("Number of tickets: %s", player.PlayerState.NumRouletteTicket)
+	helper.DebugOut("Has free spins: %s", hasFreeSpins)
+	helper.DebugOut("Roulette count: %s", player.RouletteInfo.RouletteCountInPeriod)
 	if hasTickets || hasFreeSpins {
 		//if player.LastWheelOptions.NumRemainingRoulette > 0 {
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
 		itemExists := player.IndexOfItem(wonItem) != -1
 		if itemExists {
 			amountOfItemWon := player.LastWheelOptions.Item[player.LastWheelOptions.ItemWon]
-			if config.CFile.DebugPrints {
-				helper.Out(wonItem)
-				helper.Out(strconv.Itoa(int(amountOfItemWon)))
-			}
+			helper.DebugOut("wonItem: %s", wonItem)
+			helper.DebugOut("amountOfItemWon: %s", amountOfItemWon)
 			itemIndex := player.IndexOfItem(wonItem)
-			if config.CFile.DebugPrints {
-				helper.Out(strconv.Itoa(int(player.PlayerState.Items[itemIndex].Amount)))
-			}
+			helper.DebugOut("Amount of item player has: %s", player.PlayerState.Items[itemIndex].Amount)
 			player.PlayerState.Items[itemIndex].Amount += amountOfItemWon
-			if config.CFile.DebugPrints {
-				helper.Out(strconv.Itoa(int(player.PlayerState.Items[itemIndex].Amount)))
-			}
+			helper.DebugOut("New amount of item player has: %s", player.PlayerState.Items[itemIndex].Amount)
 		} else {
 			if wonItem == strconv.Itoa(enums.IDTypeItemRouletteWin) {
 				// Jackpot
@@ -125,21 +101,15 @@ func CommitWheelSpin(helper *helper.Helper) {
 			}
 		}
 
-		if config.CFile.DebugPrints {
-			helper.Out(strconv.Itoa(int(time.Now().Unix())))
-			helper.Out(strconv.Itoa(int(player.RouletteInfo.RoulettePeriodEnd)))
-		}
+		helper.DebugOut("Time now: %s", time.Now().Unix())
+		helper.DebugOut("RoulettePeriodEnd: %s", player.RouletteInfo.RoulettePeriodEnd)
 		endPeriod := player.RouletteInfo.RoulettePeriodEnd
-		if config.CFile.DebugPrints {
-			helper.Out("Time now (passed): " + strconv.Itoa(int(time.Now().Unix())))
-			helper.Out("End period (passed): " + strconv.Itoa(int(endPeriod)))
-		}
+		helper.DebugOut("Time now (passed): %s", time.Now().Unix())
+		helper.DebugOut("End period (passed): %s", endPeriod)
 		if time.Now().Unix() > endPeriod { // TODO: Do we still need this?
 			player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
-			if config.CFile.DebugPrints {
-				helper.Out("New roulette period")
-				helper.Out(strconv.Itoa(int(player.RouletteInfo.RouletteCountInPeriod)))
-			}
+			helper.DebugOut("New roulette period")
+			helper.DebugOut("RouletteCountInPeriod", player.RouletteInfo.RouletteCountInPeriod)
 		}
 
 		// generate NEXT! wheel

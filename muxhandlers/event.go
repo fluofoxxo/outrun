@@ -1,9 +1,6 @@
 package muxhandlers
 
 import (
-	"fmt"
-
-	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/config/eventconf"
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/helper"
@@ -35,11 +32,9 @@ func GetEventList(helper *helper.Helper) {
 			}
 		}
 	}
-	if config.CFile.DebugPrints {
-		helper.Out("Personal event list: " + fmt.Sprintln(player.PersonalEvents))
-		helper.Out("Global event list: " + fmt.Sprintln(eventconf.CFile.CurrentEvents))
-		helper.Out("Event list: " + fmt.Sprintln(eventList))
-	}
+	helper.DebugOut("Personal event list: %s", player.PersonalEvents)
+	helper.DebugOut("Global event list: %s", eventconf.CFile.CurrentEvents)
+	helper.DebugOut("Event list: %s", eventList)
 	response := responses.EventList(baseInfo, eventList)
 	err = helper.SendResponse(response)
 	if err != nil {
