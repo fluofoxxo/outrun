@@ -86,3 +86,8 @@ const ( // Mileage rewards
 	ItemIDRing4    = 910204
 	ItemIDRing5    = 910265
 )
+
+const (
+	ItemIDStrRedRing = "900000"
+	ItemIDStrRing    = "910000"
+)
