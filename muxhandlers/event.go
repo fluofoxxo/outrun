@@ -32,9 +32,9 @@ func GetEventList(helper *helper.Helper) {
 			}
 		}
 	}
-	helper.DebugOut("Personal event list: %s", player.PersonalEvents)
-	helper.DebugOut("Global event list: %s", eventconf.CFile.CurrentEvents)
-	helper.DebugOut("Event list: %s", eventList)
+	helper.DebugOut("Personal event list: %v", player.PersonalEvents)
+	helper.DebugOut("Global event list: %v", eventconf.CFile.CurrentEvents)
+	helper.DebugOut("Event list: %v", eventList)
 	response := responses.EventList(baseInfo, eventList)
 	err = helper.SendResponse(response)
 	if err != nil {

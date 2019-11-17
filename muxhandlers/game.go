@@ -283,11 +283,11 @@ func PostGameResults(helper *helper.Helper) {
 		subC,
 	}
 	helper.DebugOut("Pre-function")
-	helper.DebugOut("Chapter: %s", player.MileageMapState.Chapter)
-	helper.DebugOut("Episode: %s", player.MileageMapState.Episode)
-	helper.DebugOut("StageTotalScore: %s", player.MileageMapState.StageTotalScore)
-	helper.DebugOut("Point: %s", player.MileageMapState.Point)
-	helper.DebugOut("request.Score: %s", request.Score)
+	helper.DebugOut("Chapter: %v", player.MileageMapState.Chapter)
+	helper.DebugOut("Episode: %v", player.MileageMapState.Episode)
+	helper.DebugOut("StageTotalScore: %v", player.MileageMapState.StageTotalScore)
+	helper.DebugOut("Point: %v", player.MileageMapState.Point)
+	helper.DebugOut("request.Score: %v", request.Score)
 
 	incentives := constobjs.GetMileageIncentives(player.MileageMapState.Episode, player.MileageMapState.Chapter) // Game wants incentives in _current_ episode-chapter
 	var oldRewardEpisode, newRewardEpisode int64
@@ -375,7 +375,7 @@ func PostGameResults(helper *helper.Helper) {
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
-				helper.DebugOut("goToNextEpisode -> Episode: %s", player.MileageMapState.Episode)
+				helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
 				if config.CFile.Debug {
 					player.MileageMapState.Episode = 15
 				}
@@ -400,12 +400,12 @@ func PostGameResults(helper *helper.Helper) {
 		newRewardPoint = player.MileageMapState.Point
 		// add rewards to PlayerState
 		wonRewards := campaign.GetWonRewards(oldRewardEpisode, oldRewardChapter, oldRewardPoint, newRewardEpisode, newRewardChapter, newRewardPoint)
-		helper.DebugOut("wonRewards length: %s", wonRewards)
-		helper.DebugOut("Previous rings: %s", player.PlayerState.NumRings)
+		helper.DebugOut("wonRewards length: %v", wonRewards)
+		helper.DebugOut("Previous rings: %v", player.PlayerState.NumRings)
 		newItems := player.PlayerState.Items
 		for _, reward := range wonRewards { // TODO: This is O(n^2). Maybe alleviate this?
 			helper.DebugOut("Reward: %s", reward.ItemID)
-			helper.DebugOut("Reward amount: %s", reward.NumItem)
+			helper.DebugOut("Reward amount: %v", reward.NumItem)
 			if reward.ItemID[2:] == "12" { // ID is an item
 				// check if the item is already in the player's inventory
 				for _, item := range player.PlayerState.Items {
@@ -423,15 +423,15 @@ func PostGameResults(helper *helper.Helper) {
 			}
 			// TODO: allow for characters to join the cast, like Tails on 11-1.1
 		}
-		helper.DebugOut("Current rings: %s", player.PlayerState.NumRings)
+		helper.DebugOut("Current rings: %v", player.PlayerState.NumRings)
 		player.PlayerState.Items = newItems
 	}
 
-	helper.DebugOut("Chapter: %s", player.MileageMapState.Chapter)
-	helper.DebugOut("Episode: %s", player.MileageMapState.Episode)
-	helper.DebugOut("StageTotalScore: %s", player.MileageMapState.StageTotalScore)
-	helper.DebugOut("Point: %s", player.MileageMapState.Point)
-	helper.DebugOut("request.Score: %s", request.Score)
+	helper.DebugOut("Chapter: %v", player.MileageMapState.Chapter)
+	helper.DebugOut("Episode: %v", player.MileageMapState.Episode)
+	helper.DebugOut("StageTotalScore: %v", player.MileageMapState.StageTotalScore)
+	helper.DebugOut("Point: %v", player.MileageMapState.Point)
+	helper.DebugOut("request.Score: %v", request.Score)
 
 	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
 	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1

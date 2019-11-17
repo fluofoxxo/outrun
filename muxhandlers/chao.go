@@ -118,14 +118,14 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 	helper.DebugOut("PRE")
 	helper.DebugOut("Items: %s", items)
 	helper.DebugOut("Weights: %s", items)
-	helper.DebugOut("Chao Eggs (Player): %s", player.PlayerState.ChaoEggs)
-	helper.DebugOut("Chao Eggs (ChaoWheelOptions): %s", player.ChaoRouletteGroup.ChaoWheelOptions.NumSpecialEgg)
-	helper.DebugOut("Chao Roulette tickets (Player): %s", player.PlayerState.NumChaoRouletteTicket)
-	helper.DebugOut("Chao Roulette tickets (ChaoWheelOptions): %s", player.ChaoRouletteGroup.ChaoWheelOptions.NumChaoRouletteToken)
-	helper.DebugOut("Chao Roulette spin cost: %s", player.ChaoRouletteGroup.ChaoWheelOptions.SpinCost)
-	helper.DebugOut("Red Rings: %s", player.PlayerState.NumRedRings)
-	helper.DebugOut("Bought red rings: %s", player.PlayerState.NumBuyRedRings)
-	helper.DebugOut("Spin count: %s", request.Count)
+	helper.DebugOut("Chao Eggs (Player): %v", player.PlayerState.ChaoEggs)
+	helper.DebugOut("Chao Eggs (ChaoWheelOptions): %v", player.ChaoRouletteGroup.ChaoWheelOptions.NumSpecialEgg)
+	helper.DebugOut("Chao Roulette tickets (Player): %v", player.PlayerState.NumChaoRouletteTicket)
+	helper.DebugOut("Chao Roulette tickets (ChaoWheelOptions): %v", player.ChaoRouletteGroup.ChaoWheelOptions.NumChaoRouletteToken)
+	helper.DebugOut("Chao Roulette spin cost: %v", player.ChaoRouletteGroup.ChaoWheelOptions.SpinCost)
+	helper.DebugOut("Red Rings: %v", player.PlayerState.NumRedRings)
+	helper.DebugOut("Bought red rings: %v", player.PlayerState.NumBuyRedRings)
+	helper.DebugOut("Spin count: %v", request.Count)
 
 	// reset ChaoRouletteInfo if needed
 	rightNow := time.Now().Unix()
@@ -233,8 +233,8 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 		// create a new wheel; must be done after ALL player operations are done
 		chaoCanBeLevelled := !player.AllChaoMaxLevel()
 		charactersCanBeLevelled := !player.AllCharactersMaxLevel()
-		helper.DebugOut("Chao can be levelled: %s", chaoCanBeLevelled)
-		helper.DebugOut("Characters can be levelled: %s", charactersCanBeLevelled)
+		helper.DebugOut("Chao can be levelled: %v", chaoCanBeLevelled)
+		helper.DebugOut("Characters can be levelled: %v", charactersCanBeLevelled)
 		fixRarities := func(rarities []int64) ([]int64, bool) {
 			newRarities := []int64{}
 			if !chaoCanBeLevelled && !charactersCanBeLevelled {
@@ -282,7 +282,7 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 		}
 		player.ChaoRouletteGroup.WheelChao = newItems
 		player.ChaoRouletteGroup.ChaoWheelOptions.Rarity = newRarities
-		helper.DebugOut("Rarities: %s", newRarities)
+		helper.DebugOut("Rarities: %v", newRarities)
 		if config.CFile.Debug {
 			player.ChaoRouletteGroup.WheelChao = []string{enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails, enums.CTStrTails}
 		}
@@ -302,11 +302,11 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 	helper.DebugOut("POST")
 	helper.DebugOut("Items: %s", items)
 	helper.DebugOut("Weights: %s", items)
-	helper.DebugOut("Chao Eggs (Player): %s", player.PlayerState.ChaoEggs)
-	helper.DebugOut("Chao Eggs (ChaoWheelOptions): %s", player.ChaoRouletteGroup.ChaoWheelOptions.NumSpecialEgg)
-	helper.DebugOut("Chao Roulette tickets (Player): %s", player.PlayerState.NumChaoRouletteTicket)
-	helper.DebugOut("Chao Roulette tickets (ChaoWheelOptions): %s", player.ChaoRouletteGroup.ChaoWheelOptions.NumChaoRouletteToken)
-	helper.DebugOut("Chao Roulette spin cost: %s", player.ChaoRouletteGroup.ChaoWheelOptions.SpinCost)
+	helper.DebugOut("Chao Eggs (Player): %v", player.PlayerState.ChaoEggs)
+	helper.DebugOut("Chao Eggs (ChaoWheelOptions): %v", player.ChaoRouletteGroup.ChaoWheelOptions.NumSpecialEgg)
+	helper.DebugOut("Chao Roulette tickets (Player): %v", player.PlayerState.NumChaoRouletteTicket)
+	helper.DebugOut("Chao Roulette tickets (ChaoWheelOptions): %v", player.ChaoRouletteGroup.ChaoWheelOptions.NumChaoRouletteToken)
+	helper.DebugOut("Chao Roulette spin cost: %v", player.ChaoRouletteGroup.ChaoWheelOptions.SpinCost)
 
 	baseInfo := helper.BaseInfo(emess.OK, availStatus)
 	response := responses.ChaoWheelSpin(baseInfo, player.PlayerState, player.CharacterState, player.ChaoState, player.ChaoRouletteGroup.ChaoWheelOptions, spinResults)

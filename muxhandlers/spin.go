@@ -28,8 +28,8 @@ func GetWheelOptions(helper *helper.Helper) {
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 
 	//player.LastWheelOptions = netobj.DefaultWheelOptions(player.PlayerState) // generate new wheel for 'reroll' mechanic
-	helper.DebugOut("Time now: %s", time.Now().Unix())
-	helper.DebugOut("RoulettePeriodEnd: %s", player.RouletteInfo.RoulettePeriodEnd)
+	helper.DebugOut("Time now: %v", time.Now().Unix())
+	helper.DebugOut("RoulettePeriodEnd: %v", player.RouletteInfo.RoulettePeriodEnd)
 	// check if we need to reset the end period
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
 	if time.Now().Unix() > endPeriod {
@@ -59,36 +59,36 @@ func CommitWheelSpin(helper *helper.Helper) {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
-	helper.DebugOut("request.Count: %s", request.Count)
+	helper.DebugOut("request.Count: %v", request.Count)
 
 	endPeriod := player.RouletteInfo.RoulettePeriodEnd
-	helper.DebugOut("Time now: %s", time.Now().Unix())
-	helper.DebugOut("End period: %s", endPeriod)
+	helper.DebugOut("Time now: %v", time.Now().Unix())
+	helper.DebugOut("End period: %v", endPeriod)
 	if time.Now().Unix() > endPeriod {
 		player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
 		helper.DebugOut("New roulette period")
-		helper.DebugOut("RouletteCountInPeriod: %s", player.RouletteInfo.RouletteCountInPeriod)
+		helper.DebugOut("RouletteCountInPeriod: %v", player.RouletteInfo.RouletteCountInPeriod)
 	}
 
 	responseStatus := status.OK
 	hasTickets := player.PlayerState.NumRouletteTicket > 0
 	hasFreeSpins := player.RouletteInfo.RouletteCountInPeriod < consts.RouletteFreeSpins
-	helper.DebugOut("Has tickets: %s", hasTickets)
-	helper.DebugOut("Number of tickets: %s", player.PlayerState.NumRouletteTicket)
-	helper.DebugOut("Has free spins: %s", hasFreeSpins)
-	helper.DebugOut("Roulette count: %s", player.RouletteInfo.RouletteCountInPeriod)
+	helper.DebugOut("Has tickets: %v", hasTickets)
+	helper.DebugOut("Number of tickets: %v", player.PlayerState.NumRouletteTicket)
+	helper.DebugOut("Has free spins: %v", hasFreeSpins)
+	helper.DebugOut("Roulette count: %v", player.RouletteInfo.RouletteCountInPeriod)
 	if hasTickets || hasFreeSpins {
 		//if player.LastWheelOptions.NumRemainingRoulette > 0 {
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
 		itemExists := player.IndexOfItem(wonItem) != -1
 		if itemExists {
 			amountOfItemWon := player.LastWheelOptions.Item[player.LastWheelOptions.ItemWon]
-			helper.DebugOut("wonItem: %s", wonItem)
-			helper.DebugOut("amountOfItemWon: %s", amountOfItemWon)
+			helper.DebugOut("wonItem: %v", wonItem)
+			helper.DebugOut("amountOfItemWon: %v", amountOfItemWon)
 			itemIndex := player.IndexOfItem(wonItem)
-			helper.DebugOut("Amount of item player has: %s", player.PlayerState.Items[itemIndex].Amount)
+			helper.DebugOut("Amount of item player has: %v", player.PlayerState.Items[itemIndex].Amount)
 			player.PlayerState.Items[itemIndex].Amount += amountOfItemWon
-			helper.DebugOut("New amount of item player has: %s", player.PlayerState.Items[itemIndex].Amount)
+			helper.DebugOut("New amount of item player has: %v", player.PlayerState.Items[itemIndex].Amount)
 		} else {
 			if wonItem == strconv.Itoa(enums.IDTypeItemRouletteWin) {
 				// Jackpot
@@ -101,15 +101,15 @@ func CommitWheelSpin(helper *helper.Helper) {
 			}
 		}
 
-		helper.DebugOut("Time now: %s", time.Now().Unix())
-		helper.DebugOut("RoulettePeriodEnd: %s", player.RouletteInfo.RoulettePeriodEnd)
+		helper.DebugOut("Time now: %v", time.Now().Unix())
+		helper.DebugOut("RoulettePeriodEnd: %v", player.RouletteInfo.RoulettePeriodEnd)
 		endPeriod := player.RouletteInfo.RoulettePeriodEnd
-		helper.DebugOut("Time now (passed): %s", time.Now().Unix())
-		helper.DebugOut("End period (passed): %s", endPeriod)
+		helper.DebugOut("Time now (passed): %v", time.Now().Unix())
+		helper.DebugOut("End period (passed): %v", endPeriod)
 		if time.Now().Unix() > endPeriod { // TODO: Do we still need this?
 			player.RouletteInfo = netobj.DefaultRouletteInfo() // Effectively reset everything, set new end time
 			helper.DebugOut("New roulette period")
-			helper.DebugOut("RouletteCountInPeriod", player.RouletteInfo.RouletteCountInPeriod)
+			helper.DebugOut("RouletteCountInPeriod: %v", player.RouletteInfo.RouletteCountInPeriod)
 		}
 
 		// generate NEXT! wheel
