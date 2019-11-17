@@ -12,6 +12,7 @@ var Defaults = map[string]interface{}{
 	"DDoTimeLogging":            true,
 	"DLogUnknownRequests":       true,
 	"DLogAllRequests":           false,
+	"DLogAllResponses":          false,
 	"DDebug":                    false,
 	"DDebugPrints":              false,
 	"DEnableRPC":                false,
@@ -33,6 +34,7 @@ type ConfigFile struct {
 	DoTimeLogging            bool   `json:"doTimeLogging,omitempty"`
 	LogUnknownRequests       bool   `json:"logUnknownRequests,omitempty"`
 	LogAllRequests           bool   `json:"logAllRequests,omitempty"`
+	LogAllResponses          bool   `json:"logAllResponses,omitempty"`
 	Debug                    bool   `json:"debug,omitempty"`
 	DebugPrints              bool   `json:"debugPrints,omitempty"`
 	EnableRPC                bool   `json:"enableRPC,omitempty"`
@@ -53,6 +55,7 @@ func Parse(filename string) error {
 		Defaults["DDoTimeLogging"].(bool),
 		Defaults["DLogUnknownRequests"].(bool),
 		Defaults["DLogAllRequests"].(bool),
+		Defaults["DLogAllResponses"].(bool),
 		Defaults["DDebug"].(bool),
 		Defaults["DDebugPrints"].(bool),
 		Defaults["DEnableRPC"].(bool),

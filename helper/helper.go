@@ -3,8 +3,12 @@ package helper
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/cryption"
@@ -66,6 +70,19 @@ func (r *Helper) SendInsecureResponse(i interface{}) error {
 	return nil
 }
 func (r *Helper) RespondRaw(out []byte, secureFlag, iv string) {
+	if config.CFile.LogAllResponses {
+		nano := time.Now().UnixNano()
+		nanoStr := strconv.Itoa(int(nano))
+		filename := r.Request.RequestURI + "--" + nanoStr
+		filename = strings.ReplaceAll(filename, ".", "-")
+		filename = strings.ReplaceAll(filename, "/", "-") + ".txt"
+		filepath := "logging/all_responses/" + filename
+		r.Out("DEBUG: Saving request to " + filepath)
+		err := ioutil.WriteFile(filepath, out, 0644)
+		if err != nil {
+			r.Out("DEBUG ERROR: Unable to write file '" + filepath + "'")
+		}
+	}
 	response := map[string]string{}
 	if secureFlag != "0" && secureFlag != "1" {
 		r.Warn("Improper secureFlag in call to RespondRaw!")
