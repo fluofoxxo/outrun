@@ -243,8 +243,8 @@ var CharacterWerehog = obj.Character{
 	strconv.Itoa(enums.CharaTypeWerehog),
 	800,
 	NumRedRings,
-	52500,         // used for limit breaking
-	PriceRedRings, // red rings used for limit breaking
+	52500, // used for limit breaking
+	22,    // red rings used for limit breaking
 }
 
 var CharacterSticks = obj.Character{

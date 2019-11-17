@@ -167,7 +167,7 @@ func UnlockedCharacter(helper *helper.Helper) {
 			helper.DebugOut("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star)
 			player.PlayerState.NumRings -= ringCost
 			//player.CharacterState[charaIndex].Level = 0
-			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked { // character already owned, so just limit break
+			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked || player.CharacterState[charaIndex].Status == enums.CharacterStatusMaxLevel { // character already owned, so just limit break
 				player.CharacterState[charaIndex].Star++
 			} else if player.CharacterState[charaIndex].Status == enums.CharacterStatusLocked { // character not already owned, so purchase them
 				player.CharacterState[charaIndex].Status = enums.CharacterStatusUnlocked
@@ -186,7 +186,7 @@ func UnlockedCharacter(helper *helper.Helper) {
 			helper.DebugOut("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star)
 			player.PlayerState.NumRedRings -= redRingCost
 			//player.CharacterState[charaIndex].Level = 0
-			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked { // character already owned, so just limit break
+			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked || player.CharacterState[charaIndex].Status == enums.CharacterStatusMaxLevel { // character already owned, so just limit break
 				player.CharacterState[charaIndex].Star++
 			} else if player.CharacterState[charaIndex].Status == enums.CharacterStatusLocked { // character not already owned, so purchase them
 				player.CharacterState[charaIndex].Status = enums.CharacterStatusUnlocked
