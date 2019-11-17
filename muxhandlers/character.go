@@ -141,8 +141,6 @@ func UnlockedCharacter(helper *helper.Helper) {
 		return
 	}
 
-	sp := fmt.Sprintf
-
 	responseStatus := status.OK
 
 	characterToBuy := request.CharacterID
@@ -160,13 +158,13 @@ func UnlockedCharacter(helper *helper.Helper) {
 	if buyWith == enums.ItemIDStrRing { // is buying with rings
 		ringCost := chara.Price
 		if ringCost > player.PlayerState.NumRings { // cannot buy
-			helper.DebugOut(sp("Player can't pay with rings  (Has %v)", player.PlayerState.NumRings))
+			helper.DebugOut("Player can't pay with rings (Has %v)", player.PlayerState.NumRings)
 			responseStatus = status.NotEnoughRings
 		} else { // can buy with rings
-			helper.DebugOut(sp("NumRings: %v", player.PlayerState.NumRings))
+			helper.DebugOut("NumRings: %v", player.PlayerState.NumRings)
 			//helper.DebugOut(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
-			helper.DebugOut(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
-			helper.DebugOut(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
+			helper.DebugOut("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status)
+			helper.DebugOut("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star)
 			player.PlayerState.NumRings -= ringCost
 			//player.CharacterState[charaIndex].Level = 0
 			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked { // character already owned, so just limit break
@@ -179,13 +177,13 @@ func UnlockedCharacter(helper *helper.Helper) {
 	} else if buyWith == enums.ItemIDStrRedRing { // is buying with red rings
 		redRingCost := chara.PriceRedRings
 		if redRingCost > player.PlayerState.NumRedRings { // cannot buy with red rings
-			helper.DebugOut(sp("Player can't pay with red rings (Has %v)", player.PlayerState.NumRedRings))
+			helper.DebugOut("Player can't pay with red rings (Has %v)", player.PlayerState.NumRedRings)
 			responseStatus = status.NotEnoughRedRings
 		} else { // can buy with red rings
-			helper.DebugOut(sp("NumRedRings: %v", player.PlayerState.NumRedRings))
+			helper.DebugOut("NumRedRings: %v", player.PlayerState.NumRedRings)
 			//helper.DebugOut(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
-			helper.DebugOut(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
-			helper.DebugOut(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
+			helper.DebugOut("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status)
+			helper.DebugOut("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star)
 			player.PlayerState.NumRedRings -= redRingCost
 			//player.CharacterState[charaIndex].Level = 0
 			if player.CharacterState[charaIndex].Status == enums.CharacterStatusUnlocked { // character already owned, so just limit break
@@ -200,11 +198,11 @@ func UnlockedCharacter(helper *helper.Helper) {
 		responseStatus = status.InternalServerError
 	}
 	helper.DebugOut("Post:")
-	helper.DebugOut(sp("NumRings: %v", player.PlayerState.NumRings))
-	helper.DebugOut(sp("NumRedRings: %v", player.PlayerState.NumRedRings))
-	helper.DebugOut(sp("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level))
-	helper.DebugOut(sp("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status))
-	helper.DebugOut(sp("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star))
+	helper.DebugOut("NumRings: %v", player.PlayerState.NumRings)
+	helper.DebugOut("NumRedRings: %v", player.PlayerState.NumRedRings)
+	helper.DebugOut("CharacterState[%v].Level: %v", charaIndex, player.CharacterState[charaIndex].Level)
+	helper.DebugOut("CharacterState[%v].Status: %v", charaIndex, player.CharacterState[charaIndex].Status)
+	helper.DebugOut("CharacterState[%v].Star: %v", charaIndex, player.CharacterState[charaIndex].Star)
 
 	baseInfo := helper.BaseInfo(emess.OK, int64(responseStatus))
 	response := responses.DefaultUpgradeCharacter(baseInfo, player)
