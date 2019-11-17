@@ -47,7 +47,7 @@ func DefaultWheelOptions(numRouletteTicket, rouletteCountInPeriod int64) WheelOp
 	itemWon := int64(rand.Intn(len(items)))
 	nextFreeSpin := now.EndOfDay().Unix() + 1 // midnight
 	spinCost := int64(87)
-	rouletteRank := int64(enums.WheelRankNormal) // TODO: change this
+	rouletteRank := int64(enums.WheelRankNormal)
 	//numRouletteToken := playerState.NumRouletteTicket
 	numRouletteToken := numRouletteTicket // The game uses the _current_ value, not as if it was in the past (This is hard to explain, maybe TODO: explain this better?)
 	numJackpotRing := int64(consts.RouletteJackpotRings)
