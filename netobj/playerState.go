@@ -3,6 +3,7 @@ package netobj
 import (
 	"time"
 
+	"github.com/fluofoxxo/outrun/config/gameconf"
 	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/obj"
 	"github.com/fluofoxxo/outrun/obj/constobjs"
@@ -54,17 +55,19 @@ func DefaultPlayerState() PlayerState {
 	// TODO: establish as constants
 	items := constobjs.DefaultPlayerStateItems
 	equippedItemIDs := []string{"-1", "-1", "-1"}
-	mainCharaID := enums.CTStrSonic
-	subCharaID := enums.CTStrTails
+	//mainCharaID := enums.CTStrSonic
+	mainCharaID := gameconf.CFile.DefaultMainCharacter
+	//subCharaID := enums.CTStrTails
+	subCharaID := gameconf.CFile.DefaultSubCharacter
 	mainChaoID := ChaoIDs[0]
 	subChaoID := ChaoIDs[5] // changed from [1]...
-	numRings := int64(9001)
+	numRings := int64(gameconf.CFile.StartingRings)
 	//numBuyRings := int64(1)
 	numBuyRings := int64(0)
-	numRedRings := int64(1337)
+	numRedRings := int64(gameconf.CFile.StartingRedRings)
 	//numBuyRedRings := int64(7)
 	numBuyRedRings := int64(0)
-	energy := int64(6)
+	energy := int64(gameconf.CFile.StartingEnergy)
 	energyBuy := int64(0)
 	energyRenewsAt := time.Now().Unix() + 600 // in ten minutes
 	mumMessages := int64(0)

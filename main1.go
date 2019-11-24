@@ -13,6 +13,7 @@ import (
 	"github.com/fluofoxxo/outrun/bgtasks"
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/config/eventconf"
+	"github.com/fluofoxxo/outrun/config/gameconf"
 	"github.com/fluofoxxo/outrun/config/infoconf"
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/inforeporters"
@@ -81,6 +82,15 @@ func main() {
 		}
 	} else {
 		log.Printf("[INFO] Info config file (%s) loaded\n", config.CFile.InfoConfigFilename)
+	}
+
+	err = gameconf.Parse(config.CFile.GameConfigFilename)
+	if err != nil {
+		if !config.CFile.SilenceGameConfigErrors {
+			log.Printf("[INFO] Failure loading game config file %s (%s), using defaults\n", config.CFile.GameConfigFilename, err)
+		}
+	} else {
+		log.Printf("[INFO] Game config file (%s) loaded\n", config.CFile.GameConfigFilename)
 	}
 
 	if config.CFile.EnableRPC {

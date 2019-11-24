@@ -1,6 +1,7 @@
 package netobj
 
 import (
+	"github.com/fluofoxxo/outrun/config/gameconf"
 	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/obj"
 	"github.com/fluofoxxo/outrun/obj/constobjs"
@@ -57,7 +58,28 @@ func DefaultCharacter(char obj.Character) Character {
 	}
 }
 
-func DefaultCharacterState() []Character { // every character
+func DefaultLockedCharacter(char obj.Character) Character {
+	ch := DefaultCharacter(char)
+	ch.LockCondition = int64(enums.LockConditionRingOrRedRing)
+	ch.Status = int64(enums.CharacterStatusLocked)
+	return ch
+}
+
+func DefaultStageLockedCharacter(char obj.Character) Character {
+	ch := DefaultCharacter(char)
+	ch.LockCondition = int64(enums.LockConditionMileageEpisode)
+	ch.Status = int64(enums.CharacterStatusLocked)
+	return ch
+}
+
+func DefaultRouletteLockedCharacter(char obj.Character) Character {
+	ch := DefaultCharacter(char)
+	ch.LockCondition = int64(enums.LockConditionRoulette)
+	ch.Status = int64(enums.CharacterStatusLocked)
+	return ch
+}
+
+func UnlockedCharacterState() []Character { // every character
 	// TODO: It looks like the game only wants 300000-300020, otherwise an index error is created. Investigate this in game!
 	return []Character{
 		DefaultCharacter(constobjs.CharacterSonic),
@@ -81,5 +103,34 @@ func DefaultCharacterState() []Character { // every character
 		DefaultCharacter(constobjs.CharacterTikal),
 		DefaultCharacter(constobjs.CharacterMephiles),
 		DefaultCharacter(constobjs.CharacterPSISilver),
+	}
+}
+
+func DefaultCharacterState() []Character {
+	if gameconf.CFile.AllCharactersUnlocked {
+		return UnlockedCharacterState()
+	}
+	return []Character{
+		DefaultCharacter(constobjs.CharacterSonic),
+		DefaultStageLockedCharacter(constobjs.CharacterTails),    // Episode 11
+		DefaultStageLockedCharacter(constobjs.CharacterKnuckles), // 'Campaign Map 17'
+		DefaultLockedCharacter(constobjs.CharacterAmy),
+		DefaultLockedCharacter(constobjs.CharacterShadow),
+		DefaultLockedCharacter(constobjs.CharacterBlaze),
+		DefaultLockedCharacter(constobjs.CharacterRouge),
+		DefaultLockedCharacter(constobjs.CharacterOmega),
+		DefaultLockedCharacter(constobjs.CharacterBig),
+		DefaultLockedCharacter(constobjs.CharacterCream),
+		DefaultLockedCharacter(constobjs.CharacterEspio),
+		DefaultLockedCharacter(constobjs.CharacterCharmy),
+		DefaultLockedCharacter(constobjs.CharacterVector),
+		DefaultLockedCharacter(constobjs.CharacterSilver),
+		DefaultLockedCharacter(constobjs.CharacterMetalSonic),
+		DefaultLockedCharacter(constobjs.CharacterClassicSonic),
+		DefaultLockedCharacter(constobjs.CharacterWerehog),
+		DefaultLockedCharacter(constobjs.CharacterSticks),
+		DefaultLockedCharacter(constobjs.CharacterTikal),
+		DefaultLockedCharacter(constobjs.CharacterMephiles),
+		DefaultLockedCharacter(constobjs.CharacterPSISilver),
 	}
 }

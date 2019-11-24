@@ -67,9 +67,9 @@ var AreaRewards = map[string][]obj.MileageReward{
 	"10,1": []obj.MileageReward{ // NO DOCS. This is an assumption!
 		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 8000, 5),
 		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 10, 5),
+		obj.NewMileageReward(enums.IncentiveTypeFriend, enums.CharaTypeTails, 1, 5), // Get Tails at end of episode
 	},
 	"11,1": []obj.MileageReward{
-		obj.NewMileageReward(enums.IncentiveTypeFriend, enums.CharaTypeTails, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 5000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3), // TODO: Find animal ID, if needed
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 5000, 4),
@@ -144,6 +144,7 @@ var AreaRewards = map[string][]obj.MileageReward{
 
 		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 8000, 5),
 		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 30, 5),
+		obj.NewMileageReward(enums.IncentiveTypeFriend, enums.CharaTypeKnuckles, 1, 5), // Get Knuckles at end of episode
 	},
 	"17,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDBarrier, 5, 2),

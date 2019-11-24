@@ -25,6 +25,8 @@ var Defaults = map[string]interface{}{
 	"DSilenceEventConfigErrors": true,
 	"DInfoConfigFilename":       "info_config.json",
 	"DSilenceInfoConfigErrors":  true,
+	"DGameConfigFilename":       "game_config.json",
+	"DSilenceGameConfigErrors":  true,
 }
 
 var CFile ConfigFile
@@ -47,6 +49,8 @@ type ConfigFile struct {
 	SilenceEventConfigErrors bool   `json:"silenceEventConfigErrors,omitempty"`
 	InfoConfigFilename       string `json:"infoConfigFilename,omitempty"`
 	SilenceInfoConfigErrors  bool   `json:"silenceInfoConfigErrors,omitempty"`
+	GameConfigFilename       string `json:"gameConfigFilename,omitempty"`
+	SilenceGameConfigErrors  bool   `json:"silenceGameConfigErrors,omitempty"`
 }
 
 func Parse(filename string) error {
@@ -68,6 +72,8 @@ func Parse(filename string) error {
 		Defaults["DSilenceEventConfigErrors"].(bool),
 		Defaults["DInfoConfigFilename"].(string),
 		Defaults["DSilenceInfoConfigErrors"].(bool),
+		Defaults["DGameConfigFilename"].(string),
+		Defaults["DSilenceGameConfigErrors"].(bool),
 	}
 	file, err := loadFile(filename)
 	if err != nil {
