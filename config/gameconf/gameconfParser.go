@@ -30,6 +30,7 @@ var CharacterMap = map[string]string{
 	"tikal":           enums.CTStrTikal,
 	"mephiles":        enums.CTStrMephiles,
 	"psiSilver":       enums.CTStrPSISilver,
+	"espSilver":       enums.CTStrPSISilver,
 	"amitieAmy":       enums.CTStrAmitieAmy,
 	"gothicAmy":       enums.CTStrGothicAmy,
 	"halloweenShadow": enums.CTStrHalloweenShadow,
