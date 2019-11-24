@@ -2,7 +2,7 @@
 
 ### Summary
 
-Outrun is a custom server for Sonic Runners, reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) project.
+Outrun is a custom server for Sonic Runners, reverse engineered from the [Sonic Runners Revival](https://sonic.runner.es/) (Now uses Outrun) project.
 
 ### Goals
 
@@ -20,15 +20,17 @@ Notable:
   - Character/Chao equipping
   - Character leveling and progression
   - Item/Chao roulette functionality (Functional, in progress)
+  - Events
 
 Functional:
   - Android and iOS support
   - High score keeping
-  - Notifications (pending revamp)
+  - In game notices
+  - Handy configuration file support for general, events, and notices
   - Ticker notices
   - Small database size and memory footprint
   - Low CPU usage
-  - Descriptive error reporting and handling
+  - Analytics support
 
 ### Building
 
@@ -52,7 +54,7 @@ Binary releases may be provided in more mature stages of the repository.
 5. Navigate to assets/bin/Data/Managed and extract all the DLL files to their own folder
 6. Open Assembly-CSharp.dll in dnSpy
 7. Open the class `NetBaseUtil`, and find the variable `mActionServerUrlTable `
-8. Edit every string in the `mActionServerUrlTable` array to `http://<IP>:<PORT>/` where <IP> is replaced by the IP for your instance and <PORT> is replaced by the port for your instance (Default: 9001)
+8. Edit every string in the `mActionServerUrlTable` array to `http://<IP>:<PORT>/` where `<IP>` is replaced by the IP for your instance and `<PORT>` is replaced by the port for your instance (Default: 9001)
 9. Repeat step 7 for `mSecureActionServerUrlTable`
 10. If you have an assets server, use its IP and port to replace the values in `mAssetURLTable` and `mInformationURLTable` to `http://<IP>:<PORT>/assets/` and `http://<IP>:<PORT>/information/` respectively
 11. Click File -> Save Module... and save the DLL file
@@ -75,3 +77,9 @@ Much thanks to:
   - **YPwn**, whose closest point of online social contact I do not know, for creating and running the Sonic Runners Revival server upon which this project bases much of its code upon.
   - **[@Sazpaimon](https://github.com/Sazpaimon)** for finding the encryption key I so desparately looked for but could not on my own.
   - **nacabaro** (nacabaro#2138 on Discord) for traffic logging and the discovery of **[DaGuAr](https://www.youtube.com/user/Gorila5)**'s asset archive.
+
+#### Additional assistance
+  - Story Mode items
+    - lukaafx (Discord @Kalu04#3243)
+    - [TemmieFlakes](https://twitter.com/pictochat3)
+    - SuperSonic893YT

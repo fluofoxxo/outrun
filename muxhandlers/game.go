@@ -6,12 +6,17 @@ import (
 	"math/rand"
 	"strconv"
 
+	"github.com/fluofoxxo/outrun/analytics"
+	"github.com/fluofoxxo/outrun/analytics/factors"
 	"github.com/fluofoxxo/outrun/config"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
+	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/helper"
+	"github.com/fluofoxxo/outrun/logic/campaign"
 	"github.com/fluofoxxo/outrun/netobj"
+	"github.com/fluofoxxo/outrun/obj/constobjs"
 	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses"
 	"github.com/fluofoxxo/outrun/status"
@@ -71,6 +76,11 @@ func QuickActStart(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeTimedStarts)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeTimedStarts)", err)
 	}
 }
 
@@ -85,6 +95,11 @@ func ActStart(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeStoryStarts)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeStoryStarts)", err)
 	}
 }
 
@@ -105,6 +120,11 @@ func ActRetry(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeRevives)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeRevives)", err)
 	}
 }
 
@@ -226,6 +246,11 @@ func QuickPostGameResults(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeTimedEnds)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeTimedEnds)", err)
 	}
 }
 
@@ -257,15 +282,22 @@ func PostGameResults(helper *helper.Helper) {
 		mainC,
 		subC,
 	}
-	if config.CFile.DebugPrints {
-		helper.Out("Pre-function")
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.StageTotalScore)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Point)))
-		helper.Out(strconv.Itoa(int(request.Score)))
-	}
+	helper.DebugOut("Pre-function")
+	helper.DebugOut("Chapter: %v", player.MileageMapState.Chapter)
+	helper.DebugOut("Episode: %v", player.MileageMapState.Episode)
+	helper.DebugOut("StageTotalScore: %v", player.MileageMapState.StageTotalScore)
+	helper.DebugOut("Point: %v", player.MileageMapState.Point)
+	helper.DebugOut("request.Score: %v", request.Score)
+
+	incentives := constobjs.GetMileageIncentives(player.MileageMapState.Episode, player.MileageMapState.Chapter) // Game wants incentives in _current_ episode-chapter
+	var oldRewardEpisode, newRewardEpisode int64
+	var oldRewardChapter, newRewardChapter int64
+	var oldRewardPoint, newRewardPoint int64
+
 	if request.Closed == 0 { // If the game wasn't exited out of
+		oldRewardEpisode = player.MileageMapState.Episode
+		oldRewardChapter = player.MileageMapState.Chapter
+		oldRewardPoint = player.MileageMapState.Point
 		player.PlayerState.NumRings += request.Rings
 		player.PlayerState.NumRedRings += request.RedRings
 		player.PlayerState.NumRouletteTicket += request.RedRings // TODO: URGENT! Remove as soon as possible!
@@ -343,29 +375,69 @@ func PostGameResults(helper *helper.Helper) {
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
-				if config.CFile.DebugPrints {
-					helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
+				helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
+				if config.CFile.Debug {
+					player.MileageMapState.Episode = 15
 				}
+			}
+			if player.MileageMapState.Episode > 50 { // if beat game, reset to 50-1
+				player.MileageMapState.Episode = 50
+				player.MileageMapState.Chapter = 1
+				player.MileageMapState.Point = 0
+				player.MileageMapState.StageTotalScore = 0
+				helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
 			}
 		} else {
 			player.MileageMapState.Point = newPoint
 		}
+		if config.CFile.Debug {
+			if player.MileageMapState.Episode < 14 {
+				player.MileageMapState.Episode = 14
+			}
+		}
+		newRewardEpisode = player.MileageMapState.Episode
+		newRewardChapter = player.MileageMapState.Chapter
+		newRewardPoint = player.MileageMapState.Point
+		// add rewards to PlayerState
+		wonRewards := campaign.GetWonRewards(oldRewardEpisode, oldRewardChapter, oldRewardPoint, newRewardEpisode, newRewardChapter, newRewardPoint)
+		helper.DebugOut("wonRewards length: %v", wonRewards)
+		helper.DebugOut("Previous rings: %v", player.PlayerState.NumRings)
+		newItems := player.PlayerState.Items
+		for _, reward := range wonRewards { // TODO: This is O(n^2). Maybe alleviate this?
+			helper.DebugOut("Reward: %s", reward.ItemID)
+			helper.DebugOut("Reward amount: %v", reward.NumItem)
+			if reward.ItemID[2:] == "12" { // ID is an item
+				// check if the item is already in the player's inventory
+				for _, item := range player.PlayerState.Items {
+					if item.ID == reward.ItemID { // item found, increment amount
+						item.Amount += reward.NumItem
+						break
+					}
+				}
+			} else if reward.ItemID == strconv.Itoa(enums.ItemIDRing) { // Rings
+				player.PlayerState.NumRings += reward.NumItem
+			} else if reward.ItemID == strconv.Itoa(enums.ItemIDRedRing) { // Red rings
+				player.PlayerState.NumRedRings += reward.NumItem
+			} else {
+				helper.Out("Unknown reward '" + reward.ItemID + "', ignoring")
+			}
+			// TODO: allow for characters to join the cast, like Tails on 11-1.1
+		}
+		helper.DebugOut("Current rings: %v", player.PlayerState.NumRings)
+		player.PlayerState.Items = newItems
 	}
 
-	if config.CFile.DebugPrints {
-		helper.Out("AFTER")
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Chapter)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Episode)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.StageTotalScore)))
-		helper.Out(strconv.Itoa(int(player.MileageMapState.Point)))
-		helper.Out(strconv.Itoa(int(request.Score)))
-	}
+	helper.DebugOut("Chapter: %v", player.MileageMapState.Chapter)
+	helper.DebugOut("Episode: %v", player.MileageMapState.Episode)
+	helper.DebugOut("StageTotalScore: %v", player.MileageMapState.StageTotalScore)
+	helper.DebugOut("Point: %v", player.MileageMapState.Point)
+	helper.DebugOut("request.Score: %v", request.Score)
 
 	mainCIndex := player.IndexOfChara(mainC.ID) // TODO: check if -1
 	subCIndex := player.IndexOfChara(subC.ID)   // TODO: check if -1
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters)
+	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters, incentives)
 	// apply the save after the response so that we don't break the leveling
 	player.CharacterState[mainCIndex] = mainC
 	player.CharacterState[subCIndex] = subC
@@ -378,13 +450,19 @@ func PostGameResults(helper *helper.Helper) {
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	_, err = analytics.Store(player.ID, factors.AnalyticTypeStoryEnds)
+	if err != nil {
+		helper.WarnErr("Error storing analytics (AnalyticTypeStoryEnds)", err)
 	}
 }
 
 func GetFreeItemList(helper *helper.Helper) {
-	// Probably agnostic...
+	// TODO: allow free items to be set via config
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultFreeItemList(baseInfo)
+	//response := responses.FreeItemList(baseInfo, []obj.Item{}) // No free items
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

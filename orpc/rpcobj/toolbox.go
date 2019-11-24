@@ -35,6 +35,11 @@ type ToolboxReply struct {
 	Info   string
 }
 
+type ToolboxValueReply struct {
+	Status uint
+	Result interface{}
+}
+
 type ChangeValueArgs struct {
 	UID   string
 	Value interface{}

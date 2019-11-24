@@ -3,9 +3,14 @@ package muxhandlers
 import (
 	"encoding/json"
 
+	"github.com/fluofoxxo/outrun/analytics"
+	"github.com/fluofoxxo/outrun/analytics/factors"
+	"github.com/fluofoxxo/outrun/config/infoconf"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/helper"
+	"github.com/fluofoxxo/outrun/logic/conversion"
+	"github.com/fluofoxxo/outrun/obj"
 	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses"
 	"github.com/fluofoxxo/outrun/status"
@@ -93,6 +98,7 @@ func Login(helper *helper.Helper) {
 			helper.InternalErr("Error sending response", err)
 			return
 		}
+		analytics.Store(player.ID, factors.AnalyticTypeLogins)
 		return
 	}
 }
@@ -114,7 +120,17 @@ func GetVariousParameter(helper *helper.Helper) {
 
 func GetInformation(helper *helper.Helper) {
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultInformation(baseInfo)
+	infos := []obj.Information{}
+	if infoconf.CFile.EnableInfos {
+		for _, ci := range infoconf.CFile.Infos {
+			newInfo := conversion.ConfiguredInfoToInformation(ci)
+			infos = append(infos, newInfo)
+			helper.DebugOut(newInfo.Param)
+		}
+	}
+	operatorInfos := []obj.OperatorInformation{}
+	numOpUnread := int64(len(operatorInfos))
+	response := responses.Information(baseInfo, infos, operatorInfos, numOpUnread)
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
