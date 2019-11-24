@@ -324,26 +324,35 @@ func PostGameResults(helper *helper.Helper) {
 			helper.InternalErr("Error getting upgrade increase", fmt.Errorf("no key '%s' in consts.UpgradeIncreases", subC.ID))
 			return
 		}
-		if mainC.Level < 100 {
-			mainC.Exp += expIncrease
-			for mainC.Exp >= mainC.Cost {
+		if playCharacters[0].Level < 100 {
+			playCharacters[0].Exp += expIncrease
+			for playCharacters[0].Exp >= playCharacters[0].Cost {
 				// more exp than cost = level up
-				mainC.Level++                                   // increase level
-				mainC.AbilityLevel[abilityIndex]++              // increase ability level
-				mainC.Exp -= mainC.Cost                         // remove cost from exp
-				mainC.Cost += consts.UpgradeIncreases[mainC.ID] // increase cost
+				playCharacters[0].Level++                                               // increase level
+				playCharacters[0].AbilityLevel[abilityIndex]++                          // increase ability level
+				playCharacters[0].Exp -= playCharacters[0].Cost                         // remove cost from exp
+				playCharacters[0].Cost += consts.UpgradeIncreases[playCharacters[0].ID] // increase cost
 			}
 		}
-		if subC.Level < 100 {
-			subC.Exp += expIncrease
-			for subC.Exp >= subC.Cost {
+		if playCharacters[1].Level < 100 {
+			playCharacters[1].Exp += expIncrease
+			for playCharacters[1].Exp >= playCharacters[1].Cost {
 				// more exp than cost = level up
-				subC.Level++                                  // increase level
-				subC.AbilityLevel[abilityIndex]++             // increase ability level
-				subC.Exp -= subC.Cost                         // remove cost from exp
-				subC.Cost += consts.UpgradeIncreases[subC.ID] // increase cost
+				playCharacters[1].Level++                                               // increase level
+				playCharacters[1].AbilityLevel[abilityIndex]++                          // increase ability level
+				playCharacters[1].Exp -= playCharacters[1].Cost                         // remove cost from exp
+				playCharacters[1].Cost += consts.UpgradeIncreases[playCharacters[1].ID] // increase cost
 			}
 		}
+
+		helper.DebugOut("Old mainC Exp: " + strconv.Itoa(int(mainC.Exp)) + " / " + strconv.Itoa(int(mainC.Cost)))
+		helper.DebugOut("Old mainC Level: " + strconv.Itoa(int(mainC.Level)))
+		helper.DebugOut("Old subC Exp: " + strconv.Itoa(int(subC.Exp)) + " / " + strconv.Itoa(int(subC.Cost)))
+		helper.DebugOut("Old subC Level: " + strconv.Itoa(int(subC.Level)))
+		helper.DebugOut("New mainC Exp: " + strconv.Itoa(int(playCharacters[0].Exp)) + " / " + strconv.Itoa(int(playCharacters[0].Cost)))
+		helper.DebugOut("New mainC Level: " + strconv.Itoa(int(playCharacters[0].Level)))
+		helper.DebugOut("New subC Exp: " + strconv.Itoa(int(playCharacters[1].Exp)) + " / " + strconv.Itoa(int(playCharacters[1].Cost)))
+		helper.DebugOut("New subC Level: " + strconv.Itoa(int(playCharacters[1].Level)))
 
 		/*playCharacters = []netobj.Character{ // TODO: check if this redefinition is needed
 			mainC,
@@ -438,18 +447,21 @@ func PostGameResults(helper *helper.Helper) {
 
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DefaultPostGameResults(baseInfo, player, playCharacters, incentives)
+
+	err = helper.SendResponse(response)
+	if err != nil {
+		helper.InternalErr("Error sending response", err)
+		return
+	}
+
 	// apply the save after the response so that we don't break the leveling
+	mainC = playCharacters[0]
+	subC = playCharacters[1]
 	player.CharacterState[mainCIndex] = mainC
 	player.CharacterState[subCIndex] = subC
 	err = db.SavePlayer(player)
 	if err != nil {
 		helper.InternalErr("Error saving player", err)
-		return
-	}
-
-	err = helper.SendResponse(response)
-	if err != nil {
-		helper.InternalErr("Error sending response", err)
 		return
 	}
 	_, err = analytics.Store(player.ID, factors.AnalyticTypeStoryEnds)
