@@ -209,3 +209,22 @@ func (t *Toolbox) Debug_RawPlayer(uid string, reply *ToolboxReply) error {
 	reply.Info = string(playerSrc)
 	return nil
 }
+
+func (t *Toolbox) Debug_ResetCharacterState(uid string, reply *ToolboxReply) error {
+	player, err := db.GetPlayer(uid)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "unable to get player: " + err.Error()
+		return err
+	}
+	player.CharacterState = netobj.DefaultCharacterState()
+	err = db.SavePlayer(player)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = err.Error()
+		return err
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
