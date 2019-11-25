@@ -59,8 +59,10 @@ func DefaultPlayerState() PlayerState {
 	mainCharaID := gameconf.CFile.DefaultMainCharacter
 	//subCharaID := enums.CTStrTails
 	subCharaID := gameconf.CFile.DefaultSubCharacter
-	mainChaoID := ChaoIDs[0]
-	subChaoID := ChaoIDs[5] // changed from [1]...
+	//mainChaoID := ChaoIDs[0]
+	mainChaoID := gameconf.CFile.DefaultMainChao
+	//subChaoID := ChaoIDs[5] // changed from [1]...
+	subChaoID := gameconf.CFile.DefaultSubChao
 	numRings := int64(gameconf.CFile.StartingRings)
 	//numBuyRings := int64(1)
 	numBuyRings := int64(0)

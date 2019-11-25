@@ -241,7 +241,10 @@ func (t *Toolbox) Debug_MatchPlayersToGameConf(uids string, reply *ToolboxReply)
 			return err
 		}
 		player.CharacterState = netobj.DefaultCharacterState() // already uses AllCharactersUnlocked
+		player.ChaoState = constnetobjs.DefaultChaoState()     // already uses AllChaoUnlocked
 		player.PlayerState.MainCharaID = gameconf.CFile.DefaultMainCharacter
+		player.PlayerState.SubChaoID = gameconf.CFile.DefaultSubChao
+		player.PlayerState.MainChaoID = gameconf.CFile.DefaultMainChao
 		player.PlayerState.SubCharaID = gameconf.CFile.DefaultSubCharacter
 		player.PlayerState.NumRings = gameconf.CFile.StartingRings
 		player.PlayerState.NumRedRings = gameconf.CFile.StartingRedRings

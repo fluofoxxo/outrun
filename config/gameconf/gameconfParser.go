@@ -8,7 +8,7 @@ import (
 	"github.com/fluofoxxo/outrun/enums"
 )
 
-var CharacterMap = map[string]string{
+var CharacterMap = map[string]string{ // TODO: move to consts?
 	"sonic":           enums.CTStrSonic,
 	"tails":           enums.CTStrTails,
 	"knuckles":        enums.CTStrTails,
@@ -43,11 +43,16 @@ var CharacterMap = map[string]string{
 	"none":            "-1",
 }
 
+var ChaoMap = enums.ChaoNameMap
+
 // defaults
 var Defaults = map[string]interface{}{
 	"DAllCharactersUnlocked": true,
+	"DAllChaoUnlocked":       true,
 	"DDefaultMainCharacter":  "sonic",
 	"DDefaultSubCharacter":   "empty",
+	"DDefaultMainChao":       "empty",
+	"DDefaultSubChao":        "empty",
 	"DStartingRings":         int64(5000),
 	"DStartingRedRings":      int64(25),
 	"DStartingEnergy":        int64(5),
@@ -57,8 +62,11 @@ var CFile ConfigFile
 
 type ConfigFile struct {
 	AllCharactersUnlocked bool   `json:"allCharactersUnlocked,omitempty"`
+	AllChaoUnlocked       bool   `json:"allChaoUnlocked,omitempty"`
 	DefaultMainCharacter  string `json:"defaultMainCharacter,omitempty"`
 	DefaultSubCharacter   string `json:"defaultSubCharacter,omitempty"`
+	DefaultMainChao       string `json:"defaultMainChao,omitempty"`
+	DefaultSubChao        string `json:"defaultSubChao,omitempty"`
 	StartingRings         int64  `json:"startingRings,omitempty"`
 	StartingRedRings      int64  `json:"startingRedRings,omitempty"`
 	StartingEnergy        int64  `json:"startingEnergy,omitempty"`
@@ -67,8 +75,11 @@ type ConfigFile struct {
 func Parse(filename string) error {
 	CFile = ConfigFile{
 		Defaults["DAllCharactersUnlocked"].(bool),
+		Defaults["DAllChaoUnlocked"].(bool),
 		Defaults["DDefaultMainCharacter"].(string),
 		Defaults["DDefaultSubCharacter"].(string),
+		Defaults["DDefaultMainChao"].(string),
+		Defaults["DDefaultSubChao"].(string),
 		Defaults["DStartingRings"].(int64),
 		Defaults["DStartingRedRings"].(int64),
 		Defaults["DStartingEnergy"].(int64),

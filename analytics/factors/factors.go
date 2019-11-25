@@ -20,4 +20,5 @@ const (
 	AnalyticTypeSpendRings
 	AnalyticTypeSpendRedRings
 	AnalyticTypeRevives // fulfilled
+	AnalyticTypeBadRequests
 )

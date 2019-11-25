@@ -65,17 +65,47 @@ func EquipChao(helper *helper.Helper) {
 	mainChaoID := request.MainChaoID
 	subChaoID := request.SubChaoID
 	if mainChaoID != "-1" {
-		player.PlayerState.MainChaoID = mainChaoID
-		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeMainChao)
-		if err != nil {
-			helper.WarnErr("Error storing analytics (AnalyticTypeChangeMainChao)", err)
+		// check if the player actually has the Chao
+		chaoIndex := player.IndexOfChao(mainChaoID)
+		if chaoIndex != -1 {
+			chao := player.ChaoState[chaoIndex]
+			if chao.Acquired != 0 && chao.Status != enums.ChaoStatusNotOwned {
+				player.PlayerState.MainChaoID = mainChaoID
+			} else {
+				helper.Warn("Bad Chao state: chao.Acquired = %v, should = 0; chao.Status = %v, should NOT equal enums.ChaoStatusNotOwned (%v)", chao.Acquired, chao.Status, enums.ChaoStatusNotOwned)
+			}
+			_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeMainChao)
+			if err != nil {
+				helper.WarnErr("Error storing analytics (AnalyticTypeChangeMainChao)", err)
+			}
+		} else {
+			helper.Warn("Unable to find chao ID '%s'", mainChaoID)
+			_, err = analytics.Store(player.ID, factors.AnalyticTypeBadRequests)
+			if err != nil {
+				helper.WarnErr("Error storing analytics (AnalyticTypeBadRequests)", err)
+			}
 		}
 	}
 	if subChaoID != "-1" {
-		player.PlayerState.SubChaoID = subChaoID
-		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeSubChao)
-		if err != nil {
-			helper.WarnErr("Error storing analytics (AnalyticTypeChangeSubChao)", err)
+		// check if the player actually has the Chao
+		chaoIndex := player.IndexOfChao(subChaoID)
+		if chaoIndex != -1 {
+			chao := player.ChaoState[chaoIndex]
+			if chao.Acquired != 0 && chao.Status != enums.ChaoStatusNotOwned {
+				player.PlayerState.MainChaoID = subChaoID
+			} else {
+				helper.Warn("Bad Chao state: chao.Acquired = %v, should = 0; chao.Status = %v, should NOT equal enums.ChaoStatusNotOwned (%v)", chao.Acquired, chao.Status, enums.ChaoStatusNotOwned)
+			}
+			_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeSubChao)
+			if err != nil {
+				helper.WarnErr("Error storing analytics (AnalyticTypeChangeSubChao)", err)
+			}
+		} else {
+			helper.Warn("Unable to find chao ID '%s'", subChaoID)
+			_, err = analytics.Store(player.ID, factors.AnalyticTypeBadRequests)
+			if err != nil {
+				helper.WarnErr("Error storing analytics (AnalyticTypeBadRequests)", err)
+			}
 		}
 	}
 	helper.DebugOut("Main Chao: %s", mainChaoID)
@@ -164,67 +194,41 @@ func CommitChaoWheelSpin(helper *helper.Helper) {
 					helper.InternalErr("cannot get index of character '"+strconv.Itoa(charIndex)+"'", err)
 					return
 				}
-				starUpCount := consts.ChaoRouletteCharacterStarIncrease
-				for starUpCount > 0 && player.CharacterState[charIndex].Star < 10 { // 10 is max amount of stars a character can have before game breaks
-					starUpCount--
-					player.CharacterState[charIndex].Star++
+				if player.CharacterState[charIndex].Status == enums.CharacterStatusLocked {
+					// unlock the character
+					player.CharacterState[charIndex].Status = enums.CharacterStatusUnlocked
+				} else {
+					starUpCount := consts.ChaoRouletteCharacterStarIncrease
+					for starUpCount > 0 && player.CharacterState[charIndex].Star < 10 { // 10 is max amount of stars a character can have before game breaks
+						starUpCount--
+						player.CharacterState[charIndex].Star++
+					}
+					spinResult.WonPrize.Level = player.CharacterState[charIndex].Level // set level of prize to character level
 				}
-				/*
-					// The following code is for leveling up characters when gotten by the
-					// roulette. This has been dumped in favor of giving a star to the
-					// character.
-					// TODO: remove
-					levelUpCharacter := func() error {
-						levelIncrease, ok := consts.UpgradeIncreases[player.CharacterState[charIndex].ID]
-						if !ok {
-							return fmt.Errorf("key '%v' not found in consts.UpgradeIncreases", player.CharacterState[charIndex].ID)
-						}
-						player.CharacterState[charIndex].AbilityLevel[rand.Intn(len(player.CharacterState[charIndex].AbilityLevel))]++ // upgrade random ability
-						player.CharacterState[charIndex].Level += 1
-						player.CharacterState[charIndex].Exp = 0
-						player.CharacterState[charIndex].Cost += levelIncrease
-						return nil
-					}
-					levelUpCount := consts.ChaoRouletteCharacterLevelIncrease
-					for levelUpCount > 0 { // level up (consts.ChaoRouletteCharacterLevelIncrease) times
-						levelUpCount--
-						err := levelUpCharacter()
-						if err != nil {
-							helper.InternalErr("Error levelling up character", err)
-							return
-						}
-
-						if player.CharacterState[charIndex].Level > 100 { // if limit break
-							// reset all level based character values, do limit break
-							player.CharacterState[charIndex].Level = 0
-							player.CharacterState[charIndex].AbilityLevel = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-							player.CharacterState[charIndex].AbilityNumRings = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-							player.CharacterState[charIndex].AbilityLevelUpExp = []int64{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-							player.CharacterState[charIndex].Star++
-							if player.CharacterState[charIndex].Star >= player.CharacterState[charIndex].StarMax { // if exceeded max amount of stars
-								// TODO: then what?
-								player.CharacterState[charIndex].Star = player.CharacterState[charIndex].StarMax
-							}
-						}
-					}
-				*/
-				spinResult.WonPrize.Level = player.CharacterState[charIndex].Level // set level of prize to character level
 			} else if prize.Rarity == 2 || prize.Rarity == 1 || prize.Rarity == 0 { // Chao
 				chaoIndex := player.IndexOfChao(prize.ID)
 				if chaoIndex == -1 { // chao index not found, should never happen
 					helper.InternalErr("cannot get index of chao '"+strconv.Itoa(chaoIndex)+"'", err)
 					return
 				}
-				highRange := int(consts.ChaoRouletteChaoLevelIncreaseHigh)
-				lowRange := int(consts.ChaoRouletteChaoLevelIncreaseLow)
-				prizeChaoLevel := int64(rand.Intn(highRange-lowRange+1) + lowRange) // This level is added to the current Chao level
-				player.ChaoState[chaoIndex].Level += prizeChaoLevel
-				if player.ChaoState[chaoIndex].Level > 10 { // if max chao level (https://www.deviantart.com/vocaloidbrsfreak97/journal/So-Sonic-Runners-just-recently-updated-574789098)
-					excess := player.ChaoState[chaoIndex].Level - 10 // get amount gone over
-					prizeChaoLevel -= excess                         // shave it from prize level
-					player.ChaoState[chaoIndex].Level = 10           // reset to maximum
+				if player.ChaoState[chaoIndex].Status == enums.ChaoStatusNotOwned {
+					// earn the Chao
+					player.ChaoState[chaoIndex].Status = enums.ChaoStatusOwned
+					player.ChaoState[chaoIndex].Acquired = 1
+					player.ChaoState[chaoIndex].Level = 0 // starting level
+				} else {
+					highRange := int(consts.ChaoRouletteChaoLevelIncreaseHigh)
+					lowRange := int(consts.ChaoRouletteChaoLevelIncreaseLow)
+					prizeChaoLevel := int64(rand.Intn(highRange-lowRange+1) + lowRange) // This level is added to the current Chao level
+					player.ChaoState[chaoIndex].Level += prizeChaoLevel
+					if player.ChaoState[chaoIndex].Level > 10 { // if max chao level (https://www.deviantart.com/vocaloidbrsfreak97/journal/So-Sonic-Runners-just-recently-updated-574789098)
+						excess := player.ChaoState[chaoIndex].Level - 10              // get amount gone over
+						prizeChaoLevel -= excess                                      // shave it from prize level
+						player.ChaoState[chaoIndex].Level = 10                        // reset to maximum
+						player.ChaoState[chaoIndex].Status = enums.ChaoStatusMaxLevel // set status to MaxLevel
+					}
+					spinResult.WonPrize.Level = player.ChaoState[chaoIndex].Level
 				}
-				spinResult.WonPrize.Level = player.ChaoState[chaoIndex].Level
 			} else { // Should never happen!
 				helper.InternalErr("unknown prize rarity '"+strconv.Itoa(int(prize.Rarity))+"'", fmt.Errorf("")) // TODO: Probably shouldn't use a blank error?
 			}
