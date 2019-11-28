@@ -109,13 +109,18 @@ func ActRetry(helper *helper.Helper) {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
-	player.PlayerState.NumRedRings -= 5
-	err = db.SavePlayer(player)
-	if err != nil {
-		helper.InternalErr("Error saving player", err)
-		return
+	responseStatus := status.OK
+	if player.PlayerState.NumRedRings >= 5 { // enough red rings
+		player.PlayerState.NumRedRings -= 5
+		err = db.SavePlayer(player)
+		if err != nil {
+			helper.InternalErr("Error saving player", err)
+			return
+		}
+	} else {
+		responseStatus = status.NotEnoughRedRings
 	}
-	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.NewBaseResponse(baseInfo)
 	err = helper.SendResponse(response)
 	if err != nil {
