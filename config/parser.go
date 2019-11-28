@@ -22,11 +22,11 @@ var Defaults = map[string]interface{}{
 	"DEnableAnalytics":          false,
 	"DPrintPlayerNames":         false,
 	"DEventConfigFilename":      "event_config.json",
-	"DSilenceEventConfigErrors": true,
+	"DSilenceEventConfigErrors": false,
 	"DInfoConfigFilename":       "info_config.json",
-	"DSilenceInfoConfigErrors":  true,
+	"DSilenceInfoConfigErrors":  false,
 	"DGameConfigFilename":       "game_config.json",
-	"DSilenceGameConfigErrors":  true,
+	"DSilenceGameConfigErrors":  false,
 }
 
 var CFile ConfigFile
