@@ -121,6 +121,7 @@ func GetVariousParameter(helper *helper.Helper) {
 func GetInformation(helper *helper.Helper) {
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	infos := []obj.Information{}
+	helper.DebugOut("%v", infoconf.CFile.EnableInfos)
 	if infoconf.CFile.EnableInfos {
 		for _, ci := range infoconf.CFile.Infos {
 			newInfo := conversion.ConfiguredInfoToInformation(ci)
