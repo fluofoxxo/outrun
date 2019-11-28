@@ -11,6 +11,7 @@ import (
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/db/dbaccess"
+	"github.com/fluofoxxo/outrun/logic"
 	"github.com/fluofoxxo/outrun/netobj"
 	"github.com/fluofoxxo/outrun/netobj/constnetobjs"
 )
@@ -302,5 +303,22 @@ func (t *Toolbox) Debug_PrepTag1p0(uids string, reply *ToolboxReply) error {
 	}
 	reply.Status = StatusOK
 	reply.Info = "OK"
+	return nil
+}
+
+func (t *Toolbox) Debug_PlayersByPassword(password string, reply *ToolboxReply) error {
+	foundPlayers, err := logic.FindPlayersByPassword(password, false)
+	if err != nil {
+		reply.Status = StatusOtherError
+		reply.Info = "error finding players by password: " + err.Error()
+		return err
+	}
+	playerIDs := []string{}
+	for _, player := range foundPlayers {
+		playerIDs = append(playerIDs, player.ID)
+	}
+	final := strings.Join(playerIDs, ",")
+	reply.Status = StatusOK
+	reply.Info = final
 	return nil
 }
