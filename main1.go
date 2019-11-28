@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -17,6 +18,7 @@ import (
 	"github.com/fluofoxxo/outrun/config/infoconf"
 	"github.com/fluofoxxo/outrun/cryption"
 	"github.com/fluofoxxo/outrun/inforeporters"
+	"github.com/fluofoxxo/outrun/meta"
 	"github.com/fluofoxxo/outrun/muxhandlers"
 	"github.com/fluofoxxo/outrun/muxhandlers/muxobj"
 	"github.com/fluofoxxo/outrun/orpc"
@@ -56,7 +58,27 @@ func removePrependingSlashes(next http.Handler) http.Handler {
 	})
 }
 
+func checkArgs() bool {
+	// TODO: _VERY_ dirty command line argument checking. This should be
+	// changed into something more robust and less hacky!
+	args := os.Args[1:] // drop executable
+	amt := len(args)
+	if amt >= 1 {
+		if args[0] == "--version" {
+			fmt.Printf("Outrun %s\n", meta.Version)
+			return true
+		}
+		fmt.Println("Unknown given arguments")
+		return true
+	}
+	return false
+}
+
 func main() {
+	end := checkArgs()
+	if end {
+		return
+	}
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	err := config.Parse("config.json")
@@ -159,7 +181,6 @@ func main() {
 	}
 
 	if config.CFile.LogUnknownRequests {
-		//router.HandleFunc("/", OutputUnknownRequest)
 		router.PathPrefix("/").HandlerFunc(OutputUnknownRequest)
 	}
 
