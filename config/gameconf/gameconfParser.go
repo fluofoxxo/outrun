@@ -56,6 +56,7 @@ var Defaults = map[string]interface{}{
 	"DStartingRings":         int64(5000),
 	"DStartingRedRings":      int64(25),
 	"DStartingEnergy":        int64(5),
+	"DAllItemsFree":          true,
 }
 
 var CFile ConfigFile
@@ -70,6 +71,7 @@ type ConfigFile struct {
 	StartingRings         int64  `json:"startingRings,omitempty"`
 	StartingRedRings      int64  `json:"startingRedRings,omitempty"`
 	StartingEnergy        int64  `json:"startingEnergy,omitempty"`
+	AllItemsFree          bool   `json:"allItemsFree,omitempty"`
 }
 
 func Parse(filename string) error {
@@ -83,6 +85,7 @@ func Parse(filename string) error {
 		Defaults["DStartingRings"].(int64),
 		Defaults["DStartingRedRings"].(int64),
 		Defaults["DStartingEnergy"].(int64),
+		Defaults["DAllItemsFree"].(bool),
 	}
 	file, err := loadFile(filename)
 	if err != nil {
