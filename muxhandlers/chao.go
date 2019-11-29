@@ -64,6 +64,15 @@ func EquipChao(helper *helper.Helper) {
 
 	mainChaoID := request.MainChaoID
 	subChaoID := request.SubChaoID
+	/*
+		// check if the user has one chao active and is just switching
+		if mainChaoID == "-1" && subChaoID == player.PlayerState.MainChaoID {
+			// switching from main to sub
+		}
+		if mainChaoID == player.PlayerState.SubChaoID && subChaoID == "-1" {
+			// switching from sub to main
+		}
+	*/
 	if mainChaoID != "-1" {
 		// check if the player actually has the Chao
 		chaoIndex := player.IndexOfChao(mainChaoID)
@@ -92,7 +101,7 @@ func EquipChao(helper *helper.Helper) {
 		if chaoIndex != -1 {
 			chao := player.ChaoState[chaoIndex]
 			if chao.Acquired != 0 && chao.Status != enums.ChaoStatusNotOwned {
-				player.PlayerState.MainChaoID = subChaoID
+				player.PlayerState.SubChaoID = subChaoID
 			} else {
 				helper.Warn("Bad Chao state: chao.Acquired = %v, should = 0; chao.Status = %v, should NOT equal enums.ChaoStatusNotOwned (%v)", chao.Acquired, chao.Status, enums.ChaoStatusNotOwned)
 			}
@@ -108,6 +117,7 @@ func EquipChao(helper *helper.Helper) {
 			}
 		}
 	}
+	//completed:
 	helper.DebugOut("Main Chao: %s", mainChaoID)
 	helper.DebugOut("Sub Chao: %s", subChaoID)
 	if config.CFile.Debug {
