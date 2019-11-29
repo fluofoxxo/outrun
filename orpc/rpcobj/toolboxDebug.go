@@ -347,3 +347,29 @@ func (t *Toolbox) Debug_ResetPlayersRank(uids string, reply *ToolboxReply) error
 	reply.Info = "OK"
 	return nil
 }
+
+func (t *Toolbox) Debug_FixWerehogRedRings(uids string, reply *ToolboxReply) error {
+	wh := constobjs.CharacterWerehog
+	whid := wh.ID
+	whrr := wh.PriceRedRings
+	allUIDs := strings.Split(uids, ",")
+	for _, uid := range allUIDs {
+		player, err := db.GetPlayer(uid)
+		if err != nil {
+			reply.Status = StatusOtherError
+			reply.Info = fmt.Sprintf("unable to get player %s: ", uid) + err.Error()
+			return err
+		}
+		i := player.IndexOfChara(whid)
+		if i == -1 {
+			reply.Status = StatusOK
+			reply.Info = "index not found!"
+			return fmt.Errorf("index not found!")
+		}
+		player.CharacterState[i].Character.PriceRedRings = whrr
+		player.CharacterState[i].PriceRedRings = whrr
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
