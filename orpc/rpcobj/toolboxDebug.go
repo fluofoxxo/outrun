@@ -325,3 +325,25 @@ func (t *Toolbox) Debug_PlayersByPassword(password string, reply *ToolboxReply) 
 	reply.Info = final
 	return nil
 }
+
+func (t *Toolbox) Debug_ResetPlayersRank(uids string, reply *ToolboxReply) error {
+	allUIDs := strings.Split(uids, ",")
+	for _, uid := range allUIDs {
+		player, err := db.GetPlayer(uid)
+		if err != nil {
+			reply.Status = StatusOtherError
+			reply.Info = fmt.Sprintf("unable to get player %s: ", uid) + err.Error()
+			return err
+		}
+		player.PlayerState.Rank = 0 // for some reason, this gets incremented 1 by the game
+		err = db.SavePlayer(player)
+		if err != nil {
+			reply.Status = StatusOtherError
+			reply.Info = fmt.Sprintf("error saving player %s: ", uid) + err.Error()
+			return err
+		}
+	}
+	reply.Status = StatusOK
+	reply.Info = "OK"
+	return nil
+}
