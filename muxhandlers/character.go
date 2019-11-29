@@ -35,14 +35,32 @@ func ChangeCharacter(helper *helper.Helper) {
 	mainCharaID := request.MainCharaID
 	subCharaID := request.SubCharaID
 	if mainCharaID != "-1" {
-		player.PlayerState.MainCharaID = mainCharaID
+		index := player.IndexOfChara(mainCharaID)
+		if index == -1 {
+			helper.Warn("Bad mainCharaID '%s'", mainCharaID)
+			return
+		}
+		if player.CharacterState[index].Status != enums.CharacterStatusLocked {
+			player.PlayerState.MainCharaID = mainCharaID
+		} else {
+			helper.Warn("Bad attempt to change main chara to '%s'", mainCharaID)
+		}
 		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeMainCharacter)
 		if err != nil {
 			helper.WarnErr("Error storing analytics (AnalyticTypeChangeMainCharacter)", err)
 		}
 	}
 	if subCharaID != "-1" {
-		player.PlayerState.SubCharaID = subCharaID
+		index := player.IndexOfChara(subCharaID)
+		if index == -1 {
+			helper.Warn("Bad subCharaID '%s'", subCharaID)
+			return
+		}
+		if player.CharacterState[index].Status != enums.CharacterStatusLocked {
+			player.PlayerState.SubCharaID = subCharaID
+		} else {
+			helper.Warn("Bad attempt to change sub chara to '%s'", subCharaID)
+		}
 		_, err = analytics.Store(player.ID, factors.AnalyticTypeChangeSubCharacter)
 		if err != nil {
 			helper.WarnErr("Error storing analytics (AnalyticTypeChangeSubCharacter)", err)
