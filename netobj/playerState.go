@@ -89,7 +89,7 @@ func DefaultPlayerState() PlayerState {
 	numDailyChallenge := int64(0)
 	numPlayer := int64(0)
 	animals := int64(0)
-	rank := int64(1)
+	rank := int64(0)
 	return PlayerState{
 		items,
 		equippedItemIDs,

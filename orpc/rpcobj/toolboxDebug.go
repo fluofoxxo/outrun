@@ -293,6 +293,7 @@ func (t *Toolbox) Debug_PrepTag1p0(uids string, reply *ToolboxReply) error {
 		player.PlayerState.NumRedRings = sqrt(player.PlayerState.NumRedRings)
 		player.PlayerState.Energy = gameconf.CFile.StartingEnergy
 		player.PlayerState.Items = constobjs.DefaultPlayerStateItems
+		player.PlayerState.Rank = 0 // for some reason, this gets incremented 1 by the game
 
 		player.MileageMapState = netobj.DefaultMileageMapState() // reset campaign
 

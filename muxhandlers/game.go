@@ -494,6 +494,10 @@ func PostGameResults(helper *helper.Helper) {
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
+				player.PlayerState.Rank++
+				if player.PlayerState.Rank > 998 { // rank going above 999
+					player.PlayerState.Rank = 998
+				}
 				helper.DebugOut("goToNextEpisode -> Episode: %v", player.MileageMapState.Episode)
 				if config.CFile.Debug {
 					player.MileageMapState.Episode = 11
@@ -504,6 +508,10 @@ func PostGameResults(helper *helper.Helper) {
 				player.MileageMapState.Chapter = 1
 				player.MileageMapState.Point = 0
 				player.MileageMapState.StageTotalScore = 0
+				player.PlayerState.Rank++
+				if player.PlayerState.Rank > 998 { // rank going above 999
+					player.PlayerState.Rank = 998
+				}
 				helper.DebugOut("goToNextEpisode: Player (%s) beat the game!", player.ID)
 			}
 		} else {
