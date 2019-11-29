@@ -9,13 +9,16 @@ import (
 	"github.com/fluofoxxo/outrun/analytics"
 	"github.com/fluofoxxo/outrun/analytics/factors"
 	"github.com/fluofoxxo/outrun/config"
+	"github.com/fluofoxxo/outrun/config/gameconf"
 	"github.com/fluofoxxo/outrun/consts"
 	"github.com/fluofoxxo/outrun/db"
 	"github.com/fluofoxxo/outrun/emess"
 	"github.com/fluofoxxo/outrun/enums"
 	"github.com/fluofoxxo/outrun/helper"
 	"github.com/fluofoxxo/outrun/logic/campaign"
+	"github.com/fluofoxxo/outrun/logic/gameplay"
 	"github.com/fluofoxxo/outrun/netobj"
+	"github.com/fluofoxxo/outrun/obj"
 	"github.com/fluofoxxo/outrun/obj/constobjs"
 	"github.com/fluofoxxo/outrun/requests"
 	"github.com/fluofoxxo/outrun/responses"
@@ -23,10 +26,15 @@ import (
 )
 
 func GetDailyChallengeData(helper *helper.Helper) {
-	// no player, agnostic
+	player, err := helper.GetCallingPlayer()
+	if err != nil {
+		helper.InternalErr("Error getting player", err)
+		return
+	}
+	helper.DebugOut(fmt.Sprintf("%v", player.PlayerState.Items)) // TODO: get rid of this
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
 	response := responses.DailyChallengeData(baseInfo)
-	err := helper.SendResponse(response)
+	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
 	}
@@ -45,7 +53,7 @@ func GetCostList(helper *helper.Helper) {
 func GetMileageData(helper *helper.Helper) {
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
-		helper.InternalErr("Error getting player", err) // TODO: see if InternalErr is consistent with other usage of this context
+		helper.InternalErr("Error getting player", err)
 		return
 	}
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
@@ -66,16 +74,62 @@ func GetCampaignList(helper *helper.Helper) {
 }
 
 func QuickActStart(helper *helper.Helper) {
+	recv := helper.GetGameRequest()
+	var request requests.QuickActStartRequest
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		helper.Err("Error unmarshalling", err)
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
-	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	responseStatus := status.OK
+	// consume items
+	modToStringSlice := func(ns []int64) []string {
+		result := []string{}
+		for _, n := range ns {
+			result = append(result, fmt.Sprintf("%v", n))
+		}
+		return result
+	}
+	if !gameconf.CFile.AllItemsFree {
+		consumedItems := modToStringSlice(request.Modifier)
+		consumedRings := gameplay.GetRequiredItemPayment(consumedItems)
+		for _, citemID := range consumedItems {
+			if citemID[:2] == "11" { // boosts, not items
+				continue
+			}
+			index := player.IndexOfItem(citemID)
+			if index == -1 {
+				helper.Uncatchable(fmt.Sprintf("Player sent bad item ID '%s', cannot continue", citemID))
+				helper.InvalidRequest()
+				return
+			}
+			if player.PlayerState.Items[index].Amount >= 1 { // can use item
+				player.PlayerState.Items[index].Amount -= 1
+			} else {
+				if player.PlayerState.NumRings < consumedRings { // not enough rings
+					responseStatus = status.NotEnoughRings
+					break
+				}
+				player.PlayerState.NumRings -= consumedRings
+			}
+		}
+	}
+	helper.DebugOut(fmt.Sprintf("%v", player.PlayerState.Items))
+	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.DefaultQuickActStart(baseInfo, player)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	err = db.SavePlayer(player)
+	if err != nil {
+		helper.InternalErr("Error saving player", err)
 		return
 	}
 	_, err = analytics.Store(player.ID, factors.AnalyticTypeTimedStarts)
@@ -85,16 +139,63 @@ func QuickActStart(helper *helper.Helper) {
 }
 
 func ActStart(helper *helper.Helper) {
+	recv := helper.GetGameRequest()
+	var request requests.ActStartRequest
+	err := json.Unmarshal(recv, &request)
+	if err != nil {
+		helper.Err("Error unmarshalling", err)
+		return
+	}
 	player, err := helper.GetCallingPlayer()
 	if err != nil {
 		helper.InternalErr("Error getting calling player", err)
 		return
 	}
-	baseInfo := helper.BaseInfo(emess.OK, status.OK)
+	helper.DebugOut(fmt.Sprintf("%v", player.PlayerState.Items))
+	responseStatus := status.OK
+	// consume items
+	modToStringSlice := func(ns []int64) []string {
+		result := []string{}
+		for _, n := range ns {
+			result = append(result, fmt.Sprintf("%v", n))
+		}
+		return result
+	}
+	if !gameconf.CFile.AllItemsFree {
+		consumedItems := modToStringSlice(request.Modifier)
+		consumedRings := gameplay.GetRequiredItemPayment(consumedItems)
+		for _, citemID := range consumedItems {
+			if citemID[:2] == "11" { // boosts, not items
+				continue
+			}
+			index := player.IndexOfItem(citemID)
+			if index == -1 {
+				helper.Uncatchable(fmt.Sprintf("Player sent bad item ID '%s', cannot continue", citemID))
+				helper.InvalidRequest()
+				return
+			}
+			if player.PlayerState.Items[index].Amount >= 1 { // can use item
+				player.PlayerState.Items[index].Amount -= 1
+			} else {
+				if player.PlayerState.NumRings < consumedRings { // not enough rings
+					responseStatus = status.NotEnoughRings
+					break
+				}
+				player.PlayerState.NumRings -= consumedRings
+			}
+		}
+	}
+	helper.DebugOut(fmt.Sprintf("%v", player.PlayerState.Items))
+	baseInfo := helper.BaseInfo(emess.OK, responseStatus)
 	response := responses.DefaultActStart(baseInfo, player)
 	err = helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)
+		return
+	}
+	err = db.SavePlayer(player)
+	if err != nil {
+		helper.InternalErr("Error saving player", err)
 		return
 	}
 	_, err = analytics.Store(player.ID, factors.AnalyticTypeStoryStarts)
@@ -246,6 +347,7 @@ func QuickPostGameResults(helper *helper.Helper) {
 		helper.InternalErr("Error saving player", err)
 		return
 	}
+	helper.DebugOut(fmt.Sprintf("%v", player.PlayerState.Items))
 
 	err = helper.SendResponse(response)
 	if err != nil {
@@ -423,13 +525,13 @@ func PostGameResults(helper *helper.Helper) {
 		for _, reward := range wonRewards { // TODO: This is O(n^2). Maybe alleviate this?
 			helper.DebugOut("Reward: %s", reward.ItemID)
 			helper.DebugOut("Reward amount: %v", reward.NumItem)
-			if reward.ItemID[2:] == "12" { // ID is an item
+			if reward.ItemID[:2] == "12" { // ID is an item
 				// check if the item is already in the player's inventory
-				for _, item := range player.PlayerState.Items {
-					if item.ID == reward.ItemID { // item found, increment amount
-						item.Amount += reward.NumItem
-						break
-					}
+				itemIndex := player.IndexOfItem(reward.ItemID)
+				if itemIndex != -1 {
+					player.PlayerState.Items[itemIndex].Amount += reward.NumItem
+				} else {
+					helper.Warn("Unknown item reward '%s'", reward.ItemID)
 				}
 			} else if reward.ItemID == strconv.Itoa(enums.ItemIDRing) { // Rings
 				player.PlayerState.NumRings += reward.NumItem
@@ -442,9 +544,9 @@ func PostGameResults(helper *helper.Helper) {
 				knucklesIndex := player.IndexOfChara(enums.CTStrKnuckles)
 				player.CharacterState[knucklesIndex].Status = enums.CharacterStatusUnlocked
 			} else {
-				helper.Out("Unknown reward '" + reward.ItemID + "', ignoring")
+				helper.Warn("Unknown reward '%s', ignoring", reward.ItemID)
 			}
-			// TODO: allow for characters to join the cast, like Tails on 11-1.1
+			// TODO: allow for any character joining the cast
 		}
 		helper.DebugOut("Current rings: %v", player.PlayerState.NumRings)
 		player.PlayerState.Items = newItems
@@ -474,6 +576,7 @@ func PostGameResults(helper *helper.Helper) {
 		helper.InternalErr("Error saving player", err)
 		return
 	}
+	helper.DebugOut(fmt.Sprintf("%v", player.PlayerState.Items))
 
 	err = helper.SendResponse(response)
 	if err != nil {
@@ -487,10 +590,13 @@ func PostGameResults(helper *helper.Helper) {
 }
 
 func GetFreeItemList(helper *helper.Helper) {
-	// TODO: allow free items to be set via config
 	baseInfo := helper.BaseInfo(emess.OK, status.OK)
-	response := responses.DefaultFreeItemList(baseInfo)
-	//response := responses.FreeItemList(baseInfo, []obj.Item{}) // No free items
+	var response responses.FreeItemListResponse
+	if gameconf.CFile.AllItemsFree {
+		response = responses.DefaultFreeItemList(baseInfo)
+	} else {
+		response = responses.FreeItemList(baseInfo, []obj.Item{}) // No free items
+	}
 	err := helper.SendResponse(response)
 	if err != nil {
 		helper.InternalErr("Error sending response", err)

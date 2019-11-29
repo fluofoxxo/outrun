@@ -3,6 +3,7 @@ package constobjs
 import (
     "strconv"
 
+    "github.com/fluofoxxo/outrun/enums"
     "github.com/fluofoxxo/outrun/obj"
 )
 
@@ -13,6 +14,9 @@ var DefaultPlayerStateItems = func() []obj.Item {
         n := baseNum + i
         s := strconv.Itoa(n)
         item := obj.NewItem(s, 0)
+        if int64(n) == enums.ItemIDLaser { // free item at the start of the game
+            item.Amount = 1
+        }
         items = append(items, item)
     }
     return items

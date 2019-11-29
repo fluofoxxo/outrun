@@ -14,6 +14,7 @@ import (
 	"github.com/fluofoxxo/outrun/logic"
 	"github.com/fluofoxxo/outrun/netobj"
 	"github.com/fluofoxxo/outrun/netobj/constnetobjs"
+	"github.com/fluofoxxo/outrun/obj/constobjs"
 )
 
 func (t *Toolbox) Debug_GetCampaignStatus(uid string, reply *ToolboxReply) error {
@@ -291,6 +292,7 @@ func (t *Toolbox) Debug_PrepTag1p0(uids string, reply *ToolboxReply) error {
 		player.PlayerState.NumRings = sqrt(player.PlayerState.NumRings) * 3
 		player.PlayerState.NumRedRings = sqrt(player.PlayerState.NumRedRings)
 		player.PlayerState.Energy = gameconf.CFile.StartingEnergy
+		player.PlayerState.Items = constobjs.DefaultPlayerStateItems
 
 		player.MileageMapState = netobj.DefaultMileageMapState() // reset campaign
 
