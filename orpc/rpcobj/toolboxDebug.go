@@ -368,6 +368,12 @@ func (t *Toolbox) Debug_FixWerehogRedRings(uids string, reply *ToolboxReply) err
 		}
 		player.CharacterState[i].Character.PriceRedRings = whrr
 		player.CharacterState[i].PriceRedRings = whrr
+		err = db.SavePlayer(player)
+		if err != nil {
+			reply.Status = StatusOtherError
+			reply.Info = fmt.Sprintf("error saving player %s: ", uid) + err.Error()
+			return err
+		}
 	}
 	reply.Status = StatusOK
 	reply.Info = "OK"
