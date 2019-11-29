@@ -374,210 +374,315 @@ var AreaRewards = map[string][]obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRedRing, 35, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"35,1": []obj.MileageReward{ // All these items show up as hidden in the game. Maybe random?
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"36,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 35, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDAsteroid, 35, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"36,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDDrill, 35, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"37,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 12000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 12000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"38,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDDrill, 15, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"38,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDDrill, 15, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"39,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 10000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"39,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 15, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRedRing, 35, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 18000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 35, 5),
 	},
 	"40,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"40,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDAsteroid, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"40,3": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"41,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDInvincible, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"41,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDTrampoline, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"41,3": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2), // UNKNOWN!
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDBarrier, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"42,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDCombo, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"42,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 25, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDDrill, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"43,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDAsteroid, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"43,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDCombo, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"44,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"44,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDInvincible, 25, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRedRing, 40, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"45,1": []obj.MileageReward{ // These wisps may give items!
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"46,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDCombo, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"46,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDMagnet, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"47,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDTrampoline, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"47,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDCombo, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"48,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDMagnet, 25, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"48,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDBarrier, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"49,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 18000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDInvincible, 25, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"49,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 25, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRedRing, 40, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 24000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 40, 5),
 	},
 	"50,1": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 35000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDMagnet, 35, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 40000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 45, 5),
 	},
 	"50,2": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDCombo, 35, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDTrampoline, 35, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 45000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 50, 5),
 	},
 	"50,3": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDMagnet, 40, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 42000, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 50000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 55, 5),
 	},
 	"50,4": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDRing, 47000, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDAsteroid, 45, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 55000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 60, 5),
 	},
 	"50,5": []obj.MileageReward{
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 1),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDDrill, 50, 2),
 		obj.NewMileageReward(enums.IncentiveTypeFriend, -1, 1, 3),
 		obj.NewMileageReward(enums.IncentiveTypePoint, enums.ItemIDLaser, 50, 4),
+
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRing, 60000, 5),
+		obj.NewMileageReward(enums.IncentiveTypeEpisode, enums.ItemIDRedRing, 65, 5),
 	},
 }
 
