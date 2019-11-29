@@ -64,15 +64,21 @@ func EquipChao(helper *helper.Helper) {
 
 	mainChaoID := request.MainChaoID
 	subChaoID := request.SubChaoID
-	/*
-		// check if the user has one chao active and is just switching
-		if mainChaoID == "-1" && subChaoID == player.PlayerState.MainChaoID {
-			// switching from main to sub
-		}
-		if mainChaoID == player.PlayerState.SubChaoID && subChaoID == "-1" {
-			// switching from sub to main
-		}
-	*/
+
+	// check if the user has one chao active and is just switching
+	if mainChaoID == "-1" && subChaoID == player.PlayerState.MainChaoID {
+		// switching from main to sub
+		player.PlayerState.MainChaoID = player.PlayerState.SubChaoID
+		player.PlayerState.SubChaoID = subChaoID
+		goto completed
+	}
+	if mainChaoID == player.PlayerState.SubChaoID && subChaoID == "-1" {
+		// switching from sub to main
+		player.PlayerState.SubChaoID = player.PlayerState.MainChaoID
+		player.PlayerState.MainChaoID = mainChaoID
+		goto completed
+	}
+
 	if mainChaoID != "-1" {
 		// check if the player actually has the Chao
 		chaoIndex := player.IndexOfChao(mainChaoID)
@@ -117,7 +123,7 @@ func EquipChao(helper *helper.Helper) {
 			}
 		}
 	}
-	//completed:
+completed:
 	helper.DebugOut("Main Chao: %s", mainChaoID)
 	helper.DebugOut("Sub Chao: %s", subChaoID)
 	if config.CFile.Debug {
