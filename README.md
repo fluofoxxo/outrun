@@ -14,19 +14,21 @@ Outrun is a custom server for Sonic Runners, reverse engineered from the [Sonic 
 
 Notable:
   - Timed Mode
-  - Story Mode (Functional, in progress)
+  - Story Mode
   - Ring/Red Star Ring keeping
   - Functional shop
   - Character/Chao equipping
   - Character leveling and progression
-  - Item/Chao roulette functionality (Functional, in progress)
+  - Item/Chao roulette functionality
   - Events
+  - Basic ranking
 
 Functional:
   - Android and iOS support
   - High score keeping
   - In game notices
-  - Handy configuration file support for general, events, and notices
+  - Deep configuration options
+  - Powerful RPC control functions
   - Ticker notices
   - Small database size and memory footprint
   - Low CPU usage
@@ -43,7 +45,7 @@ Functional:
 7. Run `go build github.com/fluofoxxo/outrun` and wait until the build is complete
 8. Run the produced executable (`outrun.exe` on Windows, `outrun` on Linux/macOS)
 
-Binary releases may be provided in more mature stages of the repository.
+Binary releases can be found [in the releases tab.](https://github.com/fluofoxxo/outrun/releases)
 
 #### Modifying an APK to connect to your instance (from Windows)
 
