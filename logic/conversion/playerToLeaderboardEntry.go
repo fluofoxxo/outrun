@@ -21,13 +21,25 @@ func PlayerToLeaderboardEntry(player netobj.Player, mode int64) obj.LeaderboardE
 	numRank := player.PlayerState.Rank
 	loginTime := player.LastLogin
 	mainCharaID := player.PlayerState.MainCharaID
-	mainCharaLevel := player.CharacterState[player.IndexOfChara(mainCharaID)].Level // TODO: is this right?
+	mainCharaLevel := int64(0)
 	subCharaID := player.PlayerState.SubCharaID
-	subCharaLevel := player.CharacterState[player.IndexOfChara(subCharaID)].Level
+	subCharaLevel := int64(0)
 	mainChaoID := player.PlayerState.MainChaoID
-	mainChaoLevel := player.ChaoState[player.IndexOfChao(mainChaoID)].Level
+	mainChaoLevel := int64(0)
 	subChaoID := player.PlayerState.SubChaoID
-	subChaoLevel := player.ChaoState[player.IndexOfChao(subChaoID)].Level
+	subChaoLevel := int64(0)
+	if player.IndexOfChara(mainCharaID) != -1 {
+		mainCharaLevel = player.CharacterState[player.IndexOfChara(mainCharaID)].Level
+	}
+	if player.IndexOfChara(subCharaID) != -1 {
+		subCharaLevel = player.CharacterState[player.IndexOfChara(subCharaID)].Level
+	}
+	if player.IndexOfChao(mainChaoID) != -1 {
+		mainChaoLevel = player.ChaoState[player.IndexOfChao(mainChaoID)].Level
+	}
+	if player.IndexOfChao(subChaoID) != -1 {
+		subChaoLevel = player.ChaoState[player.IndexOfChao(subChaoID)].Level
+	}
 	language := int64(enums.LangEnglish)
 	league := player.PlayerState.RankingLeague
 	maxScore := player.PlayerState.HighScore
