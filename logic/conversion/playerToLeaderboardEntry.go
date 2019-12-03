@@ -21,13 +21,13 @@ func PlayerToLeaderboardEntry(player netobj.Player, mode int64) obj.LeaderboardE
 	numRank := player.PlayerState.Rank
 	loginTime := player.LastLogin
 	mainCharaID := player.PlayerState.MainCharaID
-	mainCharaLevel := player.CharacterState[0].Level // TODO: is this right?
+	mainCharaLevel := player.CharacterState[player.IndexOfChara(mainCharaID)].Level // TODO: is this right?
 	subCharaID := player.PlayerState.SubCharaID
-	subCharaLevel := player.CharacterState[1].Level
+	subCharaLevel := player.CharacterState[player.IndexOfChara(subCharaID)].Level
 	mainChaoID := player.PlayerState.MainChaoID
-	mainChaoLevel := player.ChaoState[0].Level
+	mainChaoLevel := player.ChaoState[player.IndexOfChao(mainChaoID)].Level
 	subChaoID := player.PlayerState.SubChaoID
-	subChaoLevel := player.ChaoState[1].Level
+	subChaoLevel := player.ChaoState[player.IndexOfChao(subChaoID)].Level
 	language := int64(enums.LangEnglish)
 	league := player.PlayerState.RankingLeague
 	maxScore := player.PlayerState.HighScore
