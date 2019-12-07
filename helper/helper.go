@@ -32,7 +32,8 @@ const (
 	InternalServerError = "Internal server error"
 	BadRequest          = "Bad request"
 
-	DefaultIV = "HotAndSunnyMiami"
+	//DefaultIV = "HotAndSunnyMiami"
+	DefaultIV = "FoundDeadInMiami"
 )
 
 type Helper struct {
