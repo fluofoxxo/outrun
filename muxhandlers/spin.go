@@ -81,6 +81,7 @@ func CommitWheelSpin(helper *helper.Helper) {
 		//if player.LastWheelOptions.NumRemainingRoulette > 0 {
 		wonItem := player.LastWheelOptions.Items[player.LastWheelOptions.ItemWon]
 		itemExists := player.IndexOfItem(wonItem) != -1
+		oldRanking := player.LastWheelOptions.RouletteRank
 		if itemExists {
 			amountOfItemWon := player.LastWheelOptions.Item[player.LastWheelOptions.ItemWon]
 			helper.DebugOut("wonItem: %v", wonItem)
@@ -90,7 +91,7 @@ func CommitWheelSpin(helper *helper.Helper) {
 			player.PlayerState.Items[itemIndex].Amount += amountOfItemWon
 			helper.DebugOut("New amount of item player has: %v", player.PlayerState.Items[itemIndex].Amount)
 		} else {
-			if wonItem == strconv.Itoa(enums.IDTypeItemRouletteWin) {
+			if wonItem == strconv.Itoa(enums.IDTypeItemRouletteWin) && oldRanking == enums.WheelRankSuper {
 				// Jackpot
 				player.PlayerState.NumRings += player.LastWheelOptions.NumJackpotRing
 			} else if wonItem == strconv.Itoa(enums.IDTypeRedRing) {
@@ -121,7 +122,6 @@ func CommitWheelSpin(helper *helper.Helper) {
 		numRouletteTicket := player.PlayerState.NumRouletteTicket
 		rouletteCount := player.RouletteInfo.RouletteCountInPeriod // get amount of times we've spun the wheel today
 		//player.LastWheelOptions = netobj.DefaultWheelOptions(numRouletteTicket, rouletteCount) // create wheel
-		oldRanking := player.LastWheelOptions.RouletteRank
 		player.LastWheelOptions = netobj.UpgradeWheelOptions(player.LastWheelOptions, numRouletteTicket, rouletteCount) // create wheel
 		if player.RouletteInfo.GotJackpotThisPeriod {
 			player.LastWheelOptions.NumJackpotRing = 1
