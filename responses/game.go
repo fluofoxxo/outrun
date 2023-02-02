@@ -3,14 +3,11 @@ package responses
 import (
 	"strconv"
 
-	"github.com/jinzhu/now"
-
-	"github.com/RunnersRevival/outrun/consts"
-	"github.com/RunnersRevival/outrun/logic"
-	"github.com/RunnersRevival/outrun/netobj"
-	"github.com/RunnersRevival/outrun/obj"
-	"github.com/RunnersRevival/outrun/obj/constobjs"
-	"github.com/RunnersRevival/outrun/responses/responseobjs"
+	"github.com/fluofoxxo/outrun/logic"
+	"github.com/fluofoxxo/outrun/netobj"
+	"github.com/fluofoxxo/outrun/obj"
+	"github.com/fluofoxxo/outrun/obj/constobjs"
+	"github.com/fluofoxxo/outrun/responses/responseobjs"
 )
 
 type DailyChallengeDataResponse struct {
@@ -23,13 +20,12 @@ type DailyChallengeDataResponse struct {
 	EndTime                int64           `json:"chalEndTime"`
 }
 
-func DailyChallengeData(base responseobjs.BaseInfo, numDailyChallenge, nextNumDailyChallenge int64) DailyChallengeDataResponse {
-	ilSrc := consts.DailyMissionRewards
-	//ilSrc := []int64{enums.ItemIDRing, enums.ItemIDBarrier, enums.ItemIDMagnet, enums.ItemIDTrampoline, enums.ItemIDAsteroid, enums.ItemIDDrill, enums.ItemIDRedRing} // must be length of seven!
-	//ilSrc := []int64{900000, 900000, 900000, 900000, 900000, 900000, 900000}
+func DailyChallengeData(base responseobjs.BaseInfo) DailyChallengeDataResponse {
+	//ilSrc := []int64{enums.ItemIDMagnet, enums.ItemIDMagnet, enums.ItemIDMagnet, enums.ItemIDMagnet, enums.ItemIDMagnet, enums.ItemIDMagnet, enums.ItemIDMagnet} // must be length of seven!
+	ilSrc := []int64{900000, 900000, 900000, 900000, 900000, 900000, 900000} // TODO: good candidate for discovering item IDs
 	incentiveList := []obj.Incentive{}
 	for amountSrc, id := range ilSrc {
-		item := obj.NewItem(strconv.Itoa(int(id)), consts.DailyMissionRewardCounts[amountSrc])
+		item := obj.NewItem(strconv.Itoa(int(id)), int64(amountSrc+1))
 		incentive := obj.NewIncentive(
 			item,
 			int64(amountSrc+1),
@@ -37,11 +33,10 @@ func DailyChallengeData(base responseobjs.BaseInfo, numDailyChallenge, nextNumDa
 		incentiveList = append(incentiveList, incentive)
 	}
 	incentiveListCount := int64(len(incentiveList))
-	numDailyChallengeCount := int64(numDailyChallenge)
-	maxDailyChallengeDay := int64(7)
-	numDailyChallengeDay := int64(maxDailyChallengeDay - nextNumDailyChallenge)
-	//endTime := int64(1470322800)      // 08/04/2016 @ 3:00PM (UTC)
-	endTime := now.EndOfDay().UTC().Unix()
+	numDailyChallengeCount := int64(0)
+	numDailyChallengeDay := int64(2)
+	maxDailyChallengeDay := int64(10) // is this how many you can get a day? In that case, doesn't 10 make no sense?
+	endTime := int64(1470322800)      // 08/04/2016 @ 3:00PM (UTC)
 	baseResponse := NewBaseResponse(base)
 	return DailyChallengeDataResponse{
 		baseResponse,
@@ -149,7 +144,8 @@ func QuickActStart(base responseobjs.BaseInfo, playerState netobj.PlayerState, c
 	}
 }
 
-func DefaultQuickActStart(base responseobjs.BaseInfo, player netobj.Player, campaignList []obj.Campaign) QuickActStartResponse {
+func DefaultQuickActStart(base responseobjs.BaseInfo, player netobj.Player) QuickActStartResponse {
+	campaignList := []obj.Campaign{}
 	playerState := player.PlayerState
 	return QuickActStart(
 		base,
@@ -171,7 +167,8 @@ func ActStart(base responseobjs.BaseInfo, playerState netobj.PlayerState, campai
 	}
 }
 
-func DefaultActStart(base responseobjs.BaseInfo, player netobj.Player, campaignList []obj.Campaign) ActStartResponse {
+func DefaultActStart(base responseobjs.BaseInfo, player netobj.Player) ActStartResponse {
+	campaignList := []obj.Campaign{}
 	playerState := player.PlayerState
 	distFriends := []netobj.MileageFriend{}
 	return ActStart(
@@ -187,6 +184,7 @@ type QuickPostGameResultsResponse struct {
 	PlayerState             netobj.PlayerState    `json:"playerState"`
 	ChaoState               []netobj.Chao         `json:"chaoState"`
 	DailyChallengeIncentive []obj.Incentive       `json:"dailyChallengeIncentive"` // should be obj.Item, but game doesn't care
+	CharacterState          []netobj.Character    `json:"characterState"`
 	MessageList             []obj.Message         `json:"messageList"`
 	OperatorMessageList     []obj.OperatorMessage `json:"operatorMessageList"`
 	TotalMessage            int64                 `json:"totalMessage"`
@@ -199,6 +197,7 @@ func QuickPostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci 
 	playerState := player.PlayerState
 	chaoState := player.ChaoState
 	dailyChallengeIncentive := dci
+	characterState := player.CharacterState
 	messageList := []obj.Message{}
 	operatorMessageList := []obj.OperatorMessage{}
 	totalMessage := int64(len(messageList))
@@ -209,6 +208,7 @@ func QuickPostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci 
 		playerState,
 		chaoState,
 		dailyChallengeIncentive,
+		characterState,
 		messageList,
 		operatorMessageList,
 		totalMessage,
@@ -253,14 +253,16 @@ type PostGameResultsResponse struct {
 	QuickPostGameResultsResponse
 	MileageMapState      netobj.MileageMapState `json:"mileageMapState"`
 	MileageIncentiveList []obj.MileageIncentive `json:"mileageIncentiveList"`
+	EventIncentiveList   []obj.Item             `json:"eventIncentiveList"`
 	WheelOptions         netobj.WheelOptions    `json:"wheelOptions"`
 }
 
-func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj.Incentive, ml []obj.Message, oml []obj.OperatorMessage, pcs []netobj.Character, mms netobj.MileageMapState, mil []obj.MileageIncentive, wo netobj.WheelOptions) PostGameResultsResponse {
+func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj.Incentive, ml []obj.Message, oml []obj.OperatorMessage, pcs []netobj.Character, mms netobj.MileageMapState, mil []obj.MileageIncentive, eil []obj.Item, wo netobj.WheelOptions) PostGameResultsResponse {
 	baseResponse := NewBaseResponse(base)
 	playerState := player.PlayerState
 	chaoState := player.ChaoState
 	dailyChallengeIncentive := dci
+	characterState := player.CharacterState
 	messageList := []obj.Message{}
 	operatorMessageList := []obj.OperatorMessage{}
 	totalMessage := int64(len(messageList))
@@ -271,6 +273,7 @@ func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj
 		playerState,
 		chaoState,
 		dailyChallengeIncentive,
+		characterState,
 		messageList,
 		operatorMessageList,
 		totalMessage,
@@ -281,6 +284,7 @@ func PostGameResults(base responseobjs.BaseInfo, player netobj.Player, dci []obj
 		qpgrr,
 		mms,
 		mil,
+		eil,
 		wo,
 	}
 }
@@ -289,6 +293,7 @@ func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pc
 	qpgrr := DefaultQuickPostGameResults(base, player, pcs)
 	mms := player.MileageMapState
 	//mil := []obj.MileageIncentive{}
+	eil := []obj.Item{}
 	//wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
 	// TODO: Remove logic from response!!
 	player.LastWheelOptions = logic.WheelRefreshLogic(player, player.LastWheelOptions)
@@ -297,68 +302,8 @@ func DefaultPostGameResults(base responseobjs.BaseInfo, player netobj.Player, pc
 		qpgrr,
 		mms,
 		incentives,
-		wo,
-	}
-}
-
-type PostGameResultsEventResponse struct {
-	PostGameResultsResponse
-	EventState         netobj.EventState `json:"eventState"`
-	EventIncentiveList []obj.Item        `json:"eventIncentiveList"`
-}
-
-func PostGameResultsEvent(base responseobjs.BaseInfo, player netobj.Player, dci []obj.Incentive, ml []obj.Message, oml []obj.OperatorMessage, pcs []netobj.Character, mms netobj.MileageMapState, mil []obj.MileageIncentive, wo netobj.WheelOptions, eil []obj.Item, es netobj.EventState) PostGameResultsEventResponse {
-	baseResponse := NewBaseResponse(base)
-	playerState := player.PlayerState
-	chaoState := player.ChaoState
-	dailyChallengeIncentive := dci
-	messageList := []obj.Message{}
-	operatorMessageList := []obj.OperatorMessage{}
-	totalMessage := int64(len(messageList))
-	totalOperatorMessage := int64(len(operatorMessageList))
-	playCharacterState := pcs
-	qpgrr := QuickPostGameResultsResponse{
-		baseResponse,
-		playerState,
-		chaoState,
-		dailyChallengeIncentive,
-		messageList,
-		operatorMessageList,
-		totalMessage,
-		totalOperatorMessage,
-		playCharacterState,
-	}
-	pgrr := PostGameResultsResponse{
-		qpgrr,
-		mms,
-		mil,
-		wo,
-	}
-	return PostGameResultsEventResponse{
-		pgrr,
-		es,
 		eil,
-	}
-}
-
-func DefaultPostGameResultsEvent(base responseobjs.BaseInfo, player netobj.Player, pcs []netobj.Character, incentives []obj.MileageIncentive, eventIncentives []obj.Item, eventState netobj.EventState) PostGameResultsEventResponse {
-	qpgrr := DefaultQuickPostGameResults(base, player, pcs)
-	mms := player.MileageMapState
-	//mil := []obj.MileageIncentive{}
-	//wo := netobj.DefaultWheelOptions(player.PlayerState.NumRouletteTicket, player.RouletteInfo.RouletteCountInPeriod)
-	// TODO: Remove logic from response!!
-	player.LastWheelOptions = logic.WheelRefreshLogic(player, player.LastWheelOptions)
-	wo := player.LastWheelOptions
-	pgrr := PostGameResultsResponse{
-		qpgrr,
-		mms,
-		incentives,
 		wo,
-	}
-	return PostGameResultsEventResponse{
-		pgrr,
-		eventState,
-		eventIncentives,
 	}
 }
 
